@@ -1,0 +1,44 @@
+{
+  "name": "async-race",
+  "scripts": {
+    "start": "webpack serve --open --config ./webpack.config.js --env mode=dev",
+    "build": "webpack --config ./webpack.config.js --env mode=prod",
+    "lint": "eslint . --ext .ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^7.0.0",
+    "css-loader": "^5.2.7",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-typescript": "^16.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-webpack-plugin": "^3.1.1",
+    "html-loader": "^3.0.1",
+    "html-webpack-plugin": "^5.2.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "node-sass": "^7.0.0",
+    "prettier": "2.2.1",
+    "sass": "^1.45.0",
+    "sass-loader": "^12.4.0",
+    "sass-resources-loader": "^2.2.4",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.2",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
+  }
+}
