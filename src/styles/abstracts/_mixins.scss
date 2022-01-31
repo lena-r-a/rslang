@@ -1,0 +1,146 @@
+// кнопки
+@mixin btn() {
+  display: block;
+  width: 200px;
+  padding: 16px 0 16px 0;
+  font-size: $font-size--tiny;
+  font-family: $font-family--semiBold;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #e84545;
+  border: none;
+  transition: background-color ease-in-out 0.5s;
+
+  // если добавляем анимацию:
+  // animation-name: btn;
+  // animation-duration: 0.7s;
+  // animation-timing-function: ease-in-out;
+
+  // при реализации активных состояний
+  // &:hover,
+  // &:focus {
+  //   background-color: $bc-red--active;
+  // }
+  // &:focus-visible {
+  //   @include outline();
+  // }
+}
+
+// меню
+@mixin navigation__link() {
+  font-size: $font-size--tiny;
+  font-family: $font-family--bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+// основные заголовки типа h2
+@mixin main__caption() {
+  margin: 0;
+  font-size: $font-size--big;
+  line-height: 110%;
+  text-transform: uppercase;
+  text-align: center;
+  color: $font-color--light;
+}
+
+// заголовки типа h3
+@mixin caption() {
+  font-size: $font-size--middle;
+  font-family: $font-family--regular;
+  color: $font-color--grey-dark;
+}
+
+@mixin text--big() {
+  font-size: $font-size--small;
+  font-family: $font-family--regular;
+  text-transform: uppercase;
+  color: $font-color--red;
+}
+
+@mixin text() {
+  font-size: $font-size--middle;
+  line-height: 150%;
+  font-family: $font-family--regular;
+  color: $font-color--light;
+}
+
+@mixin info-text() {
+  font-size: $font-size--info;
+  line-height: 150%;
+  font-family: $font-family--regular;
+  color: $font-color--grey;
+}
+
+@mixin text--italic() {
+  font-style: italic;
+  font-size: $font-size--middle;
+  line-height: 120%;
+  font-family: Cardo, "Open Sans", Arial;
+  color: $font-color--light;
+}
+
+@mixin hover-active-transition() {
+  transition: .5s;
+}
+
+@mixin outline() {
+  outline: 2px solid $font-color--grey-dark;
+}
+
+@mixin list-style-none() {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin list-item-style-none() {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+// при реализации анимации кнопки
+// @keyframes btn {
+//   0% {
+//     -webkit-transform: rotate(0deg) scale(0.7);
+//             transform: rotate(0deg) scale(0.7);
+//   }
+//   20% {
+//     -webkit-transform: rotate(0deg) scale(0.8);
+//             transform: rotate(0deg) scale(0.8);
+//   }
+//   40% {
+//     -webkit-transform: rotate(0deg) scale(0.9);
+//             transform: rotate(0deg) scale(0.9);
+//   }
+//   50% {
+//     -webkit-transform: rotate(8deg) scale(1);
+//             transform: rotate(8deg) scale(1);
+//   }
+//   60% {
+//     -webkit-transform: rotate(-8deg) scale(1.2);
+//             transform: rotate(-8deg) scale(1.2);
+//   }
+//   75%,
+//   90% {
+//     -webkit-transform: rotate(8deg) scale(1);
+//             transform: rotate(8deg) scale(1);
+//   }
+//   80%,
+//   95% {
+//     -webkit-transform: rotate(-8deg) scale(1);
+//             transform: rotate(-8deg) scale(1);
+//   }
+//   70%,
+//   85%,
+//   100% {
+//     -webkit-transform: rotate(0deg) scale(1);
+//             transform: rotate(0deg) scale(1);
+//   }
+// }
