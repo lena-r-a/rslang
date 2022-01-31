@@ -1,0 +1,7 @@
+@import "./abstracts/variables";
+@import "./abstracts/mixins";
+@import "./abstracts/placeholders";
+// если проблема со сборкой, т.к не может найни папку со шрифтами - нужно будет указать путь к этой папке относительно папки main.scss
+@import "./base/fonts";
+@import "./base/global-styles";
+@import "./base/normalize";
