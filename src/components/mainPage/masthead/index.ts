@@ -1,9 +1,9 @@
 import { Component } from '../../../core/templates/components';
-import { Button } from '../../button/button';
+import { Button } from '../../../common/button/button';
 import './masthead.scss';
 
 const masheadInfo = {
-  innerText: 'Учи английский играючи',
+  innerText: 'Учи английский играючи!',
 };
 
 export class Masthead extends Component {

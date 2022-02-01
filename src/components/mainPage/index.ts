@@ -1,7 +1,7 @@
 'use strict';
 
 import { Page } from '../../core/templates/page';
-import { Masthead } from '../../common/header/masthead';
+import { Masthead } from './masthead';
 
 export class MainPage extends Page {
   static TextObject = {
