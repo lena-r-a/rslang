@@ -1,50 +1,31 @@
-'use strict';
-
 import { Component } from '../../core/templates/components';
-import { PageIds } from '../../app';
-
-const Buttons = [
-  {
-    id: PageIds.mainPage,
-    text: 'Main Page',
-  },
-  {
-    id: PageIds.statisticsPage,
-    text: 'Statistics',
-  },
-  {
-    id: PageIds.autorizationPage,
-    text: 'Autorization',
-  },
-  {
-    id: PageIds.gameSprintPage,
-    text: 'Game Sprint',
-  },
-  {
-    id: PageIds.gameChallengePage,
-    text: 'Game Challenge',
-  },
-];
+import { Menu } from './menu';
+import './header.scss';
 
 export class Header extends Component {
-  constructor(tagName: string, className: string) {
+  private menu: Menu;
+
+  private logo: HTMLElement;
+
+  constructor(tagName: string, className: string[]) {
     super(tagName, className);
+
+    this.menu = new Menu('nav', ['menu']);
+    this.container.innerHTML = '<div class="header__fixed"><div class ="header__wrapper"></div></div>';
+    this.logo = this.renderLogo();
   }
 
-  renderPageButtons() {
-    const pageButtons = document.createElement('div');
-    Buttons.forEach((btn) => {
-      const buttonHTML = document.createElement('a');
-      buttonHTML.href = `#${btn.id}`;
-      buttonHTML.innerText = btn.text;
-      buttonHTML.classList.add('btn');
-      pageButtons.append(buttonHTML);
-    });
-    this.container.append(pageButtons);
+  renderLogo() {
+    const logo = document.createElement('h1');
+    logo.innerText = 'Rs-Lang';
+    logo.classList.add('header__logo');
+    return logo;
   }
 
   render() {
-    this.renderPageButtons();
+    const headerWrapper = this.container.querySelector('.header__wrapper');
+    headerWrapper?.append(this.logo);
+    headerWrapper?.append(this.menu.render());
     return this.container;
   }
 }

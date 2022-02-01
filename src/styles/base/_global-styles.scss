@@ -1,3 +1,7 @@
+$mobile: 500px;
+$tablet: 768px;
+$desktop: 1200px;
+
 *, 
 *::before, 
 *::after {
@@ -20,8 +24,21 @@ li {
 
 body {
   width: 100%;
-  min-width: 320px;
+  min-width: $tablet;
   font-size: 100%;
   font-family: "Open Sans", "Myriad pro", Helvetica, Arial, sans-serif;
   background-color: $bc-light;
 }
+
+html {
+  font-size: 16px;
+  @media screen and (min-width: $tablet) {
+    font-size: 20px;
+  }
+  @media screen and (min-width: $desktop) {
+    font-size: 24px;
+  }
+}
+
+
+

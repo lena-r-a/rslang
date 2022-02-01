@@ -1,0 +1,55 @@
+@font-face {
+  font-family: "Raleway Regular";
+  font-weight: normal;
+  font-style: normal;
+  src: local("Raleway Regular"), url("../../assets/fonts/raleway-regular-webfont.woff2") format("woff2"), url("../../assets/fonts/raleway-regular-webfont.woff") format("woff");
+}
+
+$padding: 20px;
+$font-size--big: 3.3rem;
+$font-color--light: #fff;
+$bc-blue: #3a3e64;
+$bc--grey: #6c7279;
+$font-family--regular: "Raleway Regular";
+$margin: 20px;
+
+@mixin main__caption() {
+  margin: 0;
+  font-size: $font-size--big;
+  font-family: $font-family--regular;
+  line-height: 110%;
+  text-align: center;
+  color: $font-color--light;
+}
+
+.header {
+  width: 100%;
+  height: 100px;
+  background-color: $bc-blue;
+  border-bottom: 2px solid $bc--grey;
+}
+
+.header__fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 5;
+}
+
+.header__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding;
+}
+
+.header__logo {
+  @include main__caption();
+  margin-right: $margin;
+  font-size: 2.3rem;
+  white-space: nowrap;
+}
+
+.header__menu {
+
+}
