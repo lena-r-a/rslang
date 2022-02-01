@@ -1,0 +1,89 @@
+@font-face {
+  font-family: "Raleway Semibold";
+  font-weight: normal;
+  font-style: normal;
+  src: local("Raleway SemiBold"), url("../../assets/fonts/raleway-regular-webfont.woff2") format("woff2"), url("../../assets/fonts/raleway-semibold-webfont.woff") format("woff");
+}
+
+$font-size--tiny: 0.75rem;
+$font-family--semiBold: "Raleway SemiBold";
+$font-color--grey-dark: #2d3033;
+$bc-red--active: #e52e2e;
+$bc-light: #fff;
+$bc-red: #e84545;
+$block-border-radius: 5px;
+$tablet: 768px;
+$desktop: 1200px;
+
+@mixin outline() {
+  outline: 2px solid $font-color--grey-dark;
+}
+
+.btn {
+  display: block;
+  width: 200px;
+  padding: 16px 0 16px 0;
+  font-size: $font-size--tiny;
+  font-family: $font-family--semiBold;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  color: $bc-light;
+  background-color: $bc-red;
+  border: none;
+  border-radius: $block-border-radius;
+  transition: background-color ease-in-out 0.5s;
+
+  // если добавляем анимацию:
+  animation-name: btn;
+  animation-duration: 0.7s;
+  animation-timing-function: ease-in-out;
+
+  //при реализации активных состояний
+  &:hover,
+  &:focus {
+    background-color: $bc-red--active;
+  }
+  &:focus-visible {
+    @include outline();
+  }
+  @media screen and (min-width: $tablet) {
+    width: 250px;
+  }
+  @media screen and (min-width: $desktop) {
+    width: 300px;
+  }
+}
+
+// при реализации анимации кнопки
+@keyframes btn {
+  0% {
+    transform: rotate(0deg) scale(0.7);
+  }
+  20% {
+    transform: rotate(0deg) scale(0.8);
+  }
+  40% {
+    transform: rotate(0deg) scale(0.9);
+  }
+  50% {
+    transform: rotate(8deg) scale(1);
+  }
+  60% {
+    transform: rotate(-8deg) scale(1.2);
+  }
+  75%,
+  90% {
+    transform: rotate(8deg) scale(1);
+  }
+  80%,
+  95% {
+    transform: rotate(-8deg) scale(1);
+  }
+  70%,
+  85%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
