@@ -4,4 +4,5 @@ export type TeamMemberData = {
   position: string;
   role: string;
   gitHub: string;
+  nicName: string;
 };

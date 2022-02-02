@@ -9,6 +9,7 @@ import { DictionaryPage } from './components/dictionaryPage';
 import { GamesPage } from './components/gamesPage';
 import { Page } from './core/templates/page';
 import { Header } from './common/header';
+import { Footer } from './common/footer';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -28,11 +29,14 @@ export class App {
 
   private header: Header;
 
+  private footer: Footer;
+
   private static defaultPageId = 'currentPage';
 
   constructor() {
     this.initialPage = new MainPage('MainPage');
     this.header = new Header('header', ['header']);
+    this.footer = new Footer();
   }
 
   static renderNewPage(idPage: string) {
@@ -69,7 +73,8 @@ export class App {
     if (page) {
       const pageHTML = page.render();
       pageHTML.id = App.defaultPageId;
-      App.container.append(pageHTML); //вставили новую страницу
+      // App.container.append(pageHTML); //вставили новую страницу
+      this.container.querySelector('.header')?.after(pageHTML);
     }
   }
 
@@ -84,5 +89,6 @@ export class App {
     App.container.append(this.header.render());
     App.renderNewPage('mainPage');
     this.enableRouteChange();
+    App.container.append(this.footer.render());
   }
 }

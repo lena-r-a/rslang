@@ -28,7 +28,9 @@
 
 .teamMember__text {
   max-width: 270px;
-  align-self: flex-start;
+  @media screen and (min-width: $tablet) {
+    align-self: flex-start;
+  }
 }
 
 .teamMember__name {
@@ -61,7 +63,6 @@
 .teamMember__gitHub {
   display: block;
   justify-self: flex-end;
-  align-self: start;
   width: 50px;
   height: 50px;
   margin-top: $margin--small;
@@ -78,5 +79,8 @@
   }
   &:focus-visible {
     @include outline();
+  }
+  @media screen and (min-width: $tablet) {
+    align-self: start;
   }
 }

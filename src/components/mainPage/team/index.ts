@@ -3,13 +3,14 @@ import { TeamMemberCard } from './teamMember/teamMemberCard';
 import { TeamMemberData } from './teamMember/types';
 import './team.scss';
 
-const teamMembersData: TeamMemberData[] = [
+export const teamMembersData: TeamMemberData[] = [
   {
     img: '../../../assets/images/team1.jpg',
     name: 'Татьяна Болтрушевич',
     position: 'Разработчик',
     role: 'Реализация главной страницы',
     gitHub: 'https://github.com/Tatsiana-Vaitovich',
+    nicName: 't_a_b',
   },
   {
     img: '../../../assets/images/team2.jpg',
@@ -17,6 +18,7 @@ const teamMembersData: TeamMemberData[] = [
     position: 'Разработчик',
     role: 'Реализация',
     gitHub: 'https://github.com/whispermind',
+    nicName: 'whispermind',
   },
   {
     img: '../../../assets/images/team3.jpg',
@@ -24,6 +26,7 @@ const teamMembersData: TeamMemberData[] = [
     position: 'Разработчик',
     role: 'Реализация электронного учебника, backEnd',
     gitHub: 'https://github.com/lena-r-a',
+    nicName: 'lena_r_a',
   },
 ];
 
