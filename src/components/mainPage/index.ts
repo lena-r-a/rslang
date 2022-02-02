@@ -3,6 +3,7 @@
 import { Page } from '../../core/templates/page';
 import { Masthead } from './masthead';
 import { AppDescription } from './appDescription';
+import { Team } from './team';
 
 export class MainPage extends Page {
   static TextObject = {
@@ -14,13 +15,15 @@ export class MainPage extends Page {
   }
 
   private renderMasthead() {
-    const masthead = new Masthead('section', ['mainPage__masthead']).render();
-    return masthead;
+    return new Masthead('section', ['mainPage__masthead']).render();
   }
 
   private renderAppDescription() {
-    const appDescription = new AppDescription('section', ['MainPage__appDescription']).render();
-    return appDescription;
+    return new AppDescription('section', ['mainPage__appDescription']).render();
+  }
+
+  private renderTeam() {
+    return new Team('section', ['mainPage__team']).render();
   }
 
   render() {
@@ -29,6 +32,7 @@ export class MainPage extends Page {
     this.container.append(title);
     this.container.append(this.renderMasthead());
     this.container.append(this.renderAppDescription());
+    this.container.append(this.renderTeam());
     return this.container;
   }
 }

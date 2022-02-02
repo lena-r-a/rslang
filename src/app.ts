@@ -31,7 +31,7 @@ export class App {
   private static defaultPageId = 'currentPage';
 
   constructor() {
-    this.initialPage = new MainPage('autorizationPage');
+    this.initialPage = new MainPage('MainPage');
     this.header = new Header('header', ['header']);
   }
 

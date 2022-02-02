@@ -1,0 +1,82 @@
+.teamMember {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  &:nth-child(2),
+  &:nth-child(3) {
+    margin-top: $margin;
+  }
+  @media screen and (min-width: $tablet) {
+    width: 23%;
+    &:nth-child(2),
+    &:nth-child(3) {
+      margin-top: 0;
+    }
+  }
+  @media screen and (min-width: $desktop) {
+    width: 23%;
+  }
+}
+
+.teamMember img {
+  max-width: 100%;
+  max-height: 270px;
+  width: 270px;
+  height: auto;
+}
+
+.teamMember__text {
+  max-width: 270px;
+  align-self: flex-start;
+}
+
+.teamMember__name {
+  margin: 24px 0 0 0;
+  font-size: 1rem;
+  font-family: "Raleway Regular";
+  font-weight: 400;
+  text-align: left;
+  color: $font-color--grey-dark;
+}
+
+.teamMember__position {
+  margin: 10px 0 0 0;
+  font-size: $font-size--info;
+  font-family: "Raleway Regular";
+  text-align: left;
+  text-transform: uppercase;
+  color: $font-color--red;
+}
+
+.teamMember__info {
+  text-align: left;
+  margin: 20px 0 0 0;
+  font-size: 0.9em;
+  line-height: 150%;
+  font-family: "Raleway Regular";
+  color: #6c7279;
+}
+
+.teamMember__gitHub {
+  display: block;
+  justify-self: flex-end;
+  align-self: start;
+  width: 50px;
+  height: 50px;
+  margin-top: $margin--small;
+  background-image: url("../../../../assets/images/icon-github.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 3px solid $bc--grey;
+  border-radius: $block-border-radius;
+  cursor: pointer;
+  @include hover-active-transition();
+  &:hover,
+  &:active {
+    border: 3px solid $bc-red;
+  }
+  &:focus-visible {
+    @include outline();
+  }
+}

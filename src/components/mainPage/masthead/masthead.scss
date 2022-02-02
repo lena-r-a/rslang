@@ -1,9 +1,5 @@
 .masthead {
-  // min-height: 750px;
-  padding: 140px;
-  // background: url(../../../assets/images/header-block.png); background-repeat: no-repeat;
-  // background-size: cover;
-  // background-color: $bc-blue--dark;
+  padding: 150px;
 }
 
 .masthead__wrapper {
@@ -12,7 +8,7 @@
 
 .masthead__info {
   margin: 25px 0 0 0;
-  font-size: $font-size--middle;
+  font-size: $font-size--small;
   line-height: 150%;
   font-family: "Raleway Regular";
   text-align: center;

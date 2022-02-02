@@ -1,5 +1,6 @@
 import { Component } from '../../../core/templates/components';
 import { Button } from '../../../common/button/button';
+import { PageIds } from '../../../app';
 import './masthead.scss';
 
 const masheadInfo = {
@@ -15,8 +16,8 @@ export class Masthead extends Component {
 
   private renderBtn() {
     const btn = new Button('a', ['masthead__btn'], 'зарегистрироваться').rendor();
+    btn.setAttribute('href', `#${PageIds.autorizationPage}`);
     return btn;
-    //todo добавить onclick
   }
 
   render() {
