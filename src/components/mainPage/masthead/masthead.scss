@@ -1,9 +1,9 @@
 .masthead {
-  min-height: 750px;
-  padding: 245px 0 140px 0;
-  background: url(../../../assets/images/header-block.png); background-repeat: no-repeat;
-  background-size: cover;
-  background-color: $bc-blue--dark;
+  // min-height: 750px;
+  padding: 140px;
+  // background: url(../../../assets/images/header-block.png); background-repeat: no-repeat;
+  // background-size: cover;
+  // background-color: $bc-blue--dark;
 }
 
 .masthead__wrapper {
@@ -16,11 +16,12 @@
   line-height: 150%;
   font-family: "Raleway Regular";
   text-align: center;
-  color: $font-color--light;
+  color: $font-color--grey;
 }
 
 .masthead__caption {
   @include main-caption();
+  color: $font-color--blue;
 }
 
 .masthead__btn {

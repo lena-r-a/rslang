@@ -1,34 +1,3 @@
-@font-face {
-  font-family: "Raleway Bold";
-  font-weight: normal;
-  font-style: normal;
-  src: local("Raleway Bold"), url("../../../assets/fonts/raleway-bold-webfont.woff2") format("woff2"), url("../../../assets/fonts/raleway-bold-webfont.woff") format("woff");
-}
-
-$font-size--info: 0.9rem;
-$font-size--tiny: 0.75rem;
-$font-color--light: #fff;
-$font-color--grey-dark: #2d3033;
-$font-family--bold: "Raleway Bold";
-$margin: 20px;
-
-@mixin hover-active-transition() {
-  transition: .5s;
-}
-
-@mixin outline() {
-  outline: 2px solid $font-color--grey-dark;
-}
-
-@mixin navigation__link() {
-  font-size: $font-size--tiny;
-  font-family: $font-family--bold;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.75);
-}
-
 .menu {
   display: flex;
   flex-wrap: wrap;

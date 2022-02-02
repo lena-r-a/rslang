@@ -2,6 +2,7 @@
 
 import { Page } from '../../core/templates/page';
 import { Masthead } from './masthead';
+import { AppDescription } from './appDescription';
 
 export class MainPage extends Page {
   static TextObject = {
@@ -17,10 +18,17 @@ export class MainPage extends Page {
     return masthead;
   }
 
+  private renderAppDescription() {
+    const appDescription = new AppDescription('section', ['MainPage__appDescription']).render();
+    return appDescription;
+  }
+
   render() {
-    // const title = this.createHeaderTitle(MainPage.TextObject.MainTitle);
-    // this.container.append(title);
+    const title = this.createHeaderTitle(MainPage.TextObject.MainTitle);
+    title.classList.add('visually-hidden');
+    this.container.append(title);
     this.container.append(this.renderMasthead());
+    this.container.append(this.renderAppDescription());
     return this.container;
   }
 }
