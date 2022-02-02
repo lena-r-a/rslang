@@ -1,32 +1,3 @@
-@font-face {
-  font-family: "Raleway Regular";
-  font-weight: normal;
-  font-style: normal;
-  src: local("Raleway Regular"), url("../../../assets/fonts/raleway-regular-webfont.woff2") format("woff2"), url("../../../assets/fonts/raleway-regular-webfont.woff") format("woff");
-}
-
-$font-size--big: 3.3rem;
-$font-color--light: #fff;
-$bc-blue--dark: #313454;
-$font-size--middle: 1.5rem;
-$font-family--regular: "Raleway Regular";
-
-@mixin main-caption() {
-  margin: 0;
-  font-size: $font-size--big;
-  line-height: 110%;
-  text-transform: uppercase;
-  text-align: center;
-  color: $font-color--light;
-}
-@mixin text--italic() {
-  font-style: italic;
-  font-size: $font-size--middle;
-  line-height: 120%;
-  font-family: Cardo, "Open Sans", Arial;
-  color: $font-color--light;
-}
-
 .masthead {
   min-height: 750px;
   padding: 245px 0 140px 0;
