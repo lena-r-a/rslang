@@ -1,0 +1,20 @@
+.games {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+}
+
+.games__caption {
+  max-width: 80%;
+  margin: 0 auto;
+  margin-bottom: $margin * 2;
+  @include text();
+  font-family: $font-family--bold;
+  text-align: center;
+  color: $font-color--red;
+}
+
+.games__item {
+  max-width: 500px;
+}
