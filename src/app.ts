@@ -2,8 +2,8 @@
 import { ElBookPage } from './components/elBookPage';
 import { MainPage } from './components/mainPage';
 import { StatisticsPage } from './components/statisticsPage';
-// import { GameSprintPage } from './components/games/sprintPage';
-// import { GameChallengePage } from './components/games/challengePage';
+import { GameSprintPage } from './components/games/sprintPage';
+import { GameChallengePage } from './components/games/challengePage';
 import { AutorizationPage } from './components/autorizationPage';
 import { DictionaryPage } from './components/dictionaryPage';
 import { GamesPage } from './components/gamesPage';
@@ -43,6 +43,9 @@ export class App {
     const currentPage = document.getElementById(App.defaultPageId);
     if (currentPage) {
       currentPage.remove();
+      if (idPage === PageIds.gameChallengePage || idPage === PageIds.gameSprintPage) {
+        this.container.querySelector('.footer')?.remove();
+      }
     }
     let page: Page | null = null;
     switch (idPage) {
@@ -61,15 +64,15 @@ export class App {
       case PageIds.statisticsPage:
         page = new StatisticsPage(idPage);
         break;
+      case PageIds.gameChallengePage:
+        page = new GameChallengePage(idPage);
+        break;
+      case PageIds.gameSprintPage:
+        page = new GameSprintPage(idPage);
+        break;
       case PageIds.autorizationPage:
         page = new AutorizationPage(idPage);
     }
-    //   case PageIds.gameChallengePage:
-    //     page = new GameChallengePage(idPage);
-    //     break;
-    //   case PageIds.gameSprintPage:
-    //     page = new GameSprintPage(idPage);
-    // }
     if (page) {
       const pageHTML = page.render();
       pageHTML.id = App.defaultPageId;
@@ -88,6 +91,7 @@ export class App {
   public run() {
     App.container.append(this.header.render());
     App.renderNewPage('mainPage');
+    window.location.href = `#${PageIds.mainPage}`;
     this.enableRouteChange();
     App.container.append(this.footer.render());
   }
