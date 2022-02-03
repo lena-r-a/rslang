@@ -10,6 +10,7 @@ import { GamesPage } from './components/gamesPage';
 import { Page } from './core/templates/page';
 import { Header } from './common/header';
 import { Footer } from './common/footer';
+import { ErrorPage } from './components/errorPage';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -63,6 +64,9 @@ export class App {
         break;
       case PageIds.autorizationPage:
         page = new AutorizationPage(idPage);
+        break;
+      default:
+        page = new ErrorPage(idPage, '404');
     }
     if (page) {
       const pageHTML = page.render();
