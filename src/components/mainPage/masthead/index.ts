@@ -23,7 +23,6 @@ export class Masthead extends Component {
   render() {
     const btn = this.renderBtn();
     this.container.querySelector('.masthead__wrapper')?.append(btn);
-    console.log(this.container);
     return this.container;
   }
 }
