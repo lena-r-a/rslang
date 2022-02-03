@@ -10,7 +10,7 @@ export const teamMembersData: TeamMemberData[] = [
     position: 'Разработчик',
     role: 'Реализация главной страницы',
     gitHub: 'https://github.com/Tatsiana-Vaitovich',
-    nicName: 't_a_b',
+    nicName: 'Tatsiana-vaitovich',
   },
   {
     img: '../../../assets/images/team2.jpg',
@@ -18,7 +18,7 @@ export const teamMembersData: TeamMemberData[] = [
     position: 'Разработчик',
     role: 'Реализация',
     gitHub: 'https://github.com/whispermind',
-    nicName: 'whispermind',
+    nicName: 'Whispermind',
   },
   {
     img: '../../../assets/images/team3.jpg',
@@ -26,7 +26,7 @@ export const teamMembersData: TeamMemberData[] = [
     position: 'Разработчик',
     role: 'Реализация электронного учебника, backEnd',
     gitHub: 'https://github.com/lena-r-a',
-    nicName: 'lena_r_a',
+    nicName: 'Lena_r_a',
   },
 ];
 
