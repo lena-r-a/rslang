@@ -27,25 +27,16 @@ export class App {
 
   private initialPage: MainPage;
 
-  private header: Header;
-
-  private footer: Footer;
-
   private static defaultPageId = 'currentPage';
 
   constructor() {
     this.initialPage = new MainPage('MainPage');
-    this.header = new Header('header', ['header']);
-    this.footer = new Footer();
   }
 
   static renderNewPage(idPage: string) {
     const currentPage = document.getElementById(App.defaultPageId);
     if (currentPage) {
       currentPage.remove();
-      if (idPage === PageIds.gameChallengePage || idPage === PageIds.gameSprintPage) {
-        this.container.querySelector('.footer')?.remove();
-      }
     }
     let page: Page | null = null;
     switch (idPage) {
@@ -76,8 +67,15 @@ export class App {
     if (page) {
       const pageHTML = page.render();
       pageHTML.id = App.defaultPageId;
-      // App.container.append(pageHTML); //вставили новую страницу
       this.container.querySelector('.header')?.after(pageHTML);
+    }
+    if (idPage === PageIds.gameChallengePage || idPage === PageIds.gameSprintPage) {
+      this.container.querySelector('.footer')?.remove();
+    } else {
+      if (!document.querySelector('.footer')) {
+        const footer = new Footer();
+        this.container.append(footer.render());
+      }
     }
   }
 
@@ -89,10 +87,10 @@ export class App {
   }
 
   public run() {
-    App.container.append(this.header.render());
+    const header = new Header();
+    App.container.append(header.render());
     App.renderNewPage('mainPage');
     window.location.href = `#${PageIds.mainPage}`;
     this.enableRouteChange();
-    App.container.append(this.footer.render());
   }
 }
