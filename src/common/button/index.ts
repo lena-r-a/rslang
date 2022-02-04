@@ -1,11 +1,13 @@
-import './button.scss';
+//import './button.scss';
 import { Component } from '../../core/templates/components';
 
 export class Button extends Component {
-  constructor(tagName: string, className: string[], title: string) {
+  public title: string;
+
+  constructor(tagName: string, title: string, className?: string[]) {
     super(tagName, className);
+    this.title = title;
     this.container.textContent = title;
-    this.container.classList.add('btn');
   }
 
   public onClick(cb: () => void): void {

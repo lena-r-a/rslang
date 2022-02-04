@@ -2,12 +2,12 @@ import { AutorizationForm } from '../AutorizationForm';
 import { Form } from '../../../common/form';
 import '../form.scss';
 import { TextObj } from '../AutorizationForm';
-import type { Attr } from '../../../common/input';
+import type { Attr } from '../../../common/types';
 
 const inputEmailAttr: Attr = {
   type: 'text',
   placeholder: TextObj.FormEmailField,
-  pattern: '^([a-z0-9_-]{3,15})@([a-z]{4,}).([a-z]{2,})$',
+  pattern: '^([a-z0-9_-]{3,15})@([a-z]{1,}).([a-z]{2,})$',
   required: '',
 };
 
@@ -25,7 +25,6 @@ const inputPasswordAttr: Attr = {
   pattern: '[a-z0-9_-]{8,12}',
   required: '',
 };
-
 
 export class SignUpForm extends AutorizationForm {
   private inputEmail: HTMLInputElement;

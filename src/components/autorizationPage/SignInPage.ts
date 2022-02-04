@@ -1,6 +1,6 @@
 import { Page } from '../../core/templates/page';
 import { SignInForm } from './signInForm';
-import './autorizationPage.scss';
+import './autorizationPages.scss';
 
 export class SignInPage extends Page {
   private form: SignInForm;

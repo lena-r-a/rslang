@@ -7,8 +7,9 @@
 
 .form__input {
   display: block;
-  @include info-text();
+  width: 300px;
   margin-bottom: $margin;
+  @include info-text();
   cursor: pointer;
   &:first-child {
     margin-top: 70px;

@@ -8,7 +8,7 @@ export const teamMembersData: TeamMemberData[] = [
     img: '../../../assets/images/team1.jpg',
     name: 'Татьяна Болтрушевич',
     position: 'Разработчик',
-    role: 'Реализация главной страницы',
+    role: 'Реализация главной страницы, страницы авторизации',
     gitHub: 'https://github.com/Tatsiana-Vaitovich',
     nicName: 'Tatsiana-vaitovich',
   },
@@ -22,7 +22,7 @@ export const teamMembersData: TeamMemberData[] = [
   },
   {
     img: '../../../assets/images/team3.jpg',
-    name: 'Елена Ружанкова',
+    name: 'Елена Рыжанкова',
     position: 'Разработчик',
     role: 'Реализация электронного учебника, backEnd',
     gitHub: 'https://github.com/lena-r-a',

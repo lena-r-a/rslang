@@ -4,7 +4,8 @@ import { MainPage } from './components/mainPage';
 import { StatisticsPage } from './components/statisticsPage';
 import { GameSprintPage } from './components/games/sprintPage';
 import { GameChallengePage } from './components/games/challengePage';
-import { AutorizationPage } from './components/autorizationPage';
+import { SignInPage } from './components/autorizationPage/SignInPage';
+import { SignUpPage } from './components/autorizationPage/SignUpPage';
 import { DictionaryPage } from './components/dictionaryPage';
 import { GamesPage } from './components/gamesPage';
 import { Page } from './core/templates/page';
@@ -21,6 +22,7 @@ export const enum PageIds {
   elBookPage = 'ElBookPage',
   games = 'games',
   dictionary = 'dictionary',
+  signUpPage = 'signUpPage',
 }
 
 export class App {
@@ -63,7 +65,10 @@ export class App {
         page = new GameSprintPage(idPage);
         break;
       case PageIds.autorizationPage:
-        page = new AutorizationPage(idPage);
+        page = new SignInPage(idPage);
+        break;
+      case PageIds.signUpPage:
+        page = new SignUpPage(idPage);
         break;
       default:
         page = new ErrorPage(idPage, '404');

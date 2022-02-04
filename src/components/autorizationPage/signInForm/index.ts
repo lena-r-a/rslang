@@ -2,7 +2,7 @@ import { AutorizationForm } from '../AutorizationForm';
 import { Form } from '../../../common/form';
 import '../form.scss';
 import { TextObj } from '../AutorizationForm';
-import { Attr } from '../../../common/input';
+import { Attr } from '../../../common/types';
 import { PageIds } from '../../../app';
 
 const inputEmailAttr: Attr = {
@@ -23,7 +23,7 @@ export class SignInForm extends AutorizationForm {
 
   private inputPassword: HTMLInputElement;
 
-  private signInBtn: HTMLInputElement;
+  private signInBtn: HTMLButtonElement;
 
   private signUpBtn: HTMLLinkElement;
 
@@ -35,9 +35,9 @@ export class SignInForm extends AutorizationForm {
     this.inputEmail = Form.renderInput(inputEmailAttr);
     this.inputEmail.focus();
     this.inputPassword = Form.renderInput(inputPasswordAttr);
-    this.signInBtn = Form.renderInput({ type: 'submit' });
-    this.signInBtn.value = TextObj.signInFormLegend;
-    this.signUpBtn = Form.renderButton(['form__btn', 'form__btn--signUp'], TextObj.signUpFormLegend);
+    this.signInBtn = Form.renderButton(['form__btn', 'form__btn-signIn'], TextObj.signInFormLegend);
+    this.signInBtn.setAttribute('type', 'submit');
+    this.signUpBtn = Form.renderLink(['form__btn', 'form__btn--signUp'], TextObj.signUpFormLegend);
     this.signUpBtn.href = `#${PageIds.signUpPage}`;
     this.signUpBtn.textContent = TextObj.signUpFormLegend;
     this.inputEmail.classList.add('form__input', 'form__input--email');

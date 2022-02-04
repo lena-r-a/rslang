@@ -8,10 +8,6 @@ const Buttons = [
     text: 'главная',
   },
   {
-    id: PageIds.autorizationPage,
-    text: 'авторизация',
-  },
-  {
     id: PageIds.elBookPage,
     text: 'учебник',
   },
@@ -26,6 +22,10 @@ const Buttons = [
   {
     id: PageIds.statisticsPage,
     text: 'статистика',
+  },
+  {
+    id: PageIds.autorizationPage,
+    text: 'вход',
   },
 ];
 

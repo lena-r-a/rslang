@@ -1,8 +1,5 @@
 import { Component } from '../../core/templates/components';
-
-export type Attr = {
-  [prop: string]: string;
-};
+import { Attr } from '../types';
 
 export class Input extends Component {
   constructor(attr: Attr) {
