@@ -13,20 +13,6 @@
   background-color: #e84545;
   border: none;
   transition: background-color ease-in-out 0.5s;
-
-  // если добавляем анимацию:
-  // animation-name: btn;
-  // animation-duration: 0.7s;
-  // animation-timing-function: ease-in-out;
-
-  // при реализации активных состояний
-  // &:hover,
-  // &:focus {
-  //   background-color: $bc-red--active;
-  // }
-  // &:focus-visible {
-  //   @include outline();
-  // }
 }
 
 // меню
@@ -105,42 +91,8 @@
   margin: 0;
 }
 
-// при реализации анимации кнопки
-// @keyframes btn {
-//   0% {
-//     -webkit-transform: rotate(0deg) scale(0.7);
-//             transform: rotate(0deg) scale(0.7);
-//   }
-//   20% {
-//     -webkit-transform: rotate(0deg) scale(0.8);
-//             transform: rotate(0deg) scale(0.8);
-//   }
-//   40% {
-//     -webkit-transform: rotate(0deg) scale(0.9);
-//             transform: rotate(0deg) scale(0.9);
-//   }
-//   50% {
-//     -webkit-transform: rotate(8deg) scale(1);
-//             transform: rotate(8deg) scale(1);
-//   }
-//   60% {
-//     -webkit-transform: rotate(-8deg) scale(1.2);
-//             transform: rotate(-8deg) scale(1.2);
-//   }
-//   75%,
-//   90% {
-//     -webkit-transform: rotate(8deg) scale(1);
-//             transform: rotate(8deg) scale(1);
-//   }
-//   80%,
-//   95% {
-//     -webkit-transform: rotate(-8deg) scale(1);
-//             transform: rotate(-8deg) scale(1);
-//   }
-//   70%,
-//   85%,
-//   100% {
-//     -webkit-transform: rotate(0deg) scale(1);
-//             transform: rotate(0deg) scale(1);
-//   }
-// }
+@mixin border($border-color) {
+  border: 4px solid $border-color;
+  border-radius: 5px;
+}
+
