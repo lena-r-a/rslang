@@ -1,5 +1,3 @@
-'use strict';
-
 import { Page } from '../../core/templates/page';
 import { Masthead } from './masthead';
 import { AppDescription } from './appDescription';

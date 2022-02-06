@@ -26,10 +26,6 @@ const baseConfig = {
           {
             loader: 'sass-resources-loader',
             options: {
-              // Provide path to the file with resources
-              // resources: './path/to/resources.scss',
-
-              // Or array of paths
               resources: [
                 path.resolve(__dirname, './src/styles/abstracts/mixins.scss'),
                 path.resolve(__dirname, './src/styles/abstracts/variables.scss'),

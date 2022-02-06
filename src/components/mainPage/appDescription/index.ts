@@ -14,7 +14,7 @@ const cardsContent: CardType[] = [
   },
   {
     img: '../../../assets/images/2.png',
-    text: 'Словарь содержит 4000 часто встречающихся слов. Ичи их в своем темпе!',
+    text: 'Словарь содержит 3600 часто встречающихся слов. Ичи их в своем темпе!',
     caption: 'Словарь',
     href: PageIds.dictionary,
   },

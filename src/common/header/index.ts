@@ -7,8 +7,8 @@ export class Header extends Component {
 
   private logo: HTMLElement;
 
-  constructor(tagName: string, className: string[]) {
-    super(tagName, className);
+  constructor() {
+    super('header', ['header']);
 
     this.menu = new Menu('nav', ['menu']);
     this.container.innerHTML = '<div class="header__fixed"><div class ="header__wrapper"></div></div>';

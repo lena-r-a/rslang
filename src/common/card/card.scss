@@ -2,18 +2,19 @@
   position: relative;
   z-index: 0;
   display: block;
-  width: 100%;
+  width: 99%;
   min-height: 350px;
-  border-right: 1px solid $bc-light;
-  border-top: 1px solid $bc-light;
+  border: 4px solid $bc-blue;
+  // border-right: 1px solid $bc-light;
+  // border-top: 1px solid $bc-light;
   text-decoration: none;
   overflow: hidden;
   cursor: pointer;
   @media screen and (min-width: $tablet) {
-    width: 50%;
+    width: 49%;
   }
   @media screen and (min-width: 1800px) {
-    width: 25%;
+    width: 24%;
   }
 }
 
@@ -21,7 +22,7 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  opacity: .6;
+  opacity: .5;
   & img {
     max-width: none;
     height: 100%;

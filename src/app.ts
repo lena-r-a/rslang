@@ -2,14 +2,15 @@
 import { ElBookPage } from './components/elBookPage';
 import { MainPage } from './components/mainPage';
 import { StatisticsPage } from './components/statisticsPage';
-// import { GameSprintPage } from './components/games/sprintPage';
-// import { GameChallengePage } from './components/games/challengePage';
+import { GameSprintPage } from './components/games/sprintPage';
+import { GameChallengePage } from './components/games/challengePage';
 import { AutorizationPage } from './components/autorizationPage';
 import { DictionaryPage } from './components/dictionaryPage';
 import { GamesPage } from './components/gamesPage';
 import { Page } from './core/templates/page';
 import { Header } from './common/header';
 import { Footer } from './common/footer';
+import { ErrorPage } from './components/errorPage';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -27,16 +28,10 @@ export class App {
 
   private initialPage: MainPage;
 
-  private header: Header;
-
-  private footer: Footer;
-
   private static defaultPageId = 'currentPage';
 
   constructor() {
     this.initialPage = new MainPage('MainPage');
-    this.header = new Header('header', ['header']);
-    this.footer = new Footer();
   }
 
   static renderNewPage(idPage: string) {
@@ -61,20 +56,30 @@ export class App {
       case PageIds.statisticsPage:
         page = new StatisticsPage(idPage);
         break;
+      case PageIds.gameChallengePage:
+        page = new GameChallengePage(idPage);
+        break;
+      case PageIds.gameSprintPage:
+        page = new GameSprintPage(idPage);
+        break;
       case PageIds.autorizationPage:
         page = new AutorizationPage(idPage);
+        break;
+      default:
+        page = new ErrorPage(idPage, '404');
     }
-    //   case PageIds.gameChallengePage:
-    //     page = new GameChallengePage(idPage);
-    //     break;
-    //   case PageIds.gameSprintPage:
-    //     page = new GameSprintPage(idPage);
-    // }
     if (page) {
       const pageHTML = page.render();
       pageHTML.id = App.defaultPageId;
-      // App.container.append(pageHTML); //вставили новую страницу
       this.container.querySelector('.header')?.after(pageHTML);
+    }
+    if (idPage === PageIds.gameChallengePage || idPage === PageIds.gameSprintPage) {
+      this.container.querySelector('.footer')?.remove();
+    } else {
+      if (!document.querySelector('.footer')) {
+        const footer = new Footer();
+        this.container.append(footer.render());
+      }
     }
   }
 
@@ -86,9 +91,10 @@ export class App {
   }
 
   public run() {
-    App.container.append(this.header.render());
+    const header = new Header();
+    App.container.append(header.render());
     App.renderNewPage('mainPage');
+    window.location.href = `#${PageIds.mainPage}`;
     this.enableRouteChange();
-    App.container.append(this.footer.render());
   }
 }

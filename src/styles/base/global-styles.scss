@@ -19,8 +19,12 @@ li {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
-  min-width: $tablet;
+  min-width: $mobile;
+  min-height: 100vh;
   font-size: 100%;
   font-family: "Open Sans", "Myriad pro", Helvetica, Arial, sans-serif;
   background-color: $bc-light;
