@@ -18,7 +18,6 @@ const inputNameAttr: Attr = {
   placeholder: TextObj.signUpFormNameField,
   pattern: '^[A-Za-zА-Яа-яЁё ]{3,12}$',
   required: '',
-  autofocus: '',
 };
 
 const inputPasswordAttr: Attr = {

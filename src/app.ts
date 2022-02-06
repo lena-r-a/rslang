@@ -86,6 +86,15 @@ export class App {
         this.container.append(footer.render());
       }
     }
+    App.setFocusOnInput(idPage);
+  }
+
+  static setFocusOnInput(idPage: string): void {
+    if (idPage === PageIds.autorizationPage || idPage === PageIds.signUpPage) {
+      const formEl = document.forms[0]?.querySelector('input') as HTMLInputElement | null;
+      console.log(formEl);
+      formEl?.focus();
+    }
   }
 
   private enableRouteChange() {

@@ -11,7 +11,6 @@ const inputEmailAttr: Attr = {
   type: 'text',
   placeholder: TextObj.FormEmailField,
   required: '',
-  autofocus: '',
 };
 
 const inputPasswordAttr: Attr = {
