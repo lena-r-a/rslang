@@ -12,6 +12,7 @@ import { Page } from './core/templates/page';
 import { Header } from './common/header';
 import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
+import { Preloader } from './common/preloader';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -108,7 +109,14 @@ export class App {
     });
   }
 
+  private getPreloader() {
+    const preloader = new Preloader();
+    return preloader.render();
+  }
+
   public run() {
+    App.container.append(this.getPreloader());
+    Preloader.enablePreloader();
     const header = new Header();
     App.container.append(header.render());
     App.renderNewPage('mainPage');
