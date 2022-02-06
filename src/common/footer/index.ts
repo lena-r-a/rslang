@@ -6,7 +6,8 @@ import { teamMembersData } from '../../components/mainPage/team';
 export class Footer extends Component {
   constructor() {
     super('div', ['footer']);
-    this.container.innerHTML = '<div class="footer__date footer__col"><p>&copy; 2022</p></div><div class="footer__rss footer__col"><a href="https://rs.school/js/" target="_blank" aria-label="Rolling scopes school"><img src="https://rs.school/images/rs_school_js.svg" alt="Rolling scopes school"></a></div><div class="footer__students footer__col"></div>';
+    this.container.innerHTML =
+      '<div class="footer__date footer__col"><p>&copy; 2022</p></div><div class="footer__rss footer__col"><a href="https://rs.school/js/" target="_blank" aria-label="Rolling scopes school"><img src="https://rs.school/images/rs_school_js.svg" alt="Rolling scopes school"></a></div><div class="footer__students footer__col"></div>';
   }
 
   private getLink(dataObj: TeamMemberData) {
