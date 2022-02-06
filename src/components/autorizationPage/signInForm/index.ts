@@ -4,6 +4,8 @@ import '../form.scss';
 import { TextObj } from '../AutorizationForm';
 import { Attr } from '../../../common/types';
 import { PageIds } from '../../../app';
+import { IUserCreate, IUserLogin, UserService } from '../../../services/UsersService';
+import { RSLangLS } from '../../../RSLangLS';
 
 const inputEmailAttr: Attr = {
   type: 'text',
@@ -47,6 +49,20 @@ export class SignInForm extends AutorizationForm {
     this.text = document.createElement('p');
     this.text.classList.add('form__text');
     this.text.textContent = 'Еще не зарегистрировался? Жми!';
+    this.container.addEventListener('submit', async (e: Event) => {
+      e.preventDefault();
+      const params: IUserCreate = {
+        email: this.inputEmail.value,
+        password: this.inputPassword.value,
+      };
+      const request = new UserService();
+      const resp: IUserLogin | undefined = await request.loginUser(params);
+      if (resp) {
+        RSLangLS.saveUserData(resp);
+        console.log(RSLangLS.getUserData('userId'));
+        window.location.hash = `#${PageIds.mainPage}`;
+      }
+    });
   }
 
   public render() {

@@ -2,7 +2,9 @@ import { AutorizationForm } from '../AutorizationForm';
 import { Form } from '../../../common/form';
 import '../form.scss';
 import { TextObj } from '../AutorizationForm';
-import type { Attr } from '../../../common/types';
+import { Attr } from '../../../common/types';
+import { IUserCreate, UserService } from '../../../services/UsersService';
+import { PageIds } from '../../../app';
 
 const inputEmailAttr: Attr = {
   type: 'text',
@@ -37,6 +39,7 @@ export class SignUpForm extends AutorizationForm {
 
   constructor() {
     super();
+    this.container as HTMLFormElement;
     this.container.classList.add('form--signUpForm');
     this.inputEmail = Form.renderInput(inputEmailAttr);
     this.inputName = Form.renderInput(inputNameAttr);
@@ -48,6 +51,27 @@ export class SignUpForm extends AutorizationForm {
     this.inputPassword.classList.add('form__input', 'form__input--password');
     this.signUpBtn.classList.add('form__btn', 'form__btn--signUp');
     this.legend.textContent = TextObj.signUpFormLegend;
+    this.container.addEventListener('submit', async (e: Event) => {
+      e.preventDefault();
+      if (this.checkValidForm()) {
+        const params: IUserCreate = {
+          name: this.inputName.value,
+          email: this.inputEmail.value,
+          password: this.inputPassword.value,
+        };
+        const request = new UserService();
+        const resp = await request.createUser(params);
+        //todo получаем здесь сырой ответ и обрабатываем ошибки
+        console.log(resp);
+        window.location.hash = `#${PageIds.autorizationPage}`;
+      }
+    });
+  }
+
+  private checkValidForm(): boolean {
+    if (this.inputEmail.validity.valid && this.inputName.validity.valid && this.inputPassword.validity.valid) {
+      return true;
+    } else return false;
   }
 
   public render() {
