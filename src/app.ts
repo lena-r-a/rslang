@@ -78,6 +78,11 @@ export class App {
       pageHTML.id = App.defaultPageId;
       this.container.querySelector('.header')?.after(pageHTML);
     }
+    App.toogleFooterDisplay(idPage);
+    App.setFocusOnInput(idPage);
+  }
+
+  static toogleFooterDisplay(idPage: string): void {
     if (idPage === PageIds.gameChallengePage || idPage === PageIds.gameSprintPage) {
       this.container.querySelector('.footer')?.remove();
     } else {
@@ -86,7 +91,6 @@ export class App {
         this.container.append(footer.render());
       }
     }
-    App.setFocusOnInput(idPage);
   }
 
   static setFocusOnInput(idPage: string): void {
