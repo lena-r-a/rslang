@@ -15,7 +15,7 @@ export class Masthead extends Component {
   }
 
   private renderBtn() {
-    const btn = new Button('a', ['masthead__btn'], 'зарегистрироваться').rendor();
+    const btn = new Button('a', 'зарегистрироваться', ['masthead__btn']).rendor();
     btn.setAttribute('href', `#${PageIds.autorizationPage}`);
     return btn;
   }
