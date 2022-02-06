@@ -2,11 +2,9 @@
 import { Component } from '../../core/templates/components';
 
 export class Button extends Component {
-  public title: string;
 
   constructor(tagName: string, title: string, className?: string[]) {
     super(tagName, className);
-    this.title = title;
     this.container.textContent = title;
   }
 

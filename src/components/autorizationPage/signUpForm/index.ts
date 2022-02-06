@@ -33,9 +33,7 @@ export class SignUpForm extends AutorizationForm {
 
   private inputName: HTMLInputElement;
 
-  private signInBtn: HTMLInputElement;
-
-  private signUpBtn: HTMLInputElement;
+  private signUpBtn: HTMLButtonElement;
 
   constructor() {
     super();
@@ -44,14 +42,10 @@ export class SignUpForm extends AutorizationForm {
     this.inputName = Form.renderInput(inputNameAttr);
     this.inputName.focus();
     this.inputPassword = Form.renderInput(inputPasswordAttr);
-    this.signInBtn = Form.renderInput({ type: 'submit' });
-    this.signInBtn.value = TextObj.signInFormLegend;
-    this.signUpBtn = Form.renderInput({ type: 'submit' });
-    this.signUpBtn.value = TextObj.signUpFormLegend;
+    this.signUpBtn = Form.renderButton(['form__btn', 'form__btn--signUp'], TextObj.signUpFormLegend);
     this.inputEmail.classList.add('form__input', 'form__input--email');
     this.inputName.classList.add('form__input', 'form__input--name');
     this.inputPassword.classList.add('form__input', 'form__input--password');
-    this.signInBtn.classList.add('form__btn', 'form__btn--signIn');
     this.signUpBtn.classList.add('form__btn', 'form__btn--signUp');
     this.legend.textContent = TextObj.signUpFormLegend;
   }
@@ -60,7 +54,6 @@ export class SignUpForm extends AutorizationForm {
     this.legend.append(this.inputName);
     this.legend.append(this.inputEmail);
     this.legend.append(this.inputPassword);
-    this.legend.append(this.signInBtn);
     this.legend.append(this.signUpBtn);
     return this.container;
   }
