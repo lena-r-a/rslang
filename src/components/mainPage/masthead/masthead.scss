@@ -1,0 +1,25 @@
+.masthead {
+  padding: 150px;
+}
+
+.masthead__wrapper {
+  max-width: 90%;
+}
+
+.masthead__info {
+  margin: 25px 0 0 0;
+  font-size: $font-size--small;
+  line-height: 150%;
+  font-family: "Raleway Regular";
+  text-align: center;
+  color: $font-color--grey;
+}
+
+.masthead__caption {
+  @include main-caption();
+  color: $font-color--blue;
+}
+
+.masthead__btn {
+  margin: 40px auto 0;
+}

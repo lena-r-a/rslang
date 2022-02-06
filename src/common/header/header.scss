@@ -1,0 +1,27 @@
+.header {
+  width: 100%;
+  height: 100px;
+}
+
+.header__fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 5;
+  background-color: $bc-blue;
+}
+
+.header__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding;
+  background: url("../../assets/images/border-bottom-header.png") repeat-x bottom;
+}
+
+.header__logo {
+  @include main-caption();
+  margin-right: $margin;
+  font-size: 2.3rem;
+  white-space: nowrap;
+}

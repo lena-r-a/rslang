@@ -1,0 +1,19 @@
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.menu__item {
+  margin-right: $margin;
+  @include navigation__link();
+  color: rgba(255, 255, 255, 0.75);
+  @include hover-active-transition();
+  &:hover,
+  &:active {
+    color: $font-color--light;
+  }
+  &:focus-visible {
+    @include outline();
+  }
+}
