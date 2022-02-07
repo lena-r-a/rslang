@@ -58,8 +58,8 @@ export class SignInForm extends AutorizationForm {
       const resp: IUserLogin | undefined = await request.loginUser(params);
       if (resp) {
         RSLangLS.saveUserData(resp);
-        console.log(RSLangLS.getUserData('userId'));
-        window.location.hash = `#${PageIds.mainPage}`;
+        location.reload();
+        location.href = `#${PageIds.mainPage}`;
       }
     });
   }

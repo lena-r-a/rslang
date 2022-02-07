@@ -1,6 +1,7 @@
 import { Component } from '../../../core/templates/components';
 import { PageIds } from '../../../app';
 import './menu.scss';
+import { RSLangLS } from '../../../RSLangLS';
 
 const Buttons = [
   {
@@ -34,18 +35,23 @@ export class Menu extends Component {
     super(tagName, className);
   }
 
-  renderPageButtons() {
+  private renderPageButtons() {
     Buttons.forEach((btn) => {
       const buttonHTML = document.createElement('a');
       buttonHTML.href = `#${btn.id}`;
       buttonHTML.innerText = btn.text;
-      buttonHTML.classList.add('menu__item');
+      buttonHTML.classList.add('menu__item', `menu__item--${btn.id}`);
       this.container.append(buttonHTML);
     });
   }
 
-  render() {
+  public render() {
     this.renderPageButtons();
+    if (!RSLangLS.isUserAutorizated()) {
+      const statistics = this.container.querySelector(`.menu__item--${PageIds.statisticsPage}`) as HTMLElement;
+      console.log(statistics);
+      statistics.style.display = 'none';
+    }
     return this.container;
   }
 }

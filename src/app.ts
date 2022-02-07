@@ -13,7 +13,7 @@ import { Header } from './common/header';
 import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
-import { RSLangLS } from './RSLangLS';
+// import { RSLangLS } from './RSLangLS';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -111,13 +111,13 @@ export class App {
   }
 
   private getPreloader() {
-    const preloader = new Preloader();
-    return preloader.render();
+    const preloader = new Preloader().render();
+    preloader.style.display = 'none';
+    return preloader;
   }
 
   public run() {
     Preloader.enablePreloader();
-    // console.log(RSLangLS.isUserAutorizated());
     App.container.append(this.getPreloader());
     const header = new Header();
     App.container.append(header.render());

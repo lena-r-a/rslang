@@ -25,6 +25,6 @@ export class RSLangLS {
   }
 
   static isUserAutorizated(): boolean {
-    return Boolean(RSLangLS.getUserDataJSON);
+    return typeof RSLangLS.getUserDataJSON() === 'string';
   }
 }

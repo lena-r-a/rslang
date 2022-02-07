@@ -17,21 +17,22 @@
 }
 
 .userView__greeting {
-  display: none;
+  display: block;
   width: 100%;
   margin: 0;
   margin-top: $margin--small;
   @include navigation__link();
-  text-transform: lowercase;
+  text-transform: none;
+  cursor: auto;
 }
 
 .userView__btn {
-  display: none;
   @include btn2();
-  // display: flex;
+  @include navigation__link();
+  line-height: 40px;
+  display: flex;
   align-items: center;
   background-color: transparent;
   border: none;
   width: 80px;
-  height: 40px;
 }

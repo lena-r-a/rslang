@@ -12,7 +12,6 @@ export class Header extends Component {
 
   constructor() {
     super('header', ['header']);
-
     this.menu = new Menu('nav', ['menu']);
     this.container.innerHTML = '<div class="header__fixed"><div class ="header__wrapper"></div></div>';
     this.logo = this.renderLogo();

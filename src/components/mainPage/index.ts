@@ -2,6 +2,7 @@ import { Page } from '../../core/templates/page';
 import { Masthead } from './masthead';
 import { AppDescription } from './appDescription';
 import { Team } from './team';
+import { RSLangLS } from '../../RSLangLS';
 
 export class MainPage extends Page {
   static TextObject = {
@@ -17,14 +18,14 @@ export class MainPage extends Page {
   }
 
   private renderAppDescription() {
-    return new AppDescription('section', ['mainPage__appDescription']).render();
+    return new AppDescription('section', ['mainPage__appDescription']).render(RSLangLS.isUserAutorizated());
   }
 
   private renderTeam() {
     return new Team('section', ['mainPage__team']).render();
   }
 
-  render() {
+  public render() {
     const title = this.createHeaderTitle(MainPage.TextObject.MainTitle);
     title.classList.add('visually-hidden');
     this.container.append(title);
