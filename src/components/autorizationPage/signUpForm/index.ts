@@ -10,7 +10,7 @@ import { Preloader } from '../../../common/preloader';
 
 const inputEmailAttr: Attr = {
   type: 'text',
-  placeholder: TextObj.FormEmailField,
+  placeholder: TextObj.signUpFormEmailField,
   pattern: '^([a-z0-9_-]{3,15})@([a-z]{1,}).([a-z]{2,})$',
   required: '',
 };
@@ -29,9 +29,10 @@ const inputPasswordAttr: Attr = {
   required: '',
 };
 
-const createUserErrorsMessages = {
-  417: 'Извините, такой пользователь уже существует. Попробуйте еще раз',
-  default: 'Что-то пошло не так. Попробуйте еще раз',
+const statusMessages = {
+  417: 'Извините, такой пользователь уже существует. Попробуйте еще раз.',
+  default: 'Что-то пошло не так. Попробуйте еще раз.',
+  success: 'Вы успешно зарегистрированы! Выполните вход.',
 };
 
 export class SignUpForm extends AutorizationForm {
@@ -71,12 +72,13 @@ export class SignUpForm extends AutorizationForm {
         Preloader.hidePreloader();
         if (resp.status === 200) {
           window.location.hash = `#${PageIds.autorizationPage}`;
+          this.showSuccesMessage(statusMessages.success);
         } else if (resp.status === 417) {
-          this.showMessage(createUserErrorsMessages[417]);
+          this.showErrorMessage(statusMessages[417]);
           this.clearForm();
           this.inputName.focus();
         } else {
-          this.showMessage(createUserErrorsMessages.default);
+          this.showErrorMessage(statusMessages.default);
           this.clearForm();
           this.inputName.focus();
         }

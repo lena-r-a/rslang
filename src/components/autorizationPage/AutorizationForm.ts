@@ -6,7 +6,9 @@ export const TextObj = {
   signUpFormLegend: 'Регистрация',
   signUpFormPasswordField: 'Пароль (8-12 знаков)',
   signUpFormNameField: 'Имя (3-12 знаков)',
-  FormEmailField: 'Email: example@domen.com',
+  signUpFormEmailField: 'Email: example@domen.com',
+  signInFormPasswordField: 'Введите пароль',
+  signInFormEmailField: 'Введите email',
 };
 
 export abstract class AutorizationForm extends Form {
@@ -24,17 +26,32 @@ export abstract class AutorizationForm extends Form {
     this.fieldset.append(this.legend);
   }
 
-  public getMessage(message: string): HTMLElement {
+  private getErrorMessage(message: string): HTMLElement {
     const messageContainer = document.querySelector('.aut__message') as HTMLElement;
     messageContainer.textContent = message;
     return messageContainer;
   }
 
-  public showMessage(messageText: string) {
-    const message = this.getMessage(messageText);
+  private getSuccessMessage(message: string): HTMLElement {
+    const messageContainer = document.querySelector('.header__message') as HTMLElement;
+    messageContainer.textContent = message;
+    return messageContainer;
+  }
+
+  public showErrorMessage(messageText: string) {
+    const message = this.getErrorMessage(messageText);
+    message.style.visibility = 'visible';
     setTimeout(() => {
-      message.textContent = '';
-    }, 5000);
+      message.style.visibility = 'hidden';
+    }, 4000);
+  }
+
+  public showSuccesMessage(messageText: string) {
+    const message = this.getSuccessMessage(messageText);
+    message.style.opacity = '1';
+    setTimeout(() => {
+      message.style.opacity = '0';
+    }, 4000);
   }
 
   public clearForm() {

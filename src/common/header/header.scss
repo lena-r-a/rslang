@@ -11,6 +11,18 @@
   background-color: $bc-blue;
 }
 
+.header__message {
+  position: absolute;
+  bottom: -70px;
+  left: 50%;
+  padding: 10px;
+  transform: translateX(-50%);
+  opacity: 0;
+  @include info-text();
+  @include border(green);
+  transition: 1s;
+}
+
 .header__wrapper {
   display: flex;
   justify-content: space-between;

@@ -21,11 +21,15 @@ export class Masthead extends Component {
     return btn;
   }
 
+  private showBtn(btn: HTMLElement) {
+    btn.style.visibility = 'visible';
+  }
+
   public render() {
     const btn = this.renderBtn();
     this.container.querySelector('.masthead__wrapper')?.append(btn);
     if (!RSLangLS.isUserAutorizated()) {
-      btn.style.visibility = 'visible';
+      this.showBtn(btn);
     }
     return this.container;
   }

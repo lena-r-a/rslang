@@ -6,17 +6,24 @@ import { Attr } from '../../../common/types';
 import { PageIds } from '../../../app';
 import { IUserCreate, IUserLogin, UserService } from '../../../services/UsersService';
 import { RSLangLS } from '../../../RSLangLS';
+import { Preloader } from '../../../common/preloader';
 
 const inputEmailAttr: Attr = {
   type: 'text',
-  placeholder: TextObj.FormEmailField,
+  placeholder: TextObj.signInFormEmailField,
   required: '',
 };
 
 const inputPasswordAttr: Attr = {
   type: 'password',
-  placeholder: TextObj.signUpFormPasswordField,
+  placeholder: TextObj.signInFormPasswordField,
   required: '',
+};
+
+const statusMessages = {
+  403: 'Направильно введен пароль или email. Попробуйте еще раз.',
+  default: 'Что-то пошло не так. Попробуйте еще раз.',
+  success: 'Вы успешно вошли в аккаунт!',
 };
 
 export class SignInForm extends AutorizationForm {
@@ -50,16 +57,30 @@ export class SignInForm extends AutorizationForm {
     this.text.textContent = 'Еще не зарегистрировался? Жми!';
     this.container.addEventListener('submit', async (e: Event) => {
       e.preventDefault();
+      Preloader.showPreloader();
       const params: IUserCreate = {
         email: this.inputEmail.value,
         password: this.inputPassword.value,
       };
       const request = new UserService();
-      const resp: IUserLogin | undefined = await request.loginUser(params);
-      if (resp) {
-        RSLangLS.saveUserData(resp);
+      const resp: Response = await request.loginUser(params);
+      if (resp.status === 200) {
+        const res: IUserLogin = await resp.json();
+        RSLangLS.saveUserData(res);
+        Preloader.hidePreloader();
         location.reload();
+        this.showSuccesMessage(statusMessages.success);
         location.href = `#${PageIds.mainPage}`;
+      } else if (resp.status === 403) {
+        Preloader.hidePreloader();
+        this.clearForm();
+        this.inputEmail.focus();
+        this.showErrorMessage(statusMessages[403]);
+      } else {
+        Preloader.hidePreloader();
+        this.clearForm();
+        this.inputEmail.focus();
+        this.showErrorMessage(statusMessages.default);
       }
     });
   }

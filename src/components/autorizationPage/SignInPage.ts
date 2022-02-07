@@ -21,7 +21,6 @@ export class SignInPage extends Page {
     this.formWrapper.classList.add('aut__wrapper');
     this.messageContainer = document.createElement('span');
     this.messageContainer.classList.add('aut__message');
-    this.messageContainer.textContent = 'message';
   }
 
   render() {

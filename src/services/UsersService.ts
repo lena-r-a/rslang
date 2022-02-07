@@ -41,15 +41,20 @@ export class UserService {
     return response;
   }
 
-  public async loginUser(user: IUserCreate): Promise<IUserLogin | undefined> {
-    try {
-      const response = await this.restService.post<IUserCreate>('/signin', user);
-      const result = await response.json();
-      return result;
-    } catch {
-      () => console.log('Bad request');
-    }
+  // public async loginUser(user: IUserCreate): Promise<IUserLogin | undefined> {
+  //   try {
+  //     const response = await this.restService.post<IUserCreate>('/signin', user);
+  //     const result = await response.json();
+  //     return result;
+  //   } catch {
+  //     () => console.log('Bad request');
+  //   }
+  // }
+  public async loginUser(user: IUserCreate): Promise<Response> {
+    const response = await this.restService.post<IUserCreate>('/signin', user);
+    return response;
   }
+
 
   public async getUser(id: string, token: string): Promise<IUserCreate | undefined> {
     const fullURL = `${this.restService.baseURL}/users/${id}`;

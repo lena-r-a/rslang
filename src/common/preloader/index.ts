@@ -26,6 +26,7 @@ export class Preloader extends Component {
 
   static showPreloader() {
     const preloader = document.getElementById('preloader') as HTMLElement;
+    preloader.style.opacity = '0.7';
     preloader.style.display = 'flex';
   }
 
