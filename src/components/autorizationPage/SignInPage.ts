@@ -7,6 +7,8 @@ export class SignInPage extends Page {
 
   private formWrapper: HTMLElement;
 
+  private messageContainer: HTMLElement;
+
   static TextObject = {
     MainTitle: 'SignInPage',
   };
@@ -17,12 +19,16 @@ export class SignInPage extends Page {
     this.form = new SignInForm();
     this.formWrapper = document.createElement('div');
     this.formWrapper.classList.add('aut__wrapper');
+    this.messageContainer = document.createElement('span');
+    this.messageContainer.classList.add('aut__message');
+    this.messageContainer.textContent = 'message';
   }
 
   render() {
     const title = this.createHeaderTitle(SignInPage.TextObject.MainTitle);
     title.classList.add('visually-hidden');
     this.container.append(title);
+    this.container.append(this.messageContainer);
     this.formWrapper.append(this.form.render());
     this.container.append(this.formWrapper);
     return this.container;

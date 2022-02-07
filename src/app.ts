@@ -41,6 +41,13 @@ export class App {
     const currentPage = document.getElementById(App.defaultPageId);
     if (currentPage) {
       currentPage.remove();
+      // document.addEventListener('readystatechange', () => {
+      //   console.log('change');
+      //   Preloader.showPreloader();
+      //   if (document.readyState === 'complete') {
+      //     Preloader.hidePreloader();
+      //   }
+      // });
     }
     let page: Page | null = null;
     switch (idPage) {
@@ -116,7 +123,6 @@ export class App {
 
   public run() {
     App.container.append(this.getPreloader());
-    Preloader.enablePreloader();
     const header = new Header();
     App.container.append(header.render());
     App.renderNewPage('mainPage');

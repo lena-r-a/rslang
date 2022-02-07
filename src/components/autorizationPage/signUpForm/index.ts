@@ -5,6 +5,8 @@ import { TextObj } from '../AutorizationForm';
 import { Attr } from '../../../common/types';
 import { IUserCreate, UserService } from '../../../services/UsersService';
 import { PageIds } from '../../../app';
+import { Preloader } from '../../../common/preloader';
+// import { SignUpPage } from '../SignUpPage';
 
 const inputEmailAttr: Attr = {
   type: 'text',
@@ -25,6 +27,11 @@ const inputPasswordAttr: Attr = {
   placeholder: TextObj.signUpFormPasswordField,
   pattern: '[a-z0-9_-]{8,12}',
   required: '',
+};
+
+const createUserErrorsMessages = {
+  417: 'Извините, такой пользователь уже существует. Попробуйте еще раз',
+  default: 'Что-то пошло не так. Попробуйте еще раз',
 };
 
 export class SignUpForm extends AutorizationForm {
@@ -52,6 +59,7 @@ export class SignUpForm extends AutorizationForm {
     this.legend.textContent = TextObj.signUpFormLegend;
     this.container.addEventListener('submit', async (e: Event) => {
       e.preventDefault();
+      Preloader.showPreloader();
       if (this.checkValidForm()) {
         const params: IUserCreate = {
           name: this.inputName.value,
@@ -60,9 +68,18 @@ export class SignUpForm extends AutorizationForm {
         };
         const request = new UserService();
         const resp = await request.createUser(params);
-        //todo получаем здесь сырой ответ и обрабатываем ошибки
-        console.log(resp);
-        window.location.hash = `#${PageIds.autorizationPage}`;
+        Preloader.hidePreloader();
+        if (resp.status === 200) {
+          window.location.hash = `#${PageIds.autorizationPage}`;
+        } else if (resp.status === 417) {
+          this.showMessage(createUserErrorsMessages[417]);
+          this.clearForm();
+          this.inputName.focus();
+        } else {
+          this.showMessage(createUserErrorsMessages.default);
+          this.clearForm();
+          this.inputName.focus();
+        }
       }
     });
   }

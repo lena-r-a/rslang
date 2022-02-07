@@ -5,6 +5,12 @@
   justify-content: center;
 }
 
+.aut__message {
+  margin-bottom: $margin;
+  @include text();
+  color: $font-color--red;
+}
+
 .aut__wrapper {
   display: flex;
   flex-direction: column;
