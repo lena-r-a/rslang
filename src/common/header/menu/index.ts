@@ -23,10 +23,10 @@ const Buttons = [
     id: PageIds.statisticsPage,
     text: 'статистика',
   },
-  {
-    id: PageIds.autorizationPage,
-    text: 'вход',
-  },
+  // {
+  //   id: PageIds.autorizationPage,
+  //   text: 'вход',
+  // },
 ];
 
 export class Menu extends Component {

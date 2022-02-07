@@ -23,4 +23,8 @@ export class RSLangLS {
       return JSON.parse(res)[key];
     }
   }
+
+  static isUserAutorizated(): boolean {
+    return Boolean(RSLangLS.getUserDataJSON);
+  }
 }

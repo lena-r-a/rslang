@@ -1,0 +1,37 @@
+.userView {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: $margin;
+}
+
+.userView__wrap {
+  display: flex;
+  align-items: center;
+}
+
+.userView__img {
+  width: 50px;
+  height: auto;
+  margin-right: $margin;
+}
+
+.userView__greeting {
+  display: none;
+  width: 100%;
+  margin: 0;
+  margin-top: $margin--small;
+  @include navigation__link();
+  text-transform: lowercase;
+}
+
+.userView__btn {
+  display: none;
+  @include btn2();
+  // display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  width: 80px;
+  height: 40px;
+}

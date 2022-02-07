@@ -13,6 +13,7 @@ import { Header } from './common/header';
 import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
+import { RSLangLS } from './RSLangLS';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -41,13 +42,6 @@ export class App {
     const currentPage = document.getElementById(App.defaultPageId);
     if (currentPage) {
       currentPage.remove();
-      // document.addEventListener('readystatechange', () => {
-      //   console.log('change');
-      //   Preloader.showPreloader();
-      //   if (document.readyState === 'complete') {
-      //     Preloader.hidePreloader();
-      //   }
-      // });
     }
     let page: Page | null = null;
     switch (idPage) {
@@ -122,6 +116,8 @@ export class App {
   }
 
   public run() {
+    Preloader.enablePreloader();
+    // console.log(RSLangLS.isUserAutorizated());
     App.container.append(this.getPreloader());
     const header = new Header();
     App.container.append(header.render());

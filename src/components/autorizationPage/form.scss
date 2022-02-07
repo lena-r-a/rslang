@@ -1,3 +1,5 @@
+$form-margin: 70px;
+
 .form {
   display: flex;
   flex-direction: column;
@@ -12,38 +14,25 @@
   @include info-text();
   cursor: pointer;
   &:first-child {
-    margin-top: 70px;
+    margin-top: $form-margin;
   }
 }
 
 .form__btn {
-  display: block;
+  @include btn2;
   width: 100%;
-  padding: 10px;
   margin-bottom: $margin;
-  font-size: $font-size--tiny;
-  line-height: 100%;
-  font-family: $font-family--semiBold;
-  text-transform: uppercase;
-  text-align: center;
-  color: $font-color--light;
-  background-color: $bc--grey;
-  @include border($font-color--light); 
-  cursor: pointer;
-  @include hover-active-transition();
   &:last-child {
     margin-bottom: 0;
   }
-  &:hover,
-  &:active {
-    color: $font-color--red;
-  }
-  &:focus-visible {
-    @include outline();
-  }
   &--signIn {
-    margin-top: 70px;
+    margin-top: $form-margin;
   }
+}
+
+ 
+.form--signUpForm .form__btn--signUp {
+  margin-top: $form-margin;
 }
 
 .form__fieldset {

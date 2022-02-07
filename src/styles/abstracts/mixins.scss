@@ -15,6 +15,28 @@
   transition: background-color ease-in-out 0.5s;
 }
 
+@mixin btn2() {
+  display: block;
+  padding: 10px;
+  font-size: $font-size--tiny;
+  line-height: 100%;
+  font-family: $font-family--semiBold;
+  text-transform: uppercase;
+  text-align: center;
+  color: $font-color--light;
+  background-color: $bc--grey;
+  @include border($font-color--light); 
+  cursor: pointer;
+  @include hover-active-transition();
+  &:hover,
+  &:active {
+    color: $font-color--red;
+  }
+  &:focus-visible {
+    @include outline();
+  }
+}
+
 // меню
 @mixin navigation__link() {
   font-size: $font-size--tiny;
