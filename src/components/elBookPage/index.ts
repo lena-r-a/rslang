@@ -23,6 +23,8 @@ export class ElBookPage extends Page {
       el.addEventListener('click', () => {
         WordState.GROUP = Number(el.dataset.id);
         this.wordsContainer.renderWordList(WordState.PAGE, WordState.GROUP);
+        this.wordsContainer.container.style.backgroundColor = el.dataset.color!;
+        WordState.BG = el.dataset.color!;
       });
     });
   }

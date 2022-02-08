@@ -11,6 +11,7 @@ export class WordContainer extends Component {
   constructor() {
     super('section', ['elbook__words-container']);
     this.wordsList = [];
+    this.container.style.backgroundColor = WordState.BG;
   }
 
   public async renderWordList(page: number, group: number): Promise<void> {

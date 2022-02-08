@@ -53,7 +53,7 @@ export class WordItem extends Component {
     descriptionContainer.innerHTML = `
       <p class = "word">
         <span>${this.word.word} - <span>
-        <span>[${this.word.transcription}] - <span>
+        <span>${this.word.transcription} - <span>
         <span>${this.word.wordTranslate}<span>
       </p>
       <h4>Значение:</h4>

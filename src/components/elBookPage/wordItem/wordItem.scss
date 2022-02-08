@@ -1,7 +1,9 @@
 .elbook__word-item {
+  width: 90%;
+  margin: 0 auto;
   display: flex;
   background-color: $bc--purple;
-  color: white;
+  color: #d8daf5;
   font-size: 0.8rem;
   margin-bottom: 10px;
   height: 250px;
@@ -15,7 +17,9 @@
     margin: 5px;
   }
   .word {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 10px;
   }
 }
 .word-item__image {
