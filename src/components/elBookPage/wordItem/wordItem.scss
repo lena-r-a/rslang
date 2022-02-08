@@ -6,6 +6,7 @@
   margin-bottom: 10px;
   height: 250px;
   position: relative;
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.4);
   h4 {
     margin: 0;
     padding: 0;
@@ -20,9 +21,7 @@
 .word-item__image {
   width: 40%;
   height: auto;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  @include background-styles();
 }
 
 .word-item__right {
@@ -64,5 +63,37 @@
   &:hover {
     cursor: pointer;
     filter: brightness(0) saturate(100%) invert(49%) sepia(7%) saturate(399%) hue-rotate(172deg) brightness(88%) contrast(95%);
+  }
+}
+
+.studied {
+  border: 2px solid $bc-red;
+  position: relative;
+  box-shadow: 4px 4px 8px 0px rgba(129, 39, 43, 0.7);
+  &::after {
+    position: absolute;
+    content: '';
+    width: 40px;
+    height: 40px;
+    background-image: url('../../../assets/images/studied.svg');
+    filter: brightness(0) saturate(100%) invert(27%) sepia(34%) saturate(3391%) hue-rotate(337deg) brightness(125%) contrast(82%);
+    @include background-styles();
+    top: 10px;
+    left: 10px;
+  }
+}
+
+.complicated {
+  &::after {
+    position: absolute;
+    content: 'Сложное';
+    // width: 40px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 5px 0 5px;
+    top: 10px;
+    left: 10px;
+    border-radius: 10px;
+    background-color: $bc-red;
   }
 }

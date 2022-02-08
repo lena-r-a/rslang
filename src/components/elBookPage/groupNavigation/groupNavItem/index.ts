@@ -1,5 +1,6 @@
 import { Component } from '../../../../core/templates/components';
 import './groupNavItem.scss';
+import { WordState } from '..';
 
 export class GroupNavitem extends Component {
   private title: string;
@@ -24,7 +25,9 @@ export class GroupNavitem extends Component {
       this.container.classList.remove('unactive');
     });
     this.container.addEventListener('mouseout', () => {
-      this.container.classList.add('unactive');
+      if (WordState.GROUP !== Number(this.container.dataset.id)) {
+        this.container.classList.add('unactive');
+      }
     });
   }
 

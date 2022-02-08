@@ -1,8 +1,8 @@
 import './wordItem.scss';
 import { Component } from '../../../core/templates/components';
 import { IWord } from '../../../services/WordsService';
-
 const URL = 'https://rslang-js.herokuapp.com/';
+let isPlay = false;
 
 export class WordItem extends Component {
   word: IWord;
@@ -32,16 +32,20 @@ export class WordItem extends Component {
   }
 
   private playAudio(): void {
-    let audio = new Audio(`${URL}${this.word.audio}`);
-    audio.play();
-    audio.onended = () => {
-      audio = new Audio(`${URL}${this.word.audioMeaning}`);
+    if (!isPlay) {
+      isPlay = true;
+      let audio = new Audio(`${URL}${this.word.audio}`);
       audio.play();
       audio.onended = () => {
-        audio = new Audio(`${URL}${this.word.audioExample}`);
+        audio = new Audio(`${URL}${this.word.audioMeaning}`);
         audio.play();
+        audio.onended = () => {
+          audio = new Audio(`${URL}${this.word.audioExample}`);
+          audio.play();
+          audio.onended = () => (isPlay = false);
+        };
       };
-    };
+    }
   }
 
   private renderWordDescription(): HTMLElement {
@@ -66,15 +70,41 @@ export class WordItem extends Component {
     buttonsWrapper.classList.add('word-item__buttons');
     const studiedWord = document.createElement('button');
     studiedWord.textContent = 'Изученное слово';
+    studiedWord.classList.add('add-to-studied');
     const complicatedWord = document.createElement('button');
-    complicatedWord.textContent = 'Сложное слово';
+    complicatedWord.textContent = 'Добавить в сложные';
+    complicatedWord.classList.add('add-to-complicated');
     buttonsWrapper.append(complicatedWord);
     buttonsWrapper.append(studiedWord);
+    studiedWord.addEventListener('click', (e) => this.addToStudiedWords(e));
+    complicatedWord.addEventListener('click', (e) => this.addToComplicatedWords(e));
     return buttonsWrapper;
   }
 
-  addToStudiedWords() {
-    this.container.classList.add('studies');
+  addToStudiedWords(e: Event): void {
+    const target = e.currentTarget as HTMLElement;
+    if (this.container.classList.contains('studied')) {
+      this.container.classList.remove('studied');
+      target.textContent = 'Добаваить в изученные';
+    } else {
+      this.container.classList.add('studied');
+      target.textContent = 'Удалить из изученных';
+      this.container.classList.remove('complicated');
+      document.querySelector('.add-to-complicated')!.textContent = 'Добавить в сложные';
+    }
+  }
+
+  addToComplicatedWords(e: Event) {
+    const target = e.currentTarget as HTMLElement;
+    if (this.container.classList.contains('complicated')) {
+      this.container.classList.remove('complicated');
+      target.textContent = 'Добавить в сложные';
+    } else {
+      this.container.classList.add('complicated');
+      target.textContent = 'Удалить из сложных';
+      this.container.classList.remove('studied');
+      document.querySelector('.add-to-studied')!.textContent = 'Изученное слово';
+    }
   }
 
   private renderWordProgress(): HTMLElement {

@@ -1,7 +1,7 @@
 'use strict';
 
-export abstract class Component {
-  protected container: HTMLElement;
+export class Component {
+  readonly container: HTMLElement;
 
   constructor(tagName: string, className?: string[]) {
     this.container = document.createElement(tagName);

@@ -2,6 +2,11 @@ import { Component } from '../../../core/templates/components';
 import { GroupNavitem } from './groupNavItem';
 import './groupNavigation.scss';
 
+export const WordState = {
+  PAGE: 0,
+  GROUP: 0,
+};
+
 const navItemsText = [
   {
     title: 'Easy',
@@ -42,16 +47,34 @@ const navItemsText = [
 ];
 
 export class GroupNavigation extends Component {
+  navItems: HTMLElement[];
+
   constructor() {
     super('div', ['el-book__nav']);
+    this.navItems = [];
+    this.render();
   }
 
-  render(): HTMLElement {
-    navItemsText.forEach((el) => {
+  private changeGroup(e: Event) {
+    const target = e.currentTarget as HTMLElement;
+    WordState.GROUP = Number(target.dataset.id);
+    document.querySelectorAll('.elBool__nav-item').forEach((el) => {
+      el.classList.add('unactive');
+    });
+    target.classList.remove('unactive');
+  }
+
+  render() {
+    navItemsText.forEach((el, index) => {
       const navItem = new GroupNavitem(el.title, el.range, el.level).render();
       navItem.classList.add(el.color);
+      navItem.dataset.id = String(index);
+      if (index == WordState.GROUP) {
+        navItem.classList.remove('unactive');
+      }
+      navItem.addEventListener('click', (e) => this.changeGroup(e));
+      this.navItems.push(navItem);
       this.container.append(navItem);
     });
-    return this.container;
   }
 }

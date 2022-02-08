@@ -3,23 +3,7 @@ import { Component } from '../../../core/templates/components';
 import { WordItem } from '../wordItem';
 import { IWord } from '../../../services/WordsService';
 import { wordService } from '../../../services/WordsService';
-
-const wordMock: IWord = {
-  id: 'fdf',
-  group: 1,
-  image: 'https://koreanbinge.files.wordpress.com/2022/01/ourbelovedsummer4types.jpg?w=1024&h=496&crop=1',
-  word: 'word',
-  page: 1,
-  audio: 'https://raw.githubusercontent.com/lena-r-a/christmas/master/asset/audio/audio.mp3',
-  audioMeaning: 'dkfjsnkdjnksjnvdksjn',
-  audioExample: 'njhnjnjh',
-  textMeaning: 'fgdfg',
-  textExample: 'dfdsfds',
-  transcription: 'ffdsf',
-  wordTranslate: 'слово',
-  textMeaningTranslate: 'fdsfsdf',
-  textExampleTranslate: 'fdsfsdfs',
-};
+import { WordState } from '../groupNavigation';
 
 export class WordContainer extends Component {
   wordsList: IWord[] | undefined;
@@ -29,9 +13,9 @@ export class WordContainer extends Component {
     this.wordsList = [];
   }
 
-  public async renderWordList(): Promise<void> {
+  public async renderWordList(page: number, group: number): Promise<void> {
     this.container.innerHTML = '';
-    this.wordsList = await wordService.getWords(0, 0);
+    this.wordsList = await wordService.getWords(page, group);
     if (this.wordsList) {
       this.wordsList.forEach((el) => {
         const cardItem = new WordItem(el).render();
@@ -40,8 +24,8 @@ export class WordContainer extends Component {
     }
   }
 
-  render(): HTMLElement {
-    this.renderWordList();
-    return this.container;
-  }
+  // render(): HTMLElement {
+  //   this.renderWordList();
+  //   return this.container;
+  // }
 }

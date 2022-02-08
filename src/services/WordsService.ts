@@ -26,8 +26,8 @@ class WordServise {
 
   public async getWords(page: number, group: number): Promise<IWord[] | undefined> {
     const queryParams = {
-      _page: page,
-      _group: group,
+      page: page,
+      group: group,
     };
     try {
       const response = await this.restService.get('/words', queryParams);

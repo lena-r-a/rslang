@@ -105,6 +105,12 @@
   margin: 0;
 }
 
+@mixin background-styles() {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 // при реализации анимации кнопки
 // @keyframes btn {
 //   0% {
