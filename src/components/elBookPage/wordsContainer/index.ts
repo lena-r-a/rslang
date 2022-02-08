@@ -2,6 +2,7 @@ import './wordsContainer.scss';
 import { Component } from '../../../core/templates/components';
 import { WordItem } from '../wordItem';
 import { IWord } from '../../../services/WordsService';
+import { wordService } from '../../../services/WordsService';
 
 const wordMock: IWord = {
   id: 'fdf',
@@ -21,12 +22,26 @@ const wordMock: IWord = {
 };
 
 export class WordContainer extends Component {
+  wordsList: IWord[] | undefined;
+
   constructor() {
     super('section', ['elbook__words-container']);
+    this.wordsList = [];
+  }
+
+  public async renderWordList(): Promise<void> {
+    this.container.innerHTML = '';
+    this.wordsList = await wordService.getWords(0, 0);
+    if (this.wordsList) {
+      this.wordsList.forEach((el) => {
+        const cardItem = new WordItem(el).render();
+        this.container.append(cardItem);
+      });
+    }
   }
 
   render(): HTMLElement {
-    this.container.append(new WordItem(wordMock).render());
+    this.renderWordList();
     return this.container;
   }
 }

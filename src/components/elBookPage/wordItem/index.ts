@@ -2,6 +2,8 @@ import './wordItem.scss';
 import { Component } from '../../../core/templates/components';
 import { IWord } from '../../../services/WordsService';
 
+const URL = 'https://rslang-js.herokuapp.com/';
+
 export class WordItem extends Component {
   word: IWord;
 
@@ -14,9 +16,9 @@ export class WordItem extends Component {
     const imageContainer = document.createElement('div');
     imageContainer.classList.add('word-item__image');
     const image = new Image();
-    image.src = this.word.image;
+    image.src = `${URL}${this.word.image}`;
     image.onload = () => {
-      imageContainer.style.backgroundImage = `url(${this.word.image})`;
+      imageContainer.style.backgroundImage = `url(${URL}${this.word.image})`;
     };
     return imageContainer;
   }
@@ -25,7 +27,21 @@ export class WordItem extends Component {
     const audioWrapper = document.createElement('button');
     audioWrapper.classList.add('audio-btn');
     audioWrapper.style.backgroundImage = 'url("../../../assets/images/sound.svg")';
+    audioWrapper.addEventListener('click', () => this.playAudio());
     return audioWrapper;
+  }
+
+  private playAudio(): void {
+    let audio = new Audio(`${URL}${this.word.audio}`);
+    audio.play();
+    audio.onended = () => {
+      audio = new Audio(`${URL}${this.word.audioMeaning}`);
+      audio.play();
+      audio.onended = () => {
+        audio = new Audio(`${URL}${this.word.audioExample}`);
+        audio.play();
+      };
+    };
   }
 
   private renderWordDescription(): HTMLElement {
@@ -55,6 +71,10 @@ export class WordItem extends Component {
     buttonsWrapper.append(complicatedWord);
     buttonsWrapper.append(studiedWord);
     return buttonsWrapper;
+  }
+
+  addToStudiedWords() {
+    this.container.classList.add('studies');
   }
 
   private renderWordProgress(): HTMLElement {

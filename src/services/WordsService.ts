@@ -17,7 +17,7 @@ export interface IWord {
   textExampleTranslate: string;
 }
 
-export class WordServise {
+class WordServise {
   restService: RestService;
 
   constructor() {
@@ -47,3 +47,5 @@ export class WordServise {
     }
   }
 }
+
+export const wordService = new WordServise();
