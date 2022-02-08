@@ -1,5 +1,5 @@
 .masthead {
-  padding: 150px;
+  padding: 200px 150px;
 }
 
 .masthead__wrapper {
@@ -22,7 +22,7 @@
 }
 
 .masthead__btn {
-  display: block;
+  display: none;
   width: 200px;
   margin: 40px auto 0;
   padding: 16px 0 16px 0;
@@ -37,7 +37,6 @@
   border: none;
   border-radius: $block-border-radius;
   transition: background-color ease-in-out 0.5s;
-  visibility: hidden;
   animation-name: btn;
   animation-duration: 0.7s;
   animation-timing-function: ease-in-out;

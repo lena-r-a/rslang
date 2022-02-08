@@ -69,7 +69,8 @@ export class SignInForm extends AutorizationForm {
         RSLangLS.saveUserData(res);
         Preloader.hidePreloader();
         location.reload();
-        this.showSuccesMessage(statusMessages.success);
+        //todo adjust showSuccesMessage
+        // this.showSuccesMessage(statusMessages.success);
         location.href = `#${PageIds.mainPage}`;
       } else if (resp.status === 403) {
         Preloader.hidePreloader();

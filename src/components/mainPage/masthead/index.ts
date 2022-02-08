@@ -22,7 +22,9 @@ export class Masthead extends Component {
   }
 
   private showBtn(btn: HTMLElement) {
-    btn.style.visibility = 'visible';
+    btn.style.display = 'block';
+    this.container.style.paddingBottom = '150px';
+    this.container.style.paddingTop = '150px';
   }
 
   public render() {

@@ -35,4 +35,8 @@
   background-color: transparent;
   border: none;
   width: 80px;
+  &:hover,
+  &:active {
+    color: $font-color--light;
+  }
 }
