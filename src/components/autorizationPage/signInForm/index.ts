@@ -102,7 +102,7 @@ export class SignInForm extends AutorizationForm {
           return;
         } else {
           el.classList.remove('form__input--invalid');
-          this.inputPassword.focus();
+          this.inputEmail.focus();
         }
       });
       if (success) {
@@ -111,7 +111,7 @@ export class SignInForm extends AutorizationForm {
           email: this.inputEmail.value,
           password: this.inputPassword.value,
         };
-        this.submitForm(params);
+        await this.submitForm(params);
       }
     });
   }

@@ -1,8 +1,8 @@
 import { Component } from '../../../core/templates/components';
 import { PageIds } from '../../../app';
 import './menu.scss';
-import { RSLangLS } from '../../../RSLangLS';
 import { Button } from '../../button';
+import { logInData } from '../../../states/logInData';
 
 const Buttons = [
   {
@@ -61,7 +61,7 @@ export class Menu extends Component {
     this.container.append(this.burgerBtn.rendor());
     this.renderPageButtons();
     this.container.append(this.wrapper);
-    if (!RSLangLS.isUserAutorizated()) {
+    if (!logInData.isAutorizated) {
       const statistics = this.container.querySelector(`.menu__item--${PageIds.statisticsPage}`) as HTMLElement;
       statistics.style.display = 'none';
     }

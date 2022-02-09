@@ -1,6 +1,7 @@
 import { PageIds } from '../../../app';
 import { Component } from '../../../core/templates/components';
 import { RSLangLS } from '../../../RSLangLS';
+import { logInData } from '../../../states/logInData';
 import { Button } from '../../button';
 import './userView.scss';
 
@@ -30,7 +31,7 @@ export class UserView extends Component {
   }
 
   private showGreeting(greeting: HTMLElement) {
-    const message = RSLangLS.getUserData('name');
+    const message = logInData.name;
     if (message) {
       greeting.textContent = `Привет, ${message}!`;
     }
@@ -41,7 +42,7 @@ export class UserView extends Component {
     wrap.append(this.buttonInput);
     wrap.append(this.buttonExit.rendor());
     const greeting = this.container.querySelector('.userView__greeting') as HTMLElement;
-    if (RSLangLS.isUserAutorizated()) {
+    if (logInData.isAutorizated) {
       this.hideBtn(this.buttonInput);
       this.showGreeting(greeting);
     } else {

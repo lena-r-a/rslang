@@ -2,7 +2,7 @@ import { Page } from '../../core/templates/page';
 import { Masthead } from './masthead';
 import { AppDescription } from './appDescription';
 import { Team } from './team';
-import { RSLangLS } from '../../RSLangLS';
+import { logInData } from '../../states/logInData';
 
 export class MainPage extends Page {
   static TextObject = {
@@ -18,7 +18,7 @@ export class MainPage extends Page {
   }
 
   private renderAppDescription() {
-    return new AppDescription('section', ['mainPage__appDescription']).render(RSLangLS.isUserAutorizated());
+    return new AppDescription('section', ['mainPage__appDescription']).render(logInData.isAutorizated);
   }
 
   private renderTeam() {

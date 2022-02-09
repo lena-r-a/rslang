@@ -2,7 +2,7 @@ import { Component } from '../../../core/templates/components';
 import { Button } from '../../../common/button';
 import { PageIds } from '../../../app';
 import './masthead.scss';
-import { RSLangLS } from '../../../RSLangLS';
+import { logInData } from '../../../states/logInData';
 
 const masheadInfo = {
   innerText: 'Учи английский играючи!',
@@ -30,7 +30,7 @@ export class Masthead extends Component {
   public render() {
     const btn = this.renderBtn();
     this.container.querySelector('.masthead__wrapper')?.append(btn);
-    if (!RSLangLS.isUserAutorizated()) {
+    if (logInData.isAutorizated) {
       this.showBtn(btn);
     }
     return this.container;
