@@ -1,4 +1,4 @@
-import { AutorizationForm, inputEmailSchema, InputEmailType, inputPasswordSchema, InputPasswordType } from '../AutorizationForm';
+import { AutorizationForm } from '../AutorizationForm';
 import { Form } from '../../../common/form';
 import '../form.scss';
 import { TextObj } from '../AutorizationForm';
@@ -7,6 +7,7 @@ import { PageIds } from '../../../app';
 import { IUserCreate, IUserLogin, UserService } from '../../../services/UsersService';
 import { RSLangLS } from '../../../RSLangLS';
 import { Preloader } from '../../../common/preloader';
+import * as yup from 'yup';
 
 const inputEmailAttr: Attr = {
   type: 'text',
@@ -18,11 +19,31 @@ const inputPasswordAttr: Attr = {
   placeholder: TextObj.signInFormPasswordField,
 };
 
-const statusMessages = {
-  403: 'Направильно введен пароль или email. Попробуйте еще раз.',
+const statusMessages: StatusMessagesType = {
+  403: 'Нeправильно введен пароль или email. Попробуйте еще раз.',
+  404: 'Пользователь не найден. Попробуйте еще раз.',
   default: 'Что-то пошло не так. Попробуйте еще раз.',
   success: 'Вы успешно вошли в аккаунт!',
 };
+
+type StatusMessagesType = {
+  403: string;
+  404: string;
+  default: string;
+  success: string;
+};
+
+const inputEmailSchema = yup.object().shape({
+  email: yup.string().required('Поле обязательное для заполнения'),
+});
+
+export type InputEmailType = yup.InferType<typeof inputEmailSchema>;
+
+const inputPasswordSchema = yup.object().shape({
+  password: yup.string().required('Поле обязательное для заполнения'),
+});
+
+export type InputPasswordType = yup.InferType<typeof inputPasswordSchema>;
 
 export class SignInForm extends AutorizationForm {
   private inputEmail: HTMLInputElement;
@@ -104,11 +125,12 @@ export class SignInForm extends AutorizationForm {
       Preloader.hidePreloader();
       location.reload();
       location.href = `#${PageIds.mainPage}`;
-    } else if (resp.status === 403) {
+    } else if (Object.keys(statusMessages).includes(String(resp.status))) {
       Preloader.hidePreloader();
       this.clearForm();
       this.inputEmail.focus();
-      this.showErrorMessage(statusMessages[403]);
+      const key = resp.status as keyof StatusMessagesType;
+      this.showErrorMessage(statusMessages[key]);
     } else {
       Preloader.hidePreloader();
       this.clearForm();
