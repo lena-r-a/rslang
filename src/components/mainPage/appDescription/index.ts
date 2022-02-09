@@ -14,9 +14,9 @@ const cardsContent: CardType[] = [
   },
   {
     img: '../../../assets/images/2.png',
-    text: 'Словарь содержит 3600 часто встречающихся слов. Учи их в своем темпе!',
-    caption: 'Словарь',
-    href: PageIds.dictionary,
+    text: 'Учебник содержит 3600 часто встречающихся слов. Слушай, читай, учи их в своем темпе!',
+    caption: 'Список слов',
+    href: PageIds.elBookPage,
   },
   {
     img: '../../../assets/images/7.png',

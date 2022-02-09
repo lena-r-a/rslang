@@ -24,7 +24,6 @@ export const enum PageIds {
   gameSprintPage = 'gameSprintPage',
   elBookPage = 'ElBookPage',
   games = 'games',
-  dictionary = 'dictionary',
   signUpPage = 'signUpPage',
 }
 
@@ -51,9 +50,6 @@ export class App {
         break;
       case PageIds.games:
         page = new GamesPage(idPage);
-        break;
-      case PageIds.dictionary:
-        page = new DictionaryPage(idPage);
         break;
       case PageIds.elBookPage:
         page = new ElBookPage(idPage);

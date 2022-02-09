@@ -14,10 +14,6 @@ const Buttons = [
     text: 'учебник',
   },
   {
-    id: PageIds.dictionary,
-    text: 'словарь',
-  },
-  {
     id: PageIds.games,
     text: 'игры',
   },
