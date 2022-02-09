@@ -6,7 +6,6 @@ import { GameSprintPage } from './components/games/sprintPage';
 import { GameChallengePage } from './components/games/challengePage';
 import { SignInPage } from './components/autorizationPage/SignInPage';
 import { SignUpPage } from './components/autorizationPage/SignUpPage';
-import { DictionaryPage } from './components/dictionaryPage';
 import { GamesPage } from './components/gamesPage';
 import { Page } from './core/templates/page';
 import { Header } from './common/header';
@@ -131,8 +130,11 @@ export class App {
     App.container.append(this.getPreloader());
     const header = new Header();
     App.container.append(header.render());
-    App.renderNewPage('mainPage');
-    window.location.href = `#${PageIds.mainPage}`;
+    if (window.location.hash.slice(1)) {
+      App.renderNewPage(window.location.hash.slice(1));
+    } else {
+      App.renderNewPage('mainPage');
+    }
     this.enableRouteChange();
   }
 }

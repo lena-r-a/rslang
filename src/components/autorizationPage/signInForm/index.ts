@@ -3,7 +3,7 @@ import { Form } from '../../../common/form';
 import '../form.scss';
 import { TextObj } from '../AutorizationForm';
 import { Attr } from '../../../common/types';
-import { PageIds } from '../../../app';
+import { App, PageIds } from '../../../app';
 import { IUserCreate, IUserLogin, UserService } from '../../../services/UsersService';
 import { RSLangLS } from '../../../RSLangLS';
 import { Preloader } from '../../../common/preloader';
@@ -123,8 +123,9 @@ export class SignInForm extends AutorizationForm {
       const res: IUserLogin = await resp.json();
       RSLangLS.saveUserData(res);
       Preloader.hidePreloader();
-      location.reload();
-      location.href = `#${PageIds.mainPage}`;
+      window.location.href = `#${PageIds.mainPage}`;
+      const app = new App();
+      app.run();
     } else if (Object.keys(statusMessages).includes(String(resp.status))) {
       Preloader.hidePreloader();
       this.clearForm();
