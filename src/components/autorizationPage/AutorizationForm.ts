@@ -1,5 +1,24 @@
 import { Form } from '../../common/form';
 import './form.scss';
+import * as yup from 'yup';
+
+export const inputNameSchema = yup.object().shape({
+  name: yup.string().required('Поле обязательное для заполнения').min(3, 'Введите минимум 3 символа').max(8, 'Введите максимум 8 символов'),
+});
+
+export type InputNameType = yup.InferType<typeof inputNameSchema>;
+
+export const inputEmailSchema = yup.object().shape({
+  email: yup.string().email('Введите данные в формате example@domen.com').required('Поле обязательное для заполнения'),
+});
+
+export type InputEmailType = yup.InferType<typeof inputEmailSchema>;
+
+export const inputPasswordSchema = yup.object().shape({
+  password: yup.string().min(8, 'Введите минимум 8 символов').max(12, 'Ведите максимум 12 символов').required('Поле обязательное для заполнения'),
+});
+
+export type InputPasswordType = yup.InferType<typeof inputPasswordSchema>;
 
 export const TextObj = {
   signInFormLegend: 'Вход',

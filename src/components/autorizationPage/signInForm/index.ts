@@ -1,4 +1,4 @@
-import { AutorizationForm } from '../AutorizationForm';
+import { AutorizationForm, inputEmailSchema, InputEmailType, inputPasswordSchema, InputPasswordType } from '../AutorizationForm';
 import { Form } from '../../../common/form';
 import '../form.scss';
 import { TextObj } from '../AutorizationForm';
@@ -11,13 +11,11 @@ import { Preloader } from '../../../common/preloader';
 const inputEmailAttr: Attr = {
   type: 'text',
   placeholder: TextObj.signInFormEmailField,
-  required: '',
 };
 
 const inputPasswordAttr: Attr = {
   type: 'password',
   placeholder: TextObj.signInFormPasswordField,
-  required: '',
 };
 
 const statusMessages = {
@@ -37,6 +35,8 @@ export class SignInForm extends AutorizationForm {
 
   private text: HTMLElement;
 
+  private inputsArray: HTMLInputElement[];
+
   constructor() {
     super();
     this.container.classList.add('form--signInForm');
@@ -55,35 +55,84 @@ export class SignInForm extends AutorizationForm {
     this.text = document.createElement('p');
     this.text.classList.add('form__text');
     this.text.textContent = 'Еще не зарегистрировался? Жми!';
+    this.inputsArray = [this.inputEmail, this.inputPassword];
+
+    this.inputsArray.forEach((el) => {
+      el.addEventListener('blur', () => {
+        const err = this.checkValidElement(el);
+        if (err) {
+          el.classList.add('form__input--invalid');
+          el.focus();
+          this.showErrorMessage(err.errors[0]);
+        } else {
+          el.classList.remove('form__input--invalid');
+        }
+      });
+    });
+
     this.container.addEventListener('submit', async (e: Event) => {
       e.preventDefault();
-      Preloader.showPreloader();
-      const params: IUserCreate = {
-        email: this.inputEmail.value,
-        password: this.inputPassword.value,
-      };
-      const request = new UserService();
-      const resp: Response = await request.loginUser(params);
-      if (resp.status === 200) {
-        const res: IUserLogin = await resp.json();
-        RSLangLS.saveUserData(res);
-        Preloader.hidePreloader();
-        location.reload();
-        //todo adjust showSuccesMessage
-        // this.showSuccesMessage(statusMessages.success);
-        location.href = `#${PageIds.mainPage}`;
-      } else if (resp.status === 403) {
-        Preloader.hidePreloader();
-        this.clearForm();
-        this.inputEmail.focus();
-        this.showErrorMessage(statusMessages[403]);
-      } else {
-        Preloader.hidePreloader();
-        this.clearForm();
-        this.inputEmail.focus();
-        this.showErrorMessage(statusMessages.default);
+      let success = true;
+      this.inputsArray.forEach((el) => {
+        const error = this.checkValidElement(el);
+        if (error) {
+          el.classList.add('form__input--invalid');
+          success = false;
+          return;
+        } else {
+          el.classList.remove('form__input--invalid');
+          this.inputPassword.focus();
+        }
+      });
+      if (success) {
+        Preloader.showPreloader();
+        const params: IUserCreate = {
+          email: this.inputEmail.value,
+          password: this.inputPassword.value,
+        };
+        this.submitForm(params);
       }
     });
+  }
+
+  private async submitForm(params: IUserCreate) {
+    const request = new UserService();
+    const resp: Response = await request.loginUser(params);
+    if (resp.status === 200) {
+      const res: IUserLogin = await resp.json();
+      RSLangLS.saveUserData(res);
+      Preloader.hidePreloader();
+      location.reload();
+      location.href = `#${PageIds.mainPage}`;
+    } else if (resp.status === 403) {
+      Preloader.hidePreloader();
+      this.clearForm();
+      this.inputEmail.focus();
+      this.showErrorMessage(statusMessages[403]);
+    } else {
+      Preloader.hidePreloader();
+      this.clearForm();
+      this.inputEmail.focus();
+      this.showErrorMessage(statusMessages.default);
+    }
+  }
+
+  private checkValidElement(el: HTMLElement): InputEmailType | InputPasswordType | undefined {
+    switch (el) {
+      case this.inputEmail:
+        try {
+          inputEmailSchema.validateSync({ email: this.inputEmail.value }, { abortEarly: false });
+        } catch (err) {
+          return err as InputEmailType;
+        }
+        break;
+      case this.inputPassword:
+        try {
+          inputPasswordSchema.validateSync({ password: this.inputPassword.value }, { abortEarly: false });
+        } catch (err) {
+          return err as InputPasswordType;
+        }
+    }
   }
 
   public render() {
