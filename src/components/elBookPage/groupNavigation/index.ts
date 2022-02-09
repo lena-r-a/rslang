@@ -6,6 +6,7 @@ export const WordState = {
   PAGE: 0,
   GROUP: 0,
   BG: '#e9e91dc4',
+  TOTALPAGES: 30,
 };
 
 const navItemsText = [

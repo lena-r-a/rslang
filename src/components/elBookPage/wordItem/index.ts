@@ -52,7 +52,7 @@ export class WordItem extends Component {
     const descriptionContainer = document.createElement('div');
     descriptionContainer.innerHTML = `
       <p class = "word">
-        <span>${this.word.word} - <span>
+        <span>✧ ${this.word.word} - <span>
         <span>${this.word.transcription} - <span>
         <span>${this.word.wordTranslate}<span>
       </p>
