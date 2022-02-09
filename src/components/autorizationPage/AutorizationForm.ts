@@ -43,7 +43,7 @@ export abstract class AutorizationForm extends Form {
     message.style.visibility = 'visible';
     setTimeout(() => {
       message.style.visibility = 'hidden';
-    }, 4000);
+    }, 5000);
   }
 
   public showSuccesMessage(messageText: string) {

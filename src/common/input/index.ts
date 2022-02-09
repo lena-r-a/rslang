@@ -1,5 +1,6 @@
 import { Component } from '../../core/templates/components';
 import { Attr } from '../types';
+import './input.scss';
 
 export class Input extends Component {
   constructor(attr: Attr) {
@@ -9,6 +10,13 @@ export class Input extends Component {
         this.container.setAttribute(key, attr[key]);
       });
     }
+    this.container.onfocus = () => {
+      this.container.classList.add('input--focus');
+    };
+
+    this.container.onblur = () => {
+      this.container.classList.remove('input--focus');
+    };
   }
 
   public onInput(cb: (event: Event) => void): void {

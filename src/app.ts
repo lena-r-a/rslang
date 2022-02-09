@@ -13,7 +13,6 @@ import { Header } from './common/header';
 import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
-// import { RSLangLS } from './RSLangLS';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -98,7 +97,6 @@ export class App {
   static setFocusOnInput(idPage: string): void {
     if (idPage === PageIds.autorizationPage || idPage === PageIds.signUpPage) {
       const formEl = document.forms[0]?.querySelector('input') as HTMLInputElement | null;
-      console.log(formEl);
       formEl?.focus();
     }
   }

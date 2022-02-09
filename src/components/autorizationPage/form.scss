@@ -5,6 +5,7 @@ $form-margin: 70px;
   flex-direction: column;
   padding: $padding;
   width: 100%;
+
 }
 
 .form__input {
@@ -15,6 +16,9 @@ $form-margin: 70px;
   cursor: pointer;
   &:first-child {
     margin-top: $form-margin;
+  }
+  &--invalid {
+    border-color: $bc-red;
   }
 }
 

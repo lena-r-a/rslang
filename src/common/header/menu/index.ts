@@ -63,7 +63,6 @@ export class Menu extends Component {
     this.container.append(this.wrapper);
     if (!RSLangLS.isUserAutorizated()) {
       const statistics = this.container.querySelector(`.menu__item--${PageIds.statisticsPage}`) as HTMLElement;
-      console.log(statistics);
       statistics.style.display = 'none';
     }
     return this.container;
