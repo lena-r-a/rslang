@@ -13,7 +13,7 @@ import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
 import { RSLangLS } from './RSLangLS';
-import { logInData } from './states/logInData';
+import { refreshUserLogInData } from './states/logInData';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -115,17 +115,12 @@ export class App {
     if (RSLangLS.isUserAutorizated()) {
       const dataJSON = RSLangLS.getUserDataJSON() as string;
       const data = JSON.parse(dataJSON);
-      logInData.name = data.name;
-      logInData.token = data.token;
-      logInData.refreshToken = data.refreshToken;
-      logInData.userId = data.userId;
-      logInData.isAutorizated = true;
+      refreshUserLogInData(data);
     }
   }
 
   public run() {
     this.checkUserData();
-    console.log(logInData);
     Preloader.enablePreloader();
     App.container.append(this.getPreloader());
     const header = new Header();

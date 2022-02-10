@@ -109,4 +109,22 @@ export class UserService {
       () => console.log('Bad request');
     }
   }
+
+  public async getUserNewToken(id: string, refreshToken: string): Promise<IUserLogin | undefined> {
+    const fullURL = `${this.restService.baseURL}/users/${id}/tokens`;
+    try {
+      const response = await fetch(fullURL, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${refreshToken}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const result = await response.json();
+      return result;
+    } catch {
+      () => console.log('Bad request');
+    }
+  }
 }
