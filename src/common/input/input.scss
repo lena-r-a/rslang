@@ -1,0 +1,8 @@
+.input {
+  &--focus {
+    @include border(green);
+  }
+  &--invalid {
+    @include border(red);
+  }
+}
