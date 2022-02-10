@@ -1,0 +1,38 @@
+.page-navigation__games {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.games-menu__help-btn {
+  background-color: transparent;
+  border-color: white;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.displaynone {
+  display: none;
+}
+
+.help-message {
+  position: absolute;
+  top: -70px;
+  right: -210px;
+  width: 200px;
+  height: 100px;
+  color: black;
+  background-color: white;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  &::after {
+    position: absolute;
+    content: '';
+  }
+}

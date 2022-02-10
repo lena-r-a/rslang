@@ -51,3 +51,15 @@
 .page-navigation__start {
   background-image: url('../../../assets/images/doublearrow.svg');
 }
+
+.link-btn {
+  background-color: transparent;
+  border: none;
+  color: white;
+  transition: text-decoration ease-in 0.3s;
+  margin-right: 10px;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}

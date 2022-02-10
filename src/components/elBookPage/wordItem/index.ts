@@ -7,9 +7,32 @@ let isPlay = false;
 export class WordItem extends Component {
   word: IWord;
 
+  buttonsWrapper: HTMLElement;
+
+  studiedWord: HTMLElement;
+
+  complicatedWord: HTMLElement;
+
   constructor(word: IWord) {
     super('div', ['elbook__word-item']);
     this.word = word;
+    this.buttonsWrapper = document.createElement('div');
+    this.container.append(this.buttonsWrapper);
+    this.studiedWord = document.createElement('button');
+    this.complicatedWord = document.createElement('button');
+  }
+
+  private renderWordButtons(): HTMLElement {
+    this.buttonsWrapper.classList.add('word-item__buttons');
+    this.studiedWord.textContent = 'Добаваить в изученные';
+    this.studiedWord.classList.add('add-to-studied');
+    this.complicatedWord.textContent = 'Добавить в сложные';
+    this.complicatedWord.classList.add('add-to-complicated');
+    this.buttonsWrapper.append(this.complicatedWord);
+    this.buttonsWrapper.append(this.studiedWord);
+    this.studiedWord.addEventListener('click', (e) => this.addToStudiedWords(e));
+    this.complicatedWord.addEventListener('click', (e) => this.addToComplicatedWords(e));
+    return this.buttonsWrapper;
   }
 
   private renderImage(): HTMLElement {
@@ -65,22 +88,6 @@ export class WordItem extends Component {
     return descriptionContainer;
   }
 
-  private renderWordButtons(): HTMLElement {
-    const buttonsWrapper = document.createElement('div');
-    buttonsWrapper.classList.add('word-item__buttons');
-    const studiedWord = document.createElement('button');
-    studiedWord.textContent = 'Изученное слово';
-    studiedWord.classList.add('add-to-studied');
-    const complicatedWord = document.createElement('button');
-    complicatedWord.textContent = 'Добавить в сложные';
-    complicatedWord.classList.add('add-to-complicated');
-    buttonsWrapper.append(complicatedWord);
-    buttonsWrapper.append(studiedWord);
-    studiedWord.addEventListener('click', (e) => this.addToStudiedWords(e));
-    complicatedWord.addEventListener('click', (e) => this.addToComplicatedWords(e));
-    return buttonsWrapper;
-  }
-
   addToStudiedWords(e: Event): void {
     const target = e.currentTarget as HTMLElement;
     if (this.container.classList.contains('studied')) {
@@ -90,7 +97,7 @@ export class WordItem extends Component {
       this.container.classList.add('studied');
       target.textContent = 'Удалить из изученных';
       this.container.classList.remove('complicated');
-      document.querySelector('.add-to-complicated')!.textContent = 'Добавить в сложные';
+      this.complicatedWord.textContent = 'Добавить в сложные';
     }
   }
 
@@ -103,7 +110,7 @@ export class WordItem extends Component {
       this.container.classList.add('complicated');
       target.textContent = 'Удалить из сложных';
       this.container.classList.remove('studied');
-      document.querySelector('.add-to-studied')!.textContent = 'Изученное слово';
+      this.studiedWord.textContent = 'Добаваить в изученные';
     }
   }
 
