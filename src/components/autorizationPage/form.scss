@@ -1,0 +1,56 @@
+$form-margin: 70px;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: $padding;
+  width: 100%;
+
+}
+
+.form__input {
+  display: block;
+  width: 300px;
+  margin-bottom: $margin;
+  @include info-text();
+  cursor: pointer;
+  &:first-child {
+    margin-top: $form-margin;
+  }
+  &--invalid {
+    border-color: $bc-red;
+  }
+}
+
+.form__btn {
+  @include btn2;
+  width: 100%;
+  margin-bottom: $margin;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  &--signIn {
+    margin-top: $form-margin;
+  }
+}
+
+ 
+.form--signUpForm .form__btn--signUp {
+  margin-top: $form-margin;
+}
+
+.form__fieldset {
+  width: 100%;
+  padding: 0;
+  border: 0 none;
+}
+
+.form__caption {
+  width: 100%;
+  margin-bottom: $margin;
+  @include text();
+}
+
+.form__text {
+  @include info-text();
+}

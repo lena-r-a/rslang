@@ -14,9 +14,9 @@ const cardsContent: CardType[] = [
   },
   {
     img: '../../../assets/images/2.png',
-    text: 'Словарь содержит 3600 часто встречающихся слов. Ичи их в своем темпе!',
-    caption: 'Словарь',
-    href: PageIds.dictionary,
+    text: 'Учебник содержит 3600 часто встречающихся слов. Слушай, читай, учи их в своем темпе!',
+    caption: 'Список слов',
+    href: PageIds.elBookPage,
   },
   {
     img: '../../../assets/images/7.png',
@@ -39,11 +39,19 @@ export class AppDescription extends Component {
     this.container.innerHTML = '<h3 class="visually-hidden>Application description</h3>';
   }
 
-  render() {
+  render(isRegisted: boolean) {
     cardsContent.forEach((el) => {
       const card = new Card(el).render() as HTMLLinkElement;
+      card.classList.add(`card--${el.href}`);
       this.container.append(card);
     });
+    if (!isRegisted) {
+      const statisticsCard = this.container.querySelector(`.card--${PageIds.statisticsPage}`) as HTMLElement;
+      statisticsCard.style.cursor = 'auto';
+      statisticsCard.addEventListener('click', (e: Event) => {
+        e.preventDefault();
+      });
+    }
     return this.container;
   }
 }

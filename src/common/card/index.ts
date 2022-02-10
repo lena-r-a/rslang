@@ -20,7 +20,7 @@ export class Card extends Component {
     });
   }
 
-  render() {
+  public render() {
     return this.container as HTMLLinkElement;
   }
 }

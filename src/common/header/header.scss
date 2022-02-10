@@ -1,6 +1,8 @@
+$margin--menu: 40px;
+
 .header {
   width: 100%;
-  height: 100px;
+  height: $header-height;
 }
 
 .header__fixed {
@@ -11,17 +13,59 @@
   background-color: $bc-blue;
 }
 
+.header__message {
+  position: absolute;
+  bottom: -70px;
+  left: 50%;
+  padding: 10px;
+  transform: translateX(-50%);
+  opacity: 0;
+  @include info-text();
+  @include border(green);
+  transition: 1s;
+}
+
 .header__wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: $header-height;
   padding: $padding;
   background: url("../../assets/images/border-bottom-header.png") repeat-x bottom;
+  overflow: visible;
 }
 
 .header__logo {
   @include main-caption();
-  margin-right: $margin;
   font-size: 2.3rem;
   white-space: nowrap;
+  @media screen and (min-width: $burger-menu-screen){
+    flex-shrink: 1;
+  }
+}
+
+.header__menu {
+  position: absolute;
+  right: 0;
+  top: 45px;
+  @media screen and (min-width: $burger-menu-screen) {
+    position: unset;
+    flex-grow: 1;
+    order: 2;
+    max-width: 780px;
+    margin-left: $margin--menu;
+    margin-right: $margin--menu;
+  }
+}
+
+.header__userView {
+  order: 2;
+  margin-left: $margin--menu;
+  margin-right: calc($margin--menu + 40px + 40px);
+  @media screen and (min-width: $burger-menu-screen){
+    flex-shrink: 1;
+    order: 3;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }

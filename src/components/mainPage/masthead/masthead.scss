@@ -1,9 +1,10 @@
 .masthead {
-  padding: 150px;
+  padding: 200px 150px;
 }
 
 .masthead__wrapper {
   max-width: 90%;
+  margin: 0 auto;
 }
 
 .masthead__info {
@@ -21,9 +22,9 @@
 }
 
 .masthead__btn {
-  display: block;
-  margin: 40px auto 0;
+  display: none;
   width: 200px;
+  margin: 40px auto 0;
   padding: 16px 0 16px 0;
   font-size: $font-size--tiny;
   font-family: $font-family--semiBold;
@@ -36,13 +37,9 @@
   border: none;
   border-radius: $block-border-radius;
   transition: background-color ease-in-out 0.5s;
-
-  // если добавляем анимацию:
   animation-name: btn;
   animation-duration: 0.7s;
   animation-timing-function: ease-in-out;
-
-  //при реализации активных состояний
   &:hover,
   &:focus {
     background-color: $bc-red--active;
@@ -57,8 +54,7 @@
     width: 300px;
   }
 }
-
-// при реализации анимации кнопки
+  
 @keyframes btn {
   0% {
     transform: rotate(0deg) scale(0.7);
