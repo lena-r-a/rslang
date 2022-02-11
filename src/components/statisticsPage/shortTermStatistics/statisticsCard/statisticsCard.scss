@@ -1,0 +1,34 @@
+.statCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: $padding;
+  height: 445px;
+  width: 290px;
+  background-color: $bc-blue;
+  @include border($bc--grey);
+}
+
+.statCard__header {
+  @include navigation__link();
+  margin-bottom: $margin;
+  color: $font-color--light;
+  cursor: none;
+}
+
+.statCard__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 100px;
+  @include border($bc-red);
+  border-radius: 50%;
+}
+
+.statCard__content {
+  @include text--big();
+  color: $font-color--light;
+}
