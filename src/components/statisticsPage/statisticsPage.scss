@@ -1,0 +1,28 @@
+.stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: $padding;
+  width: 100%;
+}
+
+.stat__btn {
+  @include btn2;
+  @include border($bc--grey);
+  padding: 20px;
+  margin-right: $margin;
+  &:last-child {
+    margin-right: 0;
+  }
+  &:hover,
+  &:active {
+    color: rgba(255, 255, 255, 0.75);
+  }
+}
+
+.stat__btn-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 auto;
+  margin-bottom: $margin;
+}
