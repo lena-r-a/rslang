@@ -1,0 +1,24 @@
+.statContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: $margin;
+  padding: $padding;
+  margin: 0 auto;
+  background-image: url('../../..//assets/images/header-block.png');
+  background-size: cover; 
+  @include border($bc--grey);
+}
+
+.statContainer__header {
+  @include text();
+  margin-bottom: $margin;
+  margin-top: 0;
+}
+
+.statContainer__wrapper {
+  display: flex;
+  justify-content: space-around;
+  gap: $margin;
+  flex-wrap: wrap;
+}
