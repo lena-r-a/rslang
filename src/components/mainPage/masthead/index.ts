@@ -30,7 +30,7 @@ export class Masthead extends Component {
   public render() {
     const btn = this.renderBtn();
     this.container.querySelector('.masthead__wrapper')?.append(btn);
-    if (logInData.isAutorizated) {
+    if (!logInData.isAutorizated) {
       this.showBtn(btn);
     }
     return this.container;

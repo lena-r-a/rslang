@@ -13,7 +13,7 @@ import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
 import { RSLangLS } from './RSLangLS';
-import { refreshUserLogInData } from './states/logInData';
+import { clearUserLogInData, refreshUserLogInData } from './states/logInData';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -111,20 +111,31 @@ export class App {
     return preloader;
   }
 
-  private checkUserData() {
+  public checkUserData() {
     if (RSLangLS.isUserAutorizated()) {
       const dataJSON = RSLangLS.getUserDataJSON() as string;
       const data = JSON.parse(dataJSON);
       refreshUserLogInData(data);
-    }
+    } else clearUserLogInData();
+  }
+
+  private runApp() {
+    this.checkUserData();
+    document.body.innerHTML = '';
+    App.container.append(this.getPreloader());
+    Preloader.enablePreloader();
+    window.location.href = `#${PageIds.mainPage}`;
+    const header = new Header();
+    App.container.append(header.render());
+  }
+
+  public runToMainPage() {
+    this.runApp();
+    App.renderNewPage('mainPage');
   }
 
   public run() {
-    this.checkUserData();
-    Preloader.enablePreloader();
-    App.container.append(this.getPreloader());
-    const header = new Header();
-    App.container.append(header.render());
+    this.runApp();
     if (window.location.hash.slice(1)) {
       App.renderNewPage(window.location.hash.slice(1));
     } else {

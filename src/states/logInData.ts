@@ -1,7 +1,7 @@
 import { RSLangLS } from '../RSLangLS';
 import { UserService, IUserLogin } from '../services/UsersService';
 
-export const logInData: LogInDataType = {
+export let logInData: LogInDataType = {
   isAutorizated: false,
 };
 
@@ -13,6 +13,12 @@ export type LogInDataType = {
   refreshToken?: string;
   userId?: string;
 };
+
+export function clearUserLogInData() {
+  logInData = {
+    isAutorizated: false,
+  };
+}
 
 export function refreshUserLogInData(newData: IUserLogin) {
   logInData.userId = newData.userId;

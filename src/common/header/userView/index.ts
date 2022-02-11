@@ -1,4 +1,4 @@
-import { PageIds } from '../../../app';
+import { App, PageIds } from '../../../app';
 import { Component } from '../../../core/templates/components';
 import { RSLangLS } from '../../../RSLangLS';
 import { logInData } from '../../../states/logInData';
@@ -22,8 +22,10 @@ export class UserView extends Component {
 
   private signOut() {
     RSLangLS.removeUserData();
-    location.reload();
-    location.href = `#${PageIds.mainPage}`;
+    const app = new App();
+    app.runToMainPage();
+    // location.reload();
+    // location.href = `#${PageIds.mainPage}`;
   }
 
   private hideBtn(btn: HTMLElement) {
@@ -38,6 +40,7 @@ export class UserView extends Component {
   }
 
   render() {
+    console.log(logInData);
     const wrap = this.container.querySelector('.userView__wrap') as HTMLElement;
     wrap.append(this.buttonInput);
     wrap.append(this.buttonExit.rendor());

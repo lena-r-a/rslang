@@ -102,7 +102,7 @@ export class SignInForm extends AutorizationForm {
           return;
         } else {
           el.classList.remove('form__input--invalid');
-          this.inputEmail.focus();
+          this.inputPassword.focus();
         }
       });
       if (success) {
@@ -123,9 +123,8 @@ export class SignInForm extends AutorizationForm {
       const res: IUserLogin = await resp.json();
       RSLangLS.saveUserData(res);
       Preloader.hidePreloader();
-      window.location.href = `#${PageIds.mainPage}`;
       const app = new App();
-      app.run();
+      app.runToMainPage();
     } else if (Object.keys(statusMessages).includes(String(resp.status))) {
       Preloader.hidePreloader();
       this.clearForm();

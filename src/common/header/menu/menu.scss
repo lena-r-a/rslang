@@ -69,6 +69,7 @@
   }
   &:focus-visible {
     @include outline();
+    border-top: $bc-light;
   }
   @media screen and (min-width: $burger-menu-screen) {
     color: rgba(255, 255, 255, 0.75);
