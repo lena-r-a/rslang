@@ -121,22 +121,34 @@ export class App {
 
   private runApp() {
     this.checkUserData();
-    document.body.innerHTML = '';
     App.container.append(this.getPreloader());
     Preloader.enablePreloader();
-    window.location.href = `#${PageIds.mainPage}`;
     const header = new Header();
     App.container.append(header.render());
   }
 
   public runToMainPage() {
+    document.body.innerHTML = '';
+    window.location.href = `#${PageIds.mainPage}`;
     this.runApp();
+    // this.checkUserData();
+    // App.container.append(this.getPreloader());
+    // Preloader.enablePreloader();
+    // const header = new Header();
+    // App.container.append(header.render());
     App.renderNewPage('mainPage');
+    this.enableRouteChange();
   }
 
   public run() {
     this.runApp();
+    // this.checkUserData();
+    // App.container.append(this.getPreloader());
+    // Preloader.enablePreloader();
+    // const header = new Header();
+    // App.container.append(header.render());
     if (window.location.hash.slice(1)) {
+      console.log(window.location.hash.slice(1));
       App.renderNewPage(window.location.hash.slice(1));
     } else {
       App.renderNewPage('mainPage');

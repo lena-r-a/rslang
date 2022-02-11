@@ -62,7 +62,7 @@ export class SignInForm extends AutorizationForm {
     super();
     this.container.classList.add('form--signInForm');
     this.inputEmail = Form.renderInput(inputEmailAttr);
-    this.inputEmail.focus();
+    // this.inputEmail.focus();
     this.inputPassword = Form.renderInput(inputPasswordAttr);
     this.signInBtn = Form.renderButton(['form__btn', 'form__btn-signIn'], TextObj.signInFormLegend);
     this.signInBtn.setAttribute('type', 'submit');
