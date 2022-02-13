@@ -27,24 +27,6 @@ export type StatDataGameType = {
 export class StatisticService {
   private baseURL = 'https://rslang-js.herokuapp.com';
 
-  // public async getStatistics(id: string, token: string): Promise<StatDataType | undefined> {
-  //     const fullURL = `${this.baseURL}/users/${id}/statistics`;
-  //     try {
-  //       const response = await fetch(fullURL, {
-  //         method: 'GET',
-  //         headers: {
-  //           'Authorization': `Bearer ${token}`,
-  //           'Accept': 'application/json',
-  //         },
-  //       });
-  //       const result = await response.json();
-  //       return result;
-  //     } catch {
-  //       if ()
-  //       () => console.log('Bad request');
-  //     }
-  //   }
-
   public async getStatistics(id: string, token: string): Promise<Response> {
     const fullURL = `${this.baseURL}/users/${id}/statistics`;
     const response: Response = await fetch(fullURL, {
@@ -69,8 +51,6 @@ export class StatisticService {
         },
         body: JSON.stringify(data),
       });
-      // const result = await response.json();
-      // return result;
     } catch {
       () => console.log('Bad request');
     }
