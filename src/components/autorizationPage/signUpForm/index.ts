@@ -122,7 +122,6 @@ export class SignUpForm extends AutorizationForm {
       window.location.hash = `#${PageIds.autorizationPage}`;
       this.showSuccesMessage(statusMessages.success);
     } else if (resp.status === 417) {
-      console.log(statusMessages[417]);
       this.showErrorMessage(statusMessages[417]);
       this.clearForm();
       this.inputName.focus();

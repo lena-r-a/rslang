@@ -52,9 +52,7 @@ export class Statistics {
 
   public refreshUserStat(dataFromBack: StatDataType, currentDate: string): StatDataType {
     const backDataObj: StatDataOptionalType = dataFromBack.optional[currentDate];
-    console.log(backDataObj);
     if (this.key === 'learned' && typeof this.data === 'number') {
-      console.log(this.data);
       backDataObj.learned += this.data;
     } else if ((this.key === 'sprint' || this.key === 'challenge') && typeof this.data !== 'number') {
       backDataObj[this.key].newWords += this.data.newWords;
@@ -69,19 +67,13 @@ export class Statistics {
 
   private createNewStatPerDay(dataFromBack: StatDataType, currentDate: string): StatDataType {
     const newData = Object.assign({}, statData);
-    console.log('newData');
-    console.log(newData);
-    // todo записать данные в новую дату
     dataFromBack.optional[currentDate] = newData;
     return dataFromBack;
   }
 
   private getEarlyStatPerDay(datesArr: string[]): string | undefined {
     const savedDatesNumbers = datesArr.map((el) => Number(el.split(':').join('')));
-    console.log('savedDatesNumbers');
-    console.log(savedDatesNumbers);
     const earlyNumber = Math.min.apply(0, savedDatesNumbers);
-    console.log(earlyNumber);
     const earlyNumberIndex = savedDatesNumbers.findIndex((el) => el === earlyNumber);
     if (datesArr[earlyNumberIndex]) {
       return datesArr[earlyNumberIndex];
@@ -92,17 +84,11 @@ export class Statistics {
     const statState = new Statistics(key, data);
     const dataFromBack: StatDataType | undefined = await statState.getUserStat();
     if (dataFromBack) {
-      console.log('dataFromBack');
-      console.log(dataFromBack);
       const currentDate: string = statState.getDate();
       const savedDates: string[] = Object.keys(dataFromBack.optional);
-      console.log('savedDates');
-      console.log(savedDates);
       // удаляем наиболее ранние данные, если option переполнен
       if (savedDates.length > 8) {
         const deletedDataKey = statState.getEarlyStatPerDay(savedDates);
-        console.log('deletedKey');
-        console.log(deletedDataKey);
         if (deletedDataKey) {
           delete dataFromBack.optional[deletedDataKey];
         }
@@ -111,14 +97,10 @@ export class Statistics {
       if (savedDates.includes(currentDate)) {
         // обновить данные за день
         updatedData = statState.refreshUserStat(dataFromBack, currentDate);
-        console.log('updatedData');
-        console.log(updatedData);
       } else {
         // сохранить новые данные за день
         const newData: StatDataType = statState.createNewStatPerDay(dataFromBack, currentDate);
         updatedData = statState.refreshUserStat(newData, currentDate);
-        console.log('updatedData');
-        console.log(updatedData);
       }
       await statState.statisticService.upsertStatistics(logInData.userId!, logInData.token!, updatedData);
     }
