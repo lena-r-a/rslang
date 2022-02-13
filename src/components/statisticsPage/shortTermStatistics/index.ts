@@ -2,6 +2,7 @@ import { Component } from '../../../core/templates/components';
 import { StatisticsContainer } from '../statisticsContainer';
 import { StatisticsCard } from './statisticsCard';
 import './shortTermStatistics.scss';
+import { StatDataOptionalType } from '../../../services/StatisticsService';
 
 const titlesObj = {
   words: 'Статистика по словам',
@@ -15,24 +16,37 @@ const textObjCards = {
 };
 
 export class ShortTermStatistics extends Component {
-  constructor() {
+  readonly statData: StatDataOptionalType;
+
+  constructor(statData: StatDataOptionalType) {
     super('div', ['shortStat']);
+    this.statData = statData;
+  }
+
+  private getNewWordsSumm(): number {
+    return this.statData.challenge.newWords + this.statData.sprint.newWords;
+  }
+
+  private getRightAnswPercent() {
+    const amountQuestions = this.statData.challenge.questions + this.statData.sprint.questions;
+    const amountRightAnsw = this.statData.challenge.rightAnsw + this.statData.sprint.rightAnsw;
+    return (amountRightAnsw / amountQuestions) * 100;
   }
 
   private getWordsCard(value: string, index: number): HTMLElement {
     const card = new StatisticsCard(value).render();
     const cardContent = card.querySelector('.statCard__content') as HTMLElement;
-    console.log(cardContent);
     switch (index) {
       case 0:
-        card.classList.add('wordsStat--new');
-        //todo вставить значение для контента
+        cardContent.textContent = String(this.getNewWordsSumm());
         break;
       case 1:
         card.classList.add('wordsStat--learned');
+        cardContent.textContent = String(this.statData.learned);
         break;
       case 2:
         card.classList.add('wordsStat--percent');
+        cardContent.textContent = `${this.getRightAnswPercent()}%`;
     }
     return card;
   }
@@ -47,21 +61,49 @@ export class ShortTermStatistics extends Component {
     return statOfWordsContainer;
   }
 
+  private getRightAnswersInGamePercent(game: keyof StatDataOptionalType): number | undefined {
+    if (game === 'sprint' || game === 'challenge') {
+      return (this.statData[game].rightAnsw / this.statData[game].questions) * 100;
+    }
+  }
+
+  private isDataNull(title: string): boolean {
+    switch (title) {
+      case 'sprint':
+        return this.statData.sprint.questions === 0;
+      case 'challenge':
+        return this.statData.challenge.questions === 0;
+      default:
+        return true;
+    }
+  }
+
+  private getErrorMessage(): HTMLElement {
+    const errorMessage = document.createElement('div');
+    errorMessage.textContent = 'Недостаточно данных для статистики';
+    errorMessage.classList.add('shortStat__message');
+    return errorMessage;
+  }
+
   private getGameCard(value: string, index: number, title: string) {
     const card = new StatisticsCard(value).render();
-    // const cardContent = card.querySelector('.statCard__content') as HTMLElement;
-    console.log(title);
+    const cardContent = card.querySelector('.statCard__content') as HTMLElement;
     switch (index) {
       case 0:
-        //todo вставить textcontent
-        //title = 'sprint' ? cardContent.textContent = ... : cardContent.textContent = ...
         card.classList.add('gameStat--new');
+        title === 'sprint' ? (cardContent.textContent = `${this.statData.sprint.newWords}`) : (cardContent.textContent = `${this.statData.challenge.newWords}`);
         break;
       case 1:
         card.classList.add('gameStat--percent');
+        title === 'sprint'
+          ? (cardContent.textContent = `${this.getRightAnswersInGamePercent('sprint')}%`)
+          : (cardContent.textContent = `${this.getRightAnswersInGamePercent('challenge')}%`);
         break;
       case 2:
         card.classList.add('gameStat--session');
+        title === 'sprint'
+          ? (cardContent.textContent = String(this.statData.sprint.session))
+          : (cardContent.textContent = String(this.statData.challenge.session));
     }
     return card;
   }
@@ -71,10 +113,14 @@ export class ShortTermStatistics extends Component {
     title === 'sprint' ? (containerTitle = titlesObj.sprint) : (containerTitle = titlesObj.challenge);
     const statOfGameContainer = new StatisticsContainer(containerTitle).render();
     const wrapper = statOfGameContainer.querySelector('.statContainer__wrapper') as HTMLElement;
-    textObjCards.game.forEach((value, index) => {
-      const card = this.getGameCard(value, index, title);
-      wrapper.append(card);
-    });
+    if (this.isDataNull(title)) {
+      wrapper.append(this.getErrorMessage());
+    } else {
+      textObjCards.game.forEach((value, index) => {
+        const card = this.getGameCard(value, index, title);
+        wrapper.append(card);
+      });
+    }
     return statOfGameContainer;
   }
 

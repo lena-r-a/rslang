@@ -1,4 +1,5 @@
 .stat {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -7,16 +8,51 @@
 }
 
 .stat__btn {
-  @include btn2;
-  @include border($bc--grey);
-  padding: 20px;
-  margin-right: $margin;
-  &:last-child {
-    margin-right: 0;
+  @include btn();
+  width: auto;
+  padding: 16px;
+  &--shortTerm {
+    margin-right: $margin;
+    animation-name: btn;
+    animation-duration: 0.7s;
   }
   &:hover,
-  &:active {
-    color: rgba(255, 255, 255, 0.75);
+  &:focus {
+    background-color: $bc-red--active;
+  }
+  &:focus-visible {
+    @include outline();
+  }
+}
+
+@keyframes btn {
+  0% {
+    transform: rotate(0deg) scale(0.7);
+  }
+  20% {
+    transform: rotate(0deg) scale(0.8);
+  }
+  40% {
+    transform: rotate(0deg) scale(0.9);
+  }
+  50% {
+    transform: rotate(8deg) scale(1);
+  }
+  60% {
+    transform: rotate(-8deg) scale(1.2);
+  }
+  75%,
+  90% {
+    transform: rotate(8deg) scale(1);
+  }
+  80%,
+  95% {
+    transform: rotate(-8deg) scale(1);
+  }
+  70%,
+  85%,
+  100% {
+    transform: rotate(0deg) scale(1);
   }
 }
 
@@ -24,5 +60,10 @@
   display: flex;
   justify-content: flex-start;
   margin: 0 auto;
+  margin-bottom: $margin;
+}
+
+.stat__error-message {
+  @include error__message();
   margin-bottom: $margin;
 }
