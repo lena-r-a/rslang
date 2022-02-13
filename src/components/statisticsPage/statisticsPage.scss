@@ -4,6 +4,7 @@
   flex-direction: column;
   justify-content: flex-start;
   padding: $padding;
+  padding-top: 120px;
   width: 100%;
 }
 
@@ -60,7 +61,7 @@
   display: flex;
   justify-content: flex-start;
   margin: 0 auto;
-  margin-bottom: $margin;
+  margin-bottom: 120px;
 }
 
 .stat__error-message {

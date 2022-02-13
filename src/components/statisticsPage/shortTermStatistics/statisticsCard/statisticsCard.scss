@@ -3,11 +3,15 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  height: auto;
   padding: $padding;
-  height: 445px;
-  width: 290px;
   background-color: $bc-blue;
   @include border($bc--grey);
+  @media screen and (min-width: $statistics-adaptive) {
+    height: 445px;
+    width: 290px;
+  }
 }
 
 .statCard__header {
@@ -23,9 +27,11 @@
   align-items: center;
   width: 100px;
   height: 100px;
-  margin-bottom: 100px;
   @include border($bc-red);
   border-radius: 50%;
+  @media screen and (min-width: $statistics-adaptive) {
+    margin-bottom: 100px;
+  }
 }
 
 .statCard__content {

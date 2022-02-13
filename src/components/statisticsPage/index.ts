@@ -57,6 +57,7 @@ export class StatisticsPage extends Page {
     const userStat: StatDataType | undefined = await this.getStatistics();
     const currentDate: keyof StatDataOptionalType | string = this.getDate();
     if (userStat) {
+      console.log(userStat);
       const shortTermStat = new ShortTermStatistics(userStat.optional[currentDate]);
       return shortTermStat.render();
     }
@@ -73,6 +74,7 @@ export class StatisticsPage extends Page {
     Preloader.showPreloader();
     const shortStat = await this.getShortTermStat();
     if (shortStat) {
+      console.log(shortStat);
       this.container.append(shortStat);
       Preloader.hidePreloader();
     } else {

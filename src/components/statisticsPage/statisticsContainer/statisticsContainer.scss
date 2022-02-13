@@ -1,13 +1,21 @@
 .statContainer {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-between;
   gap: $margin;
   padding: $padding;
   margin: 0 auto;
   background-image: url('../../..//assets/images/header-block.png');
   background-size: cover; 
   @include border($bc--grey);
+  @media screen and (min-width: $statistics-adaptive) {
+    width: 980px;
+  }
+  @media screen and (min-width: $statistics-adaptive--desktop) {
+    margin: 0;
+  }
+  
 }
 
 .statContainer__header {
@@ -18,7 +26,11 @@
 
 .statContainer__wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   gap: $margin;
   flex-wrap: wrap;
+  @media screen and (min-width: $statistics-adaptive) {
+    flex-direction: row;
+  }
 }

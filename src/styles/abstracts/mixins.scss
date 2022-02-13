@@ -9,8 +9,8 @@
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  color: #ffffff;
-  background-color: #e84545;
+  color: $font-color--light;
+  background-color: $bc-red;
   border: none;
   transition: background-color ease-in-out 0.5s;
 }
@@ -118,3 +118,12 @@
   border-radius: 5px;
 }
 
+@mixin error__message {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: $margin;
+  @include text();
+  text-align: center;
+  color: $font-color--red;
+}
