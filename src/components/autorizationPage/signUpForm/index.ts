@@ -96,6 +96,9 @@ export class SignUpForm extends AutorizationForm {
               break;
             case this.inputEmail:
               this.inputPassword.focus();
+              break;
+            case this.inputPassword:
+              this.inputName.focus();
           }
         }
       });
@@ -119,6 +122,7 @@ export class SignUpForm extends AutorizationForm {
       window.location.hash = `#${PageIds.autorizationPage}`;
       this.showSuccesMessage(statusMessages.success);
     } else if (resp.status === 417) {
+      console.log(statusMessages[417]);
       this.showErrorMessage(statusMessages[417]);
       this.clearForm();
       this.inputName.focus();

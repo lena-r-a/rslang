@@ -102,7 +102,13 @@ export class SignInForm extends AutorizationForm {
           return;
         } else {
           el.classList.remove('form__input--invalid');
-          this.inputPassword.focus();
+          switch (el) {
+            case this.inputEmail:
+              this.inputPassword.focus();
+              break;
+            case this.inputPassword:
+              this.inputEmail.focus();
+          }
         }
       });
       if (success) {
