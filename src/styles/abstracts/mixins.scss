@@ -10,7 +10,7 @@
   text-decoration: none;
   cursor: pointer;
   color: $font-color--light;
-  background-color: $bc-red;
+  background-color: lighten($bc-red, 5%);
   border: none;
   border-radius: $block-border-radius;
   transition: background-color ease-in-out 0.5s;

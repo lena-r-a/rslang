@@ -41,7 +41,8 @@ export class Statistics {
       return result;
       //todo может response.status 403???
     } else if (response.status === 401) {
-      refreshUserToken();
+      console.log('401');
+      await refreshUserToken();
       const response2: Response = await this.statisticService.getStatistics(logInData.userId!, logInData.token!);
       if (response2.status === 200) {
         const result: StatDataType = await response.json();
