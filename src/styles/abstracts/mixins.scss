@@ -12,6 +12,7 @@
   color: $font-color--light;
   background-color: $bc-red;
   border: none;
+  border-radius: $block-border-radius;
   transition: background-color ease-in-out 0.5s;
 }
 

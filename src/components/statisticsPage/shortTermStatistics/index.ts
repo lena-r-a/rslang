@@ -1,7 +1,7 @@
 import { Component } from '../../../core/templates/components';
 import { StatisticsContainer } from '../statisticsContainer';
 import { StatisticsCard } from './statisticsCard';
-import './shortTermStatistics.scss';
+import '../shortLongTermStatistics.scss';
 import { StatDataOptionalType } from '../../../services/StatisticsService';
 
 const titlesObj = {

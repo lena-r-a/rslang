@@ -1,4 +1,5 @@
-.shortStat {
+.shortStat,
+.longStat {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -12,7 +13,8 @@
   }
 }
 
-.shortStat__message {
+.shortStat__message,
+.longStat__message {
     @include error__message();
     color: $font-color--grey;
     margin-bottom: $margin;

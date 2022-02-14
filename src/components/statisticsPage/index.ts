@@ -5,6 +5,7 @@ import { logInData, refreshUserToken } from '../../states/logInData';
 import { ShortTermStatistics } from './shortTermStatistics';
 import { Preloader } from '../../common/preloader';
 import './statisticsPage.scss';
+import { LongTermStatistics } from './longTermStatistics';
 
 export class StatisticsPage extends Page {
   private shortTermStatBtn: HTMLElement;
@@ -26,8 +27,20 @@ export class StatisticsPage extends Page {
     this.btnsWrapper.classList.add('stat__btn-wrapper');
 
     this.shortTermStatBtn.addEventListener('click', async () => {
+      this.clearStatisticsPage('longStat');
       await this.shortTermStatRender();
     });
+
+    this.longTermStatBtn.addEventListener('click', async () => {
+      this.clearStatisticsPage('shortStat');
+      await this.longTermStatRender();
+    });
+  }
+
+  private clearStatisticsPage(el: string) {
+    const shortTermStat = document.querySelector('.shortStat');
+    const longTermStat = document.querySelector('.longStat');
+    el === 'shortStat' ? shortTermStat?.remove() : longTermStat?.remove();
   }
 
   private async getStatistics(): Promise<StatDataType | undefined> {
@@ -36,6 +49,7 @@ export class StatisticsPage extends Page {
     if (response.status === 200) {
       const result: StatDataType = await response.json();
       delete result.id;
+      console.log(result);
       return result;
     } else if (response.status === 401) {
       await refreshUserToken();
@@ -79,6 +93,29 @@ export class StatisticsPage extends Page {
     const shortStat = await this.getShortTermStat();
     if (shortStat) {
       this.container.append(shortStat);
+      Preloader.hidePreloader();
+    } else {
+      const errorMessage = this.getErrorMessage();
+      Preloader.hidePreloader();
+      this.container.append(errorMessage);
+    }
+  }
+
+  private async getLongTermStat(): Promise<HTMLElement | undefined> {
+    const userStat: StatDataType | undefined = await this.getStatistics();
+    if (userStat) {
+      if (Object.keys(userStat.optional).length > 1) {
+        const longTermStat = new LongTermStatistics(userStat.optional);
+        return longTermStat.render();
+      }
+    }
+  }
+
+  public async longTermStatRender() {
+    Preloader.showPreloader();
+    const longStat = await this.getLongTermStat();
+    if (longStat) {
+      this.container.append(longStat);
       Preloader.hidePreloader();
     } else {
       const errorMessage = this.getErrorMessage();
