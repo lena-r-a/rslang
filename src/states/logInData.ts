@@ -32,6 +32,7 @@ export async function refreshUserToken() {
     const res: IUserLogin = await response.json();
     refreshTokenInUserLogInData(res);
     RSLangLS.saveUserData(logInData);
+    console.log('token was refreshed');
   } else {
     alert('Ошибка авторизации. Выйдите из аккаунта и войдите повторно.');
     throw new Error('Bad request');

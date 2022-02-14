@@ -4,7 +4,7 @@
   width: 200px;
   padding: 16px 0 16px 0;
   font-size: $font-size--tiny;
-  font-family: $font-family--semiBold;
+  font-weight: 400;
   text-transform: uppercase;
   text-align: center;
   text-decoration: none;
@@ -21,6 +21,7 @@
   font-size: $font-size--tiny;
   line-height: 100%;
   font-family: $font-family--semiBold;
+  font-weight: 400;
   text-transform: uppercase;
   text-align: center;
   color: $font-color--light;
@@ -41,6 +42,7 @@
 @mixin navigation__link() {
   font-size: $font-size--tiny;
   font-family: $font-family--bold;
+  font-weight: 800;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;

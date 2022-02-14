@@ -1,6 +1,6 @@
 import { App } from './app';
 import { Statistics } from './states/statisticsState';
-import { refreshUserToken } from './states/logInData';
+// import { refreshUserToken } from './states/logInData';
 import './styles/main.scss';
 
 const app = new App();
@@ -20,4 +20,4 @@ async function setStat() {
   await Statistics.updateStat('learned', 7);
 }
 
-setStat();
+// setStat();

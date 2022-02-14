@@ -58,7 +58,6 @@ export class StatisticsPage extends Page {
 
   private async getShortTermStat(): Promise<HTMLElement | undefined> {
     const userStat: StatDataType | undefined = await this.getStatistics();
-    console.log(userStat);
     const currentDate: keyof StatDataType | string = this.getDate();
     if (userStat) {
       if (userStat.optional[currentDate]) {
