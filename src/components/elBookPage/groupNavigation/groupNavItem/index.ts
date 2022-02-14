@@ -1,6 +1,6 @@
 import { Component } from '../../../../core/templates/components';
 import './groupNavItem.scss';
-import { WordState } from '..';
+import { WordState } from '../../../../RSLangSS';
 
 export class GroupNavitem extends Component {
   private title: string;

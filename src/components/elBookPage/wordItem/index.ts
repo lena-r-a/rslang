@@ -4,6 +4,7 @@ import { IWord } from '../../../services/WordsService';
 import { logInData } from '../../../states/logInData';
 import { INewWordRequest, userWordsService } from '../../../services/UserWordsService';
 import { filterWordService } from '../../../services/FilterWordsService';
+import { WordState } from '../../../RSLangSS';
 
 const URL = 'https://rslang-js.herokuapp.com/';
 let isPlay = false;
@@ -75,6 +76,10 @@ export class WordItem extends Component {
           audio.onended = () => (isPlay = false);
         };
       };
+      window.addEventListener('hashchange', () => {
+        audio.pause();
+        isPlay = false;
+      });
     }
   }
 
@@ -130,6 +135,7 @@ export class WordItem extends Component {
         await userWordsService.editUserWord(data, logInData.token!);
       }
     }
+    this.checkStudiedPage();
   }
 
   async addToComplicatedWords(e: Event) {
@@ -166,6 +172,34 @@ export class WordItem extends Component {
         data.word!.difficulty = 'hard';
         await userWordsService.editUserWord(data, logInData.token!);
       }
+    }
+    this.checkStudiedPage();
+  }
+
+  private checkStudiedPage() {
+    WordState.isStudiedPage = true;
+    document.querySelectorAll('.elbook__word-item').forEach((el) => {
+      if (!el.classList.contains('hard') && !el.classList.contains('easy')) {
+        WordState.isStudiedPage = false;
+      }
+    });
+    this.toggleStylesForStudiedPage();
+  }
+
+  toggleStylesForStudiedPage() {
+    const container = document.querySelector('.elbook__words-container') as HTMLElement;
+    if (WordState.isStudiedPage) {
+      document.querySelector('.page-navigation__current')?.classList.add('studied-page');
+      container.style.border = '2px solid green';
+      document.querySelectorAll('.game-button').forEach((el) => {
+        el.setAttribute('disabled', 'true');
+      });
+    } else {
+      document.querySelector('.page-navigation__current')?.classList.remove('studied-page');
+      container.style.border = 'none';
+      document.querySelectorAll('.game-button').forEach((el) => {
+        el.removeAttribute('disabled');
+      });
     }
   }
 

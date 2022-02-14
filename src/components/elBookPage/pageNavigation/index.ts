@@ -1,7 +1,8 @@
 import './pageNavigation.scss';
 import { Component } from '../../../core/templates/components';
-import { WordState } from '../groupNavigation';
+import { WordState } from '../../../RSLangSS';
 import { GamesMenu } from '../gamesMenu';
+import { logInData } from '../../../states/logInData';
 
 export class PageNavigation extends Component {
   prevPage: HTMLElement;
@@ -46,6 +47,9 @@ export class PageNavigation extends Component {
     this.lastPage.classList.add('page-navigation__end', 'arrow-btn');
     this.firstPage.classList.add('page-navigation__start', 'arrow-btn');
     this.difficultWordsLink.classList.add('page-navigation__difficult', 'link-btn');
+    if (!logInData.isAutorizated) {
+      this.difficultWordsLink.classList.add('visually-hidden');
+    }
   }
 
   private appendElements() {

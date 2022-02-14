@@ -6,7 +6,7 @@
   color: #d8daf5;
   font-size: 0.8rem;
   margin-bottom: 10px;
-  height: 250px;
+  min-height: 250px;
   position: relative;
   box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.4);
   h4 {
@@ -20,12 +20,22 @@
     font-size: 1.1rem;
     color: white;
     margin-bottom: 10px;
+    margin-right: 50px;
+  }
+  @media screen and (max-width: $tablet){
+    flex-direction: column;
+    height: auto;
   }
 }
 .word-item__image {
   width: 40%;
   height: auto;
   @include background-styles();
+
+  @media screen and (max-width: $tablet){
+    width: 100%;
+    height: 250px;
+  }
 }
 
 .word-item__right {
@@ -35,6 +45,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @media screen and (max-width: $tablet){
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 .word-item__buttons {
@@ -46,7 +60,7 @@
     border: none;
     border-radius: 5px;
     width: 45%;
-    height: 40px;
+    min-height: 40px;
     line-height: 40px;
     color: white;
     &:hover {

@@ -1,14 +1,7 @@
 import { Component } from '../../../core/templates/components';
 import { GroupNavitem } from './groupNavItem';
 import './groupNavigation.scss';
-
-export const WordState = {
-  PAGE: 0,
-  GROUP: 0,
-  BG: '#e9e91dc4',
-  TOTALPAGES: 30,
-  VOCABULARY: false,
-};
+import { WordState } from '../../../RSLangSS';
 
 const navItemsText = [
   {

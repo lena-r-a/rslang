@@ -20,10 +20,10 @@
 
 .help-message {
   position: absolute;
-  top: -70px;
+  top: -90px;
   right: -210px;
   width: 200px;
-  height: 100px;
+  height: 150px;
   color: black;
   background-color: white;
   text-align: center;
@@ -36,3 +36,26 @@
     content: '';
   }
 }
+
+.games-adaptive {
+  display: none;
+  width: 80%;
+  @media screen and (max-width: $tablet){
+    display: flex;
+  }
+  div {
+    height: 30px;
+    width: 30px;
+    margin-right: 20px;
+    @include background-styles();
+    filter: invert(98%) sepia(1%) saturate(188%) hue-rotate(121deg) brightness(112%) contrast(100%);
+  }
+  .small-challenge {
+    background-image: url('../../../assets/images/agame.svg');
+  }
+
+  .small-sprint {
+    background-image: url('../../../assets/images/sprint.svg');
+  }
+}
+
