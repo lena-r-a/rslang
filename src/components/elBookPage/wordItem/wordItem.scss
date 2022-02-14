@@ -70,7 +70,7 @@
   }
 }
 
-.studied {
+.easy {
   border: 2px solid $bc-red;
   position: relative;
   box-shadow: 4px 4px 8px 0px rgba(129, 39, 43, 0.7);
@@ -87,7 +87,7 @@
   }
 }
 
-.complicated {
+.hard {
   &::after {
     position: absolute;
     content: 'Сложное';

@@ -25,7 +25,7 @@ export class GroupNavitem extends Component {
       this.container.classList.remove('unactive');
     });
     this.container.addEventListener('mouseout', () => {
-      if (WordState.GROUP !== Number(this.container.dataset.id)) {
+      if (WordState.GROUP !== Number(this.container.dataset.id) || WordState.VOCABULARY) {
         this.container.classList.add('unactive');
       }
     });

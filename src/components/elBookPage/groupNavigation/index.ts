@@ -7,6 +7,7 @@ export const WordState = {
   GROUP: 0,
   BG: '#e9e91dc4',
   TOTALPAGES: 30,
+  VOCABULARY: false,
 };
 
 const navItemsText = [

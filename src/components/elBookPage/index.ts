@@ -5,6 +5,9 @@ import { GroupNavigation } from './groupNavigation';
 import { WordContainer } from './wordsContainer';
 import { WordState } from './groupNavigation';
 import { PageNavigation } from './pageNavigation';
+import { filterWordService } from '../../services/FilterWordsService';
+import { logInData } from '../../states/logInData';
+import { WordItem } from './wordItem';
 
 export class ElBookPage extends Page {
   static TextObject = {
@@ -25,6 +28,8 @@ export class ElBookPage extends Page {
     this.wordsContainer.renderWordList(WordState.PAGE, WordState.GROUP);
     this.groupNavigation.navItems.forEach((el) => {
       el.addEventListener('click', () => {
+        this.pageNavigation.navPageWrapper.classList.remove('visually-hidden');
+        this.pageNavigation.gamesMenu.container.classList.remove('visually-hidden');
         WordState.GROUP = Number(el.dataset.id);
         WordState.PAGE = 0;
         this.wordsContainer.renderWordList(WordState.PAGE, WordState.GROUP);
@@ -37,6 +42,31 @@ export class ElBookPage extends Page {
     this.pageNavigation.lastPage.addEventListener('click', () => this.goToLastPage());
     this.pageNavigation.nextPage.addEventListener('click', () => this.goToNextPage());
     this.pageNavigation.prevPage.addEventListener('click', () => this.goToPrevPage());
+    this.pageNavigation.difficultWordsLink.addEventListener('click', () => {
+      this.goToDifficultWords();
+    });
+  }
+
+  async goToDifficultWords() {
+    WordState.VOCABULARY = true;
+    this.wordsContainer.container.innerHTML = '';
+    this.groupNavigation.navItems.forEach((elem) => {
+      elem.classList.add('unactive');
+    });
+    this.pageNavigation.navPageWrapper.classList.add('visually-hidden');
+    this.pageNavigation.gamesMenu.container.classList.add('visually-hidden');
+    const result = await filterWordService.getAggregatedWords(logInData.userId!, logInData.token!, '{"userWord.difficulty":"hard"}', 3600);
+    const wordList = result![0].paginatedResults;
+    wordList!.forEach((el) => {
+      const cardItem = new WordItem(el);
+      cardItem.render();
+      cardItem.container.classList.add(el.userWord.difficulty);
+      cardItem.complicatedWord.innerHTML = 'Удалить из сложных';
+      cardItem.complicatedWord.addEventListener('click', () => cardItem.container.remove());
+      cardItem.studiedWord.innerHTML = 'Добвить в изученные';
+      cardItem.studiedWord.addEventListener('click', () => cardItem.container.remove());
+      this.wordsContainer.container.append(cardItem.container);
+    });
   }
 
   goToNextPage(): void {

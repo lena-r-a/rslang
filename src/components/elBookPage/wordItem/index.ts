@@ -1,6 +1,10 @@
 import './wordItem.scss';
 import { Component } from '../../../core/templates/components';
 import { IWord } from '../../../services/WordsService';
+import { logInData } from '../../../states/logInData';
+import { INewWordRequest, userWordsService } from '../../../services/UserWordsService';
+import { filterWordService } from '../../../services/FilterWordsService';
+
 const URL = 'https://rslang-js.herokuapp.com/';
 let isPlay = false;
 
@@ -20,16 +24,19 @@ export class WordItem extends Component {
     this.container.append(this.buttonsWrapper);
     this.studiedWord = document.createElement('button');
     this.complicatedWord = document.createElement('button');
+    this.buttonsWrapper.append(this.complicatedWord);
+    this.buttonsWrapper.append(this.studiedWord);
+    if (!logInData.isAutorizated) {
+      this.buttonsWrapper.classList.add('visually-hidden');
+    }
   }
 
   private renderWordButtons(): HTMLElement {
     this.buttonsWrapper.classList.add('word-item__buttons');
     this.studiedWord.textContent = 'Добаваить в изученные';
-    this.studiedWord.classList.add('add-to-studied');
+    this.studiedWord.classList.add('add-to-easy');
     this.complicatedWord.textContent = 'Добавить в сложные';
-    this.complicatedWord.classList.add('add-to-complicated');
-    this.buttonsWrapper.append(this.complicatedWord);
-    this.buttonsWrapper.append(this.studiedWord);
+    this.complicatedWord.classList.add('add-to-hard');
     this.studiedWord.addEventListener('click', (e) => this.addToStudiedWords(e));
     this.complicatedWord.addEventListener('click', (e) => this.addToComplicatedWords(e));
     return this.buttonsWrapper;
@@ -88,29 +95,77 @@ export class WordItem extends Component {
     return descriptionContainer;
   }
 
-  addToStudiedWords(e: Event): void {
+  async addToStudiedWords(e: Event) {
     const target = e.currentTarget as HTMLElement;
-    if (this.container.classList.contains('studied')) {
-      this.container.classList.remove('studied');
-      target.textContent = 'Добаваить в изученные';
-    } else {
-      this.container.classList.add('studied');
+    const thisID = this.word.id || this.word._id;
+    const result = await filterWordService.getWordByID(logInData.userId!, thisID!, logInData.token!);
+    const data: INewWordRequest = {
+      userId: logInData.userId!,
+      wordId: thisID!,
+      word: {
+        difficulty: 'normal',
+      },
+    };
+    if (!result[0].userWord) {
+      this.container.classList.add('easy');
       target.textContent = 'Удалить из изученных';
-      this.container.classList.remove('complicated');
+      this.container.classList.remove('hard');
       this.complicatedWord.textContent = 'Добавить в сложные';
+      data.word!.difficulty = 'easy';
+      await userWordsService.createUserWord(data, logInData.token!);
+    } else {
+      if (result[0].userWord && result[0].userWord.optional) {
+        data.word!.optional = result[0].userWord.optional;
+      }
+      if (result[0].userWord.difficulty == 'easy') {
+        this.container.classList.remove('easy');
+        target.textContent = 'Добаваить в изученные';
+        await userWordsService.editUserWord(data, logInData.token!);
+      } else {
+        this.container.classList.add('easy');
+        target.textContent = 'Удалить из изученных';
+        this.container.classList.remove('hard');
+        this.complicatedWord.textContent = 'Добавить в сложные';
+        data.word!.difficulty = 'easy';
+        await userWordsService.editUserWord(data, logInData.token!);
+      }
     }
   }
 
-  addToComplicatedWords(e: Event) {
+  async addToComplicatedWords(e: Event) {
     const target = e.currentTarget as HTMLElement;
-    if (this.container.classList.contains('complicated')) {
-      this.container.classList.remove('complicated');
-      target.textContent = 'Добавить в сложные';
-    } else {
-      this.container.classList.add('complicated');
+    const thisID = this.word.id || this.word._id;
+    const result = await filterWordService.getWordByID(logInData.userId!, thisID!, logInData.token!);
+    const data: INewWordRequest = {
+      userId: logInData.userId!,
+      wordId: thisID!,
+      word: {
+        difficulty: 'normal',
+      },
+    };
+    if (!result[0].userWord) {
+      this.container.classList.add('hard');
       target.textContent = 'Удалить из сложных';
-      this.container.classList.remove('studied');
+      this.container.classList.remove('easy');
       this.studiedWord.textContent = 'Добаваить в изученные';
+      data.word!.difficulty = 'hard';
+      await userWordsService.createUserWord(data, logInData.token!);
+    } else {
+      if (result[0].userWord && result[0].userWord.optional) {
+        data.word!.optional = result[0].userWord.optional;
+      }
+      if (result[0].userWord && result[0].userWord.difficulty == 'hard') {
+        this.container.classList.remove('hard');
+        target.textContent = 'Добавить в сложные';
+        await userWordsService.editUserWord(data, logInData.token!);
+      } else {
+        this.container.classList.add('hard');
+        target.textContent = 'Удалить из сложных';
+        this.container.classList.remove('easy');
+        this.studiedWord.textContent = 'Добаваить в изученные';
+        data.word!.difficulty = 'hard';
+        await userWordsService.editUserWord(data, logInData.token!);
+      }
     }
   }
 
