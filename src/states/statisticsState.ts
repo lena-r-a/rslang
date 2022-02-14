@@ -39,9 +39,15 @@ export class Statistics {
       const result: StatDataType = await response.json();
       delete result.id;
       return result;
+      //todo может response.status 403???
     } else if (response.status === 401) {
       refreshUserToken();
-      await this.getUserStat();
+      const response2: Response = await this.statisticService.getStatistics(logInData.userId!, logInData.token!);
+      if (response2.status === 200) {
+        const result: StatDataType = await response.json();
+        delete result.id;
+        return result;
+      }
     } else if (response.status === 404) {
       const newUserStat: StatDataType = { learnedWords: 0, optional: {} };
       return newUserStat;
@@ -55,6 +61,7 @@ export class Statistics {
     if (this.key === 'learned' && typeof this.data === 'number') {
       backDataObj.learned += this.data;
     } else if ((this.key === 'sprint' || this.key === 'challenge') && typeof this.data !== 'number') {
+      console.log(this.key);
       backDataObj[this.key].newWords += this.data.newWords;
       backDataObj[this.key].questions += this.data.questions;
       backDataObj[this.key].rightAnsw += this.data.rightAnsw;
@@ -114,7 +121,3 @@ export class Statistics {
     return `${year}:${month < 10 ? '0' + month : month}:${day < 10 ? '0' + day : day}`;
   }
 }
-
-// новые слова - слова, которые используются в играх первый раз
-// изученные: 1) слова, на которые пользователь дал правильные ответы в играх (3 раза подряд - для обычных слов; 5 раз подряд - для сложных слов); 2) слова, которые пользователь пометил как изученные 3) слова, при угадывании которых была допущенна ошибка, удаляются из изученных.
-// не придумала, как записать долгосрочную статистику (LongTermStat). т.е количество полей у optinal ограничено и количество знаков в каждом поле - тоже. только есть такая мысль: при переполнении optinal - удалять данные с самой поздней датой???

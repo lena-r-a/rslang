@@ -14,7 +14,6 @@ const textObjCards = {
   words: ['Количество новых слов за день', 'Количество изученных слов за день', '% правильных ответов'],
   game: ['Количество новых слов', '% правильных ответов', 'Самая длинная серия'],
 };
-
 export class ShortTermStatistics extends Component {
   readonly statData: StatDataOptionalType;
 
@@ -30,7 +29,7 @@ export class ShortTermStatistics extends Component {
   private getRightAnswPercent() {
     const amountQuestions = this.statData.challenge.questions + this.statData.sprint.questions;
     const amountRightAnsw = this.statData.challenge.rightAnsw + this.statData.sprint.rightAnsw;
-    return (amountRightAnsw / amountQuestions) * 100;
+    return Math.round((amountRightAnsw / amountQuestions) * 100);
   }
 
   private getWordsCard(value: string, index: number): HTMLElement {
@@ -41,12 +40,16 @@ export class ShortTermStatistics extends Component {
         cardContent.textContent = String(this.getNewWordsSumm());
         break;
       case 1:
-        card.classList.add('wordsStat--learned');
         cardContent.textContent = String(this.statData.learned);
         break;
       case 2:
-        card.classList.add('wordsStat--percent');
-        cardContent.textContent = `${this.getRightAnswPercent()}%`;
+        if (!isNaN(this.getRightAnswPercent())) {
+          cardContent.textContent = `${this.getRightAnswPercent()}%`;
+        } else {
+          card.lastChild?.remove();
+          const errorMessage = this.getErrorMessage();
+          card.append(errorMessage);
+        }
     }
     return card;
   }
@@ -63,7 +66,7 @@ export class ShortTermStatistics extends Component {
 
   private getRightAnswersInGamePercent(game: keyof StatDataOptionalType): number | undefined {
     if (game === 'sprint' || game === 'challenge') {
-      return (this.statData[game].rightAnsw / this.statData[game].questions) * 100;
+      return Math.round((this.statData[game].rightAnsw / this.statData[game].questions) * 100);
     }
   }
 

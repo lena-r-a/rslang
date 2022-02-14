@@ -21,7 +21,6 @@ export function refreshUserLogInData(newData: IUserLogin) {
 }
 
 export function refreshTokenInUserLogInData(newData: IUserLogin) {
-  console.log(logInData);
   logInData.token = newData.token;
   logInData.refreshToken = newData.refreshToken;
 }

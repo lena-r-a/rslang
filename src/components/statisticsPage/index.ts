@@ -1,6 +1,6 @@
 import { Button } from '../../common/button';
 import { Page } from '../../core/templates/page';
-import { StatDataOptionalType, StatDataType, StatisticService } from '../../services/StatisticsService';
+import { StatDataType, StatisticService } from '../../services/StatisticsService';
 import { logInData, refreshUserToken } from '../../states/logInData';
 import { ShortTermStatistics } from './shortTermStatistics';
 import { Preloader } from '../../common/preloader';
@@ -38,10 +38,13 @@ export class StatisticsPage extends Page {
       delete result.id;
       return result;
     } else if (response.status === 401) {
-      refreshUserToken();
-      await this.getStatistics();
-    } else {
-      return undefined;
+      await refreshUserToken();
+      const response2: Response = await statisticService.getStatistics(logInData.userId!, logInData.token!);
+      if (response2.status === 200) {
+        const result: StatDataType = await response.json();
+        delete result.id;
+        return result;
+      }
     }
   }
 
@@ -55,10 +58,13 @@ export class StatisticsPage extends Page {
 
   private async getShortTermStat(): Promise<HTMLElement | undefined> {
     const userStat: StatDataType | undefined = await this.getStatistics();
-    const currentDate: keyof StatDataOptionalType | string = this.getDate();
+    console.log(userStat);
+    const currentDate: keyof StatDataType | string = this.getDate();
     if (userStat) {
-      const shortTermStat = new ShortTermStatistics(userStat.optional[currentDate]);
-      return shortTermStat.render();
+      if (userStat.optional[currentDate]) {
+        const shortTermStat = new ShortTermStatistics(userStat.optional[currentDate]);
+        return shortTermStat.render();
+      }
     }
   }
 

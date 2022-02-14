@@ -14,5 +14,7 @@
 
 .shortStat__message {
     @include error__message();
+    color: $font-color--grey;
     margin-bottom: $margin;
+    font-size: $font-size--small;
 }
