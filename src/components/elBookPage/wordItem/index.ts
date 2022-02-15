@@ -96,7 +96,6 @@ export class WordItem extends Component {
       <h4>Пример:</h4>
       <p>${this.word.textExample}</p>
     `;
-    descriptionContainer.append(this.renderAudio());
     return descriptionContainer;
   }
 
@@ -220,6 +219,7 @@ export class WordItem extends Component {
     rightContainer.classList.add('word-item__right');
     rightContainer.append(this.renderWordDescription());
     rightContainer.append(this.renderWordButtons());
+    rightContainer.append(this.renderAudio());
     this.container.append(rightContainer);
     rightContainer.append(this.renderWordProgress());
     return this.container;

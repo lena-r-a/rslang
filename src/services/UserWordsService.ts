@@ -1,23 +1,22 @@
 export interface IUserWord {
-  difficulty: string;
-  optional?: Record<string, unknown>;
+  difficulty: 'hard' | 'easy' | 'normal';
+  optional?: IOptional;
 }
 
 export interface IUserWordsResponse {
-  difficulty: string;
+  difficulty: 'hard' | 'easy' | 'normal';
   id: string;
   wordId: string;
 }
 
-//this is optional interface - depends on task
 export interface IOptional {
-  testFieldString: string;
-  testFieldBoolean: boolean;
+  trueAnswer: number;
+  falseAnswer: number;
 }
 
 export interface INewWord {
-  difficulty: string; //here need enum
-  optional?: Record<string, unknown>;
+  difficulty: 'hard' | 'easy' | 'normal';
+  optional?: IOptional;
 }
 
 export interface INewWordRequest {

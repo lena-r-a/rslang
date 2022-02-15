@@ -20,7 +20,6 @@ export class RSLangSS {
     const data = this.getFromSessionStorage();
     if (data) {
       WordState = JSON.parse(data);
-      console.log(WordState);
     }
   }
 }

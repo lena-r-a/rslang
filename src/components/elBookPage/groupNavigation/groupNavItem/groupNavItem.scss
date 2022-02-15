@@ -71,3 +71,18 @@
     background-color: rgb(194, 187, 187);
   }
 }
+
+@media screen and (max-width: $tablet){
+  .nav-item__left {
+    display: none;
+  }
+
+  .elBool__nav-item {
+    min-width: 50px;
+    justify-content: end;
+  }
+
+  .nav-item__right {
+    width: 100%;
+  }
+}
