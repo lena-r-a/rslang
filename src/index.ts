@@ -1,4 +1,5 @@
 import { App } from './app';
+// import { selfAssessmentLenaRA, selfAssessmentTAB, selfAssessmentWhispermind } from './self-assessment';
 // import { Statistics } from './states/statisticsState';
 // import { refreshUserToken } from './states/logInData';
 import './styles/main.scss';
@@ -21,3 +22,7 @@ app.run();
 // }
 
 // setStat();
+
+// selfAssessmentTAB();
+// selfAssessmentWhispermind();
+// selfAssessmentLenaRA();
