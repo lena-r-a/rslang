@@ -76,6 +76,11 @@
   display: none;
 }
 
+.active-link {
+  text-decoration: underline;
+  color: antiquewhite;
+}
+
 @media screen and (max-width: $tablet){
   .game-button {
     display: none;

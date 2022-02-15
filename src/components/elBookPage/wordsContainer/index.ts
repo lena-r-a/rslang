@@ -21,6 +21,7 @@ export class WordContainer extends Component {
     this.container.innerHTML = '';
     WordState.VOCABULARY = false;
     WordState.isStudiedPage = true;
+    document.querySelector('.page-navigation__difficult')?.classList.remove('active-link');
     Preloader.showPreloader();
     this.wordsList = await wordService.getWords(page, group);
     if (this.wordsList) {

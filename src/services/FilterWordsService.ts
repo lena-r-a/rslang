@@ -27,7 +27,6 @@ export class FilterWordsService {
   ): Promise<IAggr[] | undefined> {
     const string = `${group ? 'group=' + group + '&' : ''}${page ? 'page=' + page + '&' : ''}${wordsPerPage ? 'wordsPerPage=' + wordsPerPage + '&' : ''}`;
     const fullURL = `${this.baseURL}/users/${userId}/aggregatedWords?${string}filter=${filter}`;
-    console.log(fullURL);
     try {
       const response = await fetch(fullURL, {
         method: 'GET',

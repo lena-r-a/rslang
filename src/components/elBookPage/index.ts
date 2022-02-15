@@ -36,6 +36,7 @@ export class ElBookPage extends Page {
     WordState.isStudiedPage = false;
     this.wordsContainer.container.innerHTML = '';
     this.wordsContainer.container.style.border = 'none';
+    this.pageNavigation.difficultWordsLink.classList.add('active-link');
     this.groupNavigation.navItems.forEach((elem) => {
       elem.classList.add('unactive');
     });

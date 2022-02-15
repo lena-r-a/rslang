@@ -205,8 +205,11 @@ export class WordItem extends Component {
 
   private renderWordProgress(): HTMLElement {
     const progressContainer = document.createElement('div');
+    if (!logInData.isAutorizated) {
+      progressContainer.classList.add('dislplaynone');
+    }
     progressContainer.innerHTML = `
-      <p>Статистика слова: Угадано 1 раз Ошибка: 1 раз</p>
+      <p>Статистика слова: Угадано: <span>1</span> / Ошибка: <span>1</span></p>
     `;
     return progressContainer;
   }
@@ -218,6 +221,7 @@ export class WordItem extends Component {
     rightContainer.append(this.renderWordDescription());
     rightContainer.append(this.renderWordButtons());
     this.container.append(rightContainer);
+    rightContainer.append(this.renderWordProgress());
     return this.container;
   }
 }
