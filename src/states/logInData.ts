@@ -1,3 +1,4 @@
+import { App } from '../app';
 import { Preloader } from '../common/preloader';
 import { RSLangLS } from '../RSLangLS';
 import { UserService, IUserLogin } from '../services/UsersService';
@@ -35,7 +36,10 @@ export async function refreshUserToken() {
     RSLangLS.saveUserData(logInData);
     // console.log('token was refreshed');
   } else {
-    alert('Ошибка авторизации. Выйдите из аккаунта и войдите повторно.');
+    alert('Ошибка авторизации. Войдите в аккаунт повторно.');
+    RSLangLS.removeUserData();
+    const app = new App();
+    app.runToAutorizationPage();
     Preloader.hidePreloader();
     throw new Error('Bad request');
   }
