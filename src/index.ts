@@ -1,6 +1,5 @@
 import { App } from './app';
-// import { selfAssessmentLenaRA, selfAssessmentTAB, selfAssessmentWhispermind } from './self-assessment';
-// import { Statistics } from './states/statisticsState';
+import { Statistics } from './states/statisticsState';
 // import { refreshUserToken } from './states/logInData';
 import './styles/main.scss';
 
@@ -18,11 +17,7 @@ app.run();
 //   };
 //   await Statistics.updateStat('challenge', data);
 //   await Statistics.updateStat('sprint', data);
-//   await Statistics.updateStat('learned', 7);
+//   await Statistics.updateStat('learned', 9);
 // }
 
 // setStat();
-
-// selfAssessmentTAB();
-// selfAssessmentWhispermind();
-// selfAssessmentLenaRA();
