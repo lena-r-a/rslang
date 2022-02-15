@@ -1,7 +1,8 @@
 import { Component } from '../../../core/templates/components';
-import { Button } from '../../../common/button/button';
+import { Button } from '../../../common/button';
 import { PageIds } from '../../../app';
 import './masthead.scss';
+import { logInData } from '../../../states/logInData';
 
 const masheadInfo = {
   innerText: 'Учи английский играючи!',
@@ -15,14 +16,23 @@ export class Masthead extends Component {
   }
 
   private renderBtn() {
-    const btn = new Button('a', 'зарегистрироваться', ['masthead__btn']).rendor();
+    const btn = new Button('a', 'Вход', ['masthead__btn']).rendor();
     btn.setAttribute('href', `#${PageIds.autorizationPage}`);
     return btn;
   }
 
-  render() {
+  private showBtn(btn: HTMLElement) {
+    btn.style.display = 'block';
+    this.container.style.paddingBottom = '150px';
+    this.container.style.paddingTop = '150px';
+  }
+
+  public render() {
     const btn = this.renderBtn();
     this.container.querySelector('.masthead__wrapper')?.append(btn);
+    if (logInData.isAutorizated) {
+      this.showBtn(btn);
+    }
     return this.container;
   }
 }
