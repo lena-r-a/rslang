@@ -40,7 +40,9 @@ export class StatisticsPage extends Page {
   private clearStatisticsPage(el: string) {
     const shortTermStat = document.querySelector('.shortStat');
     const longTermStat = document.querySelector('.longStat');
+    const errorMessage = document.querySelector('.stat__error-message');
     el === 'shortStat' ? shortTermStat?.remove() : longTermStat?.remove();
+    errorMessage?.remove();
   }
 
   private async getStatistics(): Promise<StatDataType | undefined> {
@@ -52,7 +54,14 @@ export class StatisticsPage extends Page {
       console.log(result);
       return result;
     } else if (response.status === 401) {
+      // console.log('401 from StatisticsPage');
+      // console.log(logInData.userId);
+      // console.log(logInData.token);
+      // console.log(logInData.refreshToken);
       await refreshUserToken();
+      // console.log(logInData.userId);
+      // console.log(logInData.token);
+      // console.log(logInData.refreshToken);
       const response2: Response = await statisticService.getStatistics(logInData.userId!, logInData.token!);
       if (response2.status === 200) {
         const result: StatDataType = await response.json();

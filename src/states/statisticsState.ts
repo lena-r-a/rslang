@@ -39,9 +39,8 @@ export class Statistics {
       const result: StatDataType = await response.json();
       delete result.id;
       return result;
-      //todo может response.status 403???
     } else if (response.status === 401) {
-      console.log('401');
+      // console.log('401 from Statistics');
       await refreshUserToken();
       const response2: Response = await this.statisticService.getStatistics(logInData.userId!, logInData.token!);
       if (response2.status === 200) {
@@ -53,7 +52,7 @@ export class Statistics {
       const newUserStat: StatDataType = { learnedWords: 0, optional: {} };
       return newUserStat;
     } else {
-      throw new Error('Bed reqest');
+      throw new Error('Bad request');
     }
   }
 
