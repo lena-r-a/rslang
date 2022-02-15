@@ -1,8 +1,3 @@
-// export interface IStatistic {
-//   learnedWords: number;
-//   optional: Record<string, unknown>;
-// }
-
 export type StatDataType = {
   id?: string;
   learnedWords: number; // количество изученных слов за день

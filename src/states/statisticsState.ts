@@ -1,6 +1,6 @@
+import { ISettings, SettingsService } from '../services/SettingsService';
 import { StatDataGameType, StatDataOptionalType, StatDataType, StatisticService } from '../services/StatisticsService';
 import { logInData, refreshUserToken } from './logInData';
-// для реализации статистики нужны данные. мне нужно их получать из функционала, который реализуют другие разработчики )
 
 export const statData: StatDataOptionalType = {
   learned: 0,
@@ -18,19 +18,37 @@ export const statData: StatDataOptionalType = {
   },
 };
 
+export const statKeys: StatKeysType = {
+  challenge: 'challenge',
+  sprint: 'sprint',
+  learned: 'learned',
+};
+
+export type StatKeysType = {
+  challenge: string;
+  sprint: string;
+  learned: string;
+};
+
+export type StatDateLearnedType = {
+  word: string;
+  add: boolean;
+};
+
 export class Statistics {
-  private key: string;
-  //key 'challenge' | 'sprint' | 'learned'
-  //если ключ 'challenge' | 'sprint' - передаем как второй парамет объект типа StatDataGameType
+  private key: keyof StatKeysType;
 
   private statisticService: StatisticService;
 
-  private data: StatDataGameType | number;
+  private settingsService: SettingsService;
 
-  constructor(key: string, data: StatDataGameType | number) {
+  private data: StatDataGameType | StatDateLearnedType;
+
+  constructor(key: keyof StatKeysType, data: StatDataGameType | StatDateLearnedType) {
     this.key = key;
     this.data = data;
     this.statisticService = new StatisticService();
+    this.settingsService = new SettingsService();
   }
 
   private async getUserStat(): Promise<StatDataType | undefined> {
@@ -56,17 +74,57 @@ export class Statistics {
     }
   }
 
-  public refreshUserStat(dataFromBack: StatDataType, currentDate: string): StatDataType {
+  private async getLearnedToday(): Promise<ISettings | undefined> {
+    const response: Response = await this.settingsService.getSettings(logInData.userId!, logInData.token!);
+    if (response.status === 200) {
+      const result: ISettings = await response.json();
+      delete result.id;
+      return result;
+    } else if (response.status === 401) {
+      // console.log('401 from Statistics');
+      await refreshUserToken();
+      const response2: Response = await this.settingsService.getSettings(logInData.userId!, logInData.token!);
+      if (response2.status === 200) {
+        const result: ISettings = await response.json();
+        delete result.id;
+        return result;
+      }
+    } else if (response.status === 404) {
+      // если данных на back нет - создаем "чистый объект"
+      return this.createNewLearnedToday();
+    } else {
+      throw new Error('Bad request');
+    }
+  }
+
+  public refreshLearnedToday(learnedTodayFromBack: ISettings) {
+    const learned: string[] = learnedTodayFromBack.optional.learnedToday.words;
+    if ('add' in this.data) {
+      if (this.data.add) {
+        if (!learned.includes(this.data.word)) {
+          learned.push(this.data.word);
+        }
+      } else if (!this.data.add) {
+        const index = learned.indexOf(this.data.word);
+        if (index !== -1) {
+          learned.splice(index, 1);
+        }
+      }
+    }
+  }
+
+  public refreshUserStat(dataFromBack: StatDataType, learnedTodayFromBack: ISettings, currentDate: string): StatDataType {
     const backDataObj: StatDataOptionalType = dataFromBack.optional[currentDate];
-    if (this.key === 'learned' && typeof this.data === 'number') {
-      backDataObj.learned += this.data;
-    } else if ((this.key === 'sprint' || this.key === 'challenge') && typeof this.data !== 'number') {
-      console.log(this.key);
-      backDataObj[this.key].newWords += this.data.newWords;
-      backDataObj[this.key].questions += this.data.questions;
-      backDataObj[this.key].rightAnsw += this.data.rightAnsw;
-      if (backDataObj[this.key].session < this.data.session) {
-        backDataObj[this.key].session = this.data.session;
+    if (this.key === 'learned') {
+      backDataObj[this.key] = learnedTodayFromBack.optional.learnedToday.words.length;
+    } else if (this.key === 'sprint' || this.key === 'challenge') {
+      if ('newWords' in this.data) {
+        backDataObj[this.key].newWords += this.data.newWords;
+        backDataObj[this.key].questions += this.data.questions;
+        backDataObj[this.key].rightAnsw += this.data.rightAnsw;
+        if (backDataObj[this.key].session < this.data.session) {
+          backDataObj[this.key].session = this.data.session;
+        }
       }
     }
     return dataFromBack;
@@ -78,6 +136,22 @@ export class Statistics {
     return dataFromBack;
   }
 
+  private createNewLearnedToday(): ISettings {
+    const newLearnedToday: ISettings = {
+      wordsPerDay: 1,
+      optional: {
+        learnedToday: {
+          words: [],
+        },
+      },
+    };
+    return newLearnedToday;
+  }
+
+  private clearLearnedFromBack(obj: ISettings) {
+    obj.optional.learnedToday.words.length = 0;
+  }
+
   private getEarlyStatPerDay(datesArr: string[]): string | undefined {
     const savedDatesNumbers = datesArr.map((el) => Number(el.split(':').join('')));
     const earlyNumber = Math.min.apply(0, savedDatesNumbers);
@@ -87,10 +161,12 @@ export class Statistics {
     }
   }
 
-  static async updateStat(key: string, data: StatDataGameType | number) {
+  static async updateStat(key: keyof StatKeysType, data: StatDataGameType | StatDateLearnedType) {
     const statState = new Statistics(key, data);
     const dataFromBack: StatDataType | undefined = await statState.getUserStat();
-    if (dataFromBack) {
+    const learnedFromBack: ISettings | undefined = await statState.getLearnedToday();
+    // получили данные с back
+    if (dataFromBack && learnedFromBack) {
       const currentDate: string = statState.getDate();
       const savedDates: string[] = Object.keys(dataFromBack.optional);
       // удаляем наиболее ранние данные, если option переполнен
@@ -103,13 +179,17 @@ export class Statistics {
       let updatedData: StatDataType;
       if (savedDates.includes(currentDate)) {
         // обновить данные за день
-        updatedData = statState.refreshUserStat(dataFromBack, currentDate);
+        statState.refreshLearnedToday(learnedFromBack);
+        updatedData = statState.refreshUserStat(dataFromBack, learnedFromBack, currentDate);
       } else {
         // сохранить новые данные за день
         const newData: StatDataType = statState.createNewStatPerDay(dataFromBack, currentDate);
-        updatedData = statState.refreshUserStat(newData, currentDate);
+        statState.clearLearnedFromBack(learnedFromBack);
+        statState.refreshLearnedToday(learnedFromBack);
+        updatedData = statState.refreshUserStat(newData, learnedFromBack, currentDate);
       }
       await statState.statisticService.upsertStatistics(logInData.userId!, logInData.token!, updatedData);
+      await statState.settingsService.upsertSettings(logInData.userId!, logInData.token!, learnedFromBack);
     }
   }
 
