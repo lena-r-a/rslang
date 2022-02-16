@@ -17,7 +17,7 @@ export class RSLangLS {
     localStorage.removeItem(LSData.userData);
   }
 
-  static getUserData(key: keyof IUserLogin): string | undefined {
+  getUserData(key: keyof IUserLogin): string | undefined {
     const res: string | null = RSLangLS.getUserDataJSON();
     if (res) {
       return JSON.parse(res)[key];

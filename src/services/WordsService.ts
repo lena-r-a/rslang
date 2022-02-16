@@ -2,6 +2,7 @@ import { RestService } from './RestService';
 
 export interface IWord {
   id: string;
+  _id?: string;
   group: number;
   page: number;
   word: string;
@@ -17,7 +18,7 @@ export interface IWord {
   textExampleTranslate: string;
 }
 
-export class WordServise {
+class WordServise {
   restService: RestService;
 
   constructor() {
@@ -26,8 +27,8 @@ export class WordServise {
 
   public async getWords(page: number, group: number): Promise<IWord[] | undefined> {
     const queryParams = {
-      _page: page,
-      _group: group,
+      page: page,
+      group: group,
     };
     try {
       const response = await this.restService.get('/words', queryParams);
@@ -47,3 +48,5 @@ export class WordServise {
     }
   }
 }
+
+export const wordService = new WordServise();

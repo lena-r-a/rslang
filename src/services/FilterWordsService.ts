@@ -1,7 +1,17 @@
 import { IWord } from './WordsService';
+import { IUserWord } from './UserWordsService';
 
-export interface IFilter {
-  optional: Record<string, unknown>;
+// export interface IFilter {
+//   filter: Record<string, unknown>;
+// }
+
+export interface IAgregatedWord extends IWord {
+  userWord: IUserWord;
+}
+
+export interface IAggr {
+  paginatedResults: IAgregatedWord[];
+  totalCount: [];
 }
 
 export class FilterWordsService {
@@ -10,13 +20,13 @@ export class FilterWordsService {
   public async getAggregatedWords(
     userId: string,
     token: string,
-    group: number,
-    page: number,
+    filter: string,
     wordsPerPage: number,
-    filter: IFilter,
-  ): Promise<IWord[] | undefined> {
-    const fullURL = `${this.baseURL}/users/${userId}/aggregatedWords?group=${group}}&page=${page}&wordsPerPage=${wordsPerPage}&
-    filter=${JSON.stringify(filter)}`;
+    group?: number,
+    page?: number,
+  ): Promise<IAggr[] | undefined> {
+    const string = `${group ? 'group=' + group + '&' : ''}${page ? 'page=' + page + '&' : ''}${wordsPerPage ? 'wordsPerPage=' + wordsPerPage + '&' : ''}`;
+    const fullURL = `${this.baseURL}/users/${userId}/aggregatedWords?${string}filter=${filter}`;
     try {
       const response = await fetch(fullURL, {
         method: 'GET',
@@ -32,20 +42,22 @@ export class FilterWordsService {
     }
   }
 
-  public async getWordByID(userId: string, wordId: string, token: string): Promise<IWord | undefined> {
+  public async getWordByID(userId: string, wordId: string, token: string): Promise<IAgregatedWord[]> {
     const fullURL = `${this.baseURL}/users/${userId}/aggregatedWords/${wordId}`;
-    try {
-      const response = await fetch(fullURL, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json',
-        },
-      });
-      const result = await response.json();
-      return result;
-    } catch {
-      () => console.log('Bad request');
-    }
+    // try {
+    const response = await fetch(fullURL, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+      },
+    });
+    const result = await response.json();
+    return result;
+    // } catch {
+    //   () => console.log('Bad request');
+    // }
   }
 }
+
+export const filterWordService = new FilterWordsService();
