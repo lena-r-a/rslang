@@ -1,3 +1,5 @@
+import { refreshUserToken } from '../states/logInData';
+
 export interface IUserWord {
   difficulty: 'hard' | 'easy' | 'normal';
   optional?: IOptional;
@@ -31,7 +33,7 @@ class UserWordsService {
   public async getUserWords(id: string, token: string): Promise<IUserWordsResponse[] | undefined> {
     const fullURL = `${this.baseURL}/users/${id}/words`;
     try {
-      const response = await fetch(fullURL, {
+      let response = await fetch(fullURL, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -39,6 +41,17 @@ class UserWordsService {
           'Content-Type': 'application/json',
         },
       });
+      if (response.status === 401) {
+        await refreshUserToken();
+        response = await fetch(fullURL, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+      }
       const result = await response.json();
       return result;
     } catch {
@@ -48,7 +61,7 @@ class UserWordsService {
 
   public createUserWord = async (newWord: INewWordRequest, token: string) => {
     try {
-      const response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
+      let response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -57,6 +70,18 @@ class UserWordsService {
         },
         body: JSON.stringify(newWord.word),
       });
+      if (response.status === 401) {
+        await refreshUserToken();
+        response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newWord.word),
+        });
+      }
       const result = await response.json();
       return result;
     } catch {
@@ -82,7 +107,7 @@ class UserWordsService {
 
   public editUserWord = async (newWord: INewWordRequest, token: string) => {
     try {
-      const response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
+      let response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -91,6 +116,18 @@ class UserWordsService {
         },
         body: JSON.stringify(newWord.word),
       });
+      if (response.status === 401) {
+        await refreshUserToken();
+        response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newWord.word),
+        });
+      }
       const result = await response.json();
       return result;
     } catch {

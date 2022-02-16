@@ -24,6 +24,7 @@ export class ElBookPage extends Page {
 
   constructor(id: string) {
     super(id);
+    this.container.classList.add('elbook');
     this.groupNavigation = new GroupNavigation();
     this.wordsContainer = new WordContainer();
     this.pageNavigation = new PageNavigation();

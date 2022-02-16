@@ -5,6 +5,7 @@ import { logInData } from '../../../states/logInData';
 import { INewWordRequest, userWordsService } from '../../../services/UserWordsService';
 import { filterWordService } from '../../../services/FilterWordsService';
 import { WordState } from '../../../RSLangSS';
+import { Statistics, StatKeysType } from '../../../states/statisticsState';
 
 const URL = 'https://rslang-js.herokuapp.com/';
 let isPlay = false;
@@ -108,6 +109,10 @@ export class WordItem extends Component {
       wordId: thisID!,
       word: {
         difficulty: 'normal',
+        optional: {
+          trueAnswer: 0,
+          falseAnswer: 0,
+        },
       },
     };
     if (!result[0].userWord) {
@@ -117,6 +122,7 @@ export class WordItem extends Component {
       this.complicatedWord.textContent = 'Добавить в сложные';
       data.word!.difficulty = 'easy';
       await userWordsService.createUserWord(data, logInData.token!);
+      await Statistics.updateStat('learned', { word: this.word.word, add: true });
     } else {
       if (result[0].userWord && result[0].userWord.optional) {
         data.word!.optional = result[0].userWord.optional;
@@ -125,6 +131,7 @@ export class WordItem extends Component {
         this.container.classList.remove('easy');
         target.textContent = 'Добаваить в изученные';
         await userWordsService.editUserWord(data, logInData.token!);
+        await Statistics.updateStat('learned', { word: this.word.word, add: false });
       } else {
         this.container.classList.add('easy');
         target.textContent = 'Удалить из изученных';
@@ -132,6 +139,7 @@ export class WordItem extends Component {
         this.complicatedWord.textContent = 'Добавить в сложные';
         data.word!.difficulty = 'easy';
         await userWordsService.editUserWord(data, logInData.token!);
+        await Statistics.updateStat('learned', { word: this.word.word, add: true });
       }
     }
     this.checkStudiedPage();
@@ -146,6 +154,10 @@ export class WordItem extends Component {
       wordId: thisID!,
       word: {
         difficulty: 'normal',
+        optional: {
+          trueAnswer: 0,
+          falseAnswer: 0,
+        },
       },
     };
     if (!result[0].userWord) {
@@ -170,6 +182,7 @@ export class WordItem extends Component {
         this.studiedWord.textContent = 'Добаваить в изученные';
         data.word!.difficulty = 'hard';
         await userWordsService.editUserWord(data, logInData.token!);
+        await Statistics.updateStat('learned', { word: this.word.word, add: false });
       }
     }
     this.checkStudiedPage();
@@ -206,10 +219,21 @@ export class WordItem extends Component {
     const progressContainer = document.createElement('div');
     if (!logInData.isAutorizated) {
       progressContainer.classList.add('dislplaynone');
+    } else {
+      filterWordService.getWordByID(logInData.userId!, this.word.id!, logInData.token!).then((rez) => {
+        if (rez[0].userWord && rez[0].userWord.optional) {
+          progressContainer.innerHTML = `
+            <p class="word-progress">Статистика слова: Угадано: 
+            <span>${rez[0].userWord.optional?.trueAnswer}</span> / Ошибка: 
+            <span>${rez[0].userWord.optional?.trueAnswer}</span></p>
+          `;
+        } else {
+          progressContainer.innerHTML = `
+            <p class="word-progress">Статистика слова: Угадано: <span>0</span> / Ошибка: <span>0</span></p>
+          `;
+        }
+      });
     }
-    progressContainer.innerHTML = `
-      <p>Статистика слова: Угадано: <span>1</span> / Ошибка: <span>1</span></p>
-    `;
     return progressContainer;
   }
 

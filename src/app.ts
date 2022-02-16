@@ -13,6 +13,7 @@ import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
 import { RSLangLS } from './RSLangLS';
+import { rsLangSS } from './RSLangSS';
 import { clearUserLogInData, refreshUserLogInData } from './states/logInData';
 
 export const enum PageIds {
@@ -144,6 +145,10 @@ export class App {
   }
 
   public run() {
+    rsLangSS.setWordStateFromStorage();
+    window.onbeforeunload = () => {
+      rsLangSS.saveToSessionStorage();
+    };
     this.runApp();
     if (window.location.hash.slice(1)) {
       App.renderNewPage(window.location.hash.slice(1));
