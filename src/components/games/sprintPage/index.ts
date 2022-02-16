@@ -92,12 +92,17 @@ export class GameSprintPage extends Game {
     WRONG_BUTTON.textContent = 'Неверно';
     CONTROLS_CONTAINER.classList.add('game__controls');
     CONTROLS_CONTAINER.append(WRONG_BUTTON, RIGHT_BUTTON);
-    CONTROLS_CONTAINER.addEventListener('click', (e) => {
+    this.setControlsListeners(CONTROLS_CONTAINER, RIGHT_BUTTON, WRONG_BUTTON);
+    this.sprintGameContainer.append(CONTROLS_CONTAINER);
+  }
+
+  setControlsListeners(container: HTMLElement, right_button: HTMLButtonElement, wrong_button: HTMLButtonElement) {
+    container.addEventListener('click', (e) => {
       const CORRECT_TRANSLATE = this.questionsList![this.currentQuestion].wordTranslate;
-      if (e.target === RIGHT_BUTTON) {
+      if (e.target === right_button) {
         if (this.answer.textContent === CORRECT_TRANSLATE) this.correctAnswer();
         else this.incorrectAnswer();
-      } else if (e.target === WRONG_BUTTON) {
+      } else if (e.target === wrong_button) {
         if (this.answer.textContent !== CORRECT_TRANSLATE) this.correctAnswer();
         else this.incorrectAnswer();
       }
@@ -105,7 +110,6 @@ export class GameSprintPage extends Game {
       this.currentQuestion++;
       this.nextQuestion();
     });
-    this.sprintGameContainer.append(CONTROLS_CONTAINER);
   }
 
   renderScore() {
@@ -147,14 +151,15 @@ export class GameSprintPage extends Game {
       this.pointsGrowth /= 2;
     }
   }
-  clearStack(){
+
+  clearStack() {
     this.stackCurrent = 0;
     for (let i = 0; i < this.stackItems!.length; i++) {
       this.stackItems![i].classList.remove('game__stack-item_filled');
     }
   }
 
-  updateStats(){
+  updateStats() {
     const DESCRIPTION = `${this.pointsGrowth} очков за ответ`;
     const SCORE_DESCRIPTION = `Набрано очков: ${this.totalPoints}`;
     this.stackDesciprtion.textContent = DESCRIPTION;
