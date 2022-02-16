@@ -116,6 +116,12 @@
   margin: 0;
 }
 
+@mixin background-styles() {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 @mixin border($border-color) {
   border: 4px solid $border-color;
   border-radius: 5px;

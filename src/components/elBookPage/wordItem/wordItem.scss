@@ -1,0 +1,122 @@
+.elbook__word-item {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  background-color: $bc--purple;
+  color: #d8daf5;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+  min-height: 250px;
+  position: relative;
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.4);
+  h4 {
+    margin: 0;
+    padding: 0;
+  }
+  p {
+    margin: 5px;
+  }
+  .word {
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 10px;
+    margin-right: 50px;
+  }
+  @media screen and (max-width: $tablet){
+    flex-direction: column;
+    height: auto;
+  }
+}
+.word-item__image {
+  width: 40%;
+  height: auto;
+  @include background-styles();
+
+  @media screen and (max-width: $tablet){
+    width: 100%;
+    height: 250px;
+  }
+}
+
+.word-item__right {
+  margin-left: 10px;
+  padding: 10px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  @media screen and (max-width: $tablet){
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+.word-item__buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  button {
+    background-color: rgb(141, 122, 141);
+    border: none;
+    border-radius: 5px;
+    width: 45%;
+    min-height: 40px;
+    line-height: 40px;
+    color: white;
+    &:hover {
+      cursor: pointer;
+      background-color: $bc--grey;
+    }
+    @media screen and (max-width: $tablet){
+      line-height: 20px;
+    }
+  }
+}
+
+.audio-btn {
+  border: none;
+  background-color: transparent;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  &:hover {
+    cursor: pointer;
+    filter: brightness(0) saturate(100%) invert(49%) sepia(7%) saturate(399%) hue-rotate(172deg) brightness(88%) contrast(95%);
+  }
+}
+
+.easy {
+  border: 2px solid $bc-red;
+  position: relative;
+  box-shadow: 4px 4px 8px 0px rgba(129, 39, 43, 0.7);
+  &::after {
+    position: absolute;
+    content: '';
+    width: 40px;
+    height: 40px;
+    background-image: url('../../../assets/images/studied.svg');
+    filter: brightness(0) saturate(100%) invert(27%) sepia(34%) saturate(3391%) hue-rotate(337deg) brightness(125%) contrast(82%);
+    @include background-styles();
+    top: 10px;
+    left: 10px;
+  }
+}
+
+.hard {
+  &::after {
+    position: absolute;
+    content: 'Сложное';
+    // width: 40px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 5px 0 5px;
+    top: 10px;
+    left: 10px;
+    border-radius: 10px;
+    background-color: $bc-red;
+  }
+}

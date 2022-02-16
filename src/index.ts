@@ -7,7 +7,7 @@ import './styles/main.scss';
 const app = new App();
 app.run();
 
-refreshUserToken();
+// refreshUserToken();
 
 // async function setStat() {
 //   const data: StatDataGameType = {
