@@ -6,9 +6,7 @@
 }
 
 .aut__message {
-  margin-bottom: $margin;
-  @include text();
-  color: $font-color--red;
+  @include error__message();
 }
 
 .aut__wrapper {

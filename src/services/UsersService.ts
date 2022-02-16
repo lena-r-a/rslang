@@ -13,11 +13,12 @@ export interface IUser {
 }
 
 export interface IUserLogin {
-  message: string;
-  token: string;
-  refreshToken: string;
-  userId: string;
-  name: string;
+  isAutorizated?: boolean;
+  message?: string;
+  token?: string;
+  refreshToken?: string;
+  userId?: string;
+  name?: string;
 }
 
 export class UserService {
@@ -110,21 +111,16 @@ export class UserService {
     }
   }
 
-  public async getUserNewToken(id: string, refreshToken: string): Promise<IUserLogin | undefined> {
+  public async getUserNewToken(id: string, refreshToken: string): Promise<Response> {
     const fullURL = `${this.restService.baseURL}/users/${id}/tokens`;
-    try {
-      const response = await fetch(fullURL, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${refreshToken}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-      const result = await response.json();
-      return result;
-    } catch {
-      () => console.log('Bad request');
-    }
+    const response = await fetch(fullURL, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${refreshToken}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    return response;
   }
 }

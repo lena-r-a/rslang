@@ -13,8 +13,7 @@ import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
 import { RSLangLS } from './RSLangLS';
-import { rsLangSS } from './RSLangSS';
-import { refreshUserLogInData } from './states/logInData';
+import { clearUserLogInData, refreshUserLogInData } from './states/logInData';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -112,24 +111,40 @@ export class App {
     return preloader;
   }
 
-  private checkUserData() {
+  public checkUserData() {
     if (RSLangLS.isUserAutorizated()) {
       const dataJSON = RSLangLS.getUserDataJSON() as string;
       const data = JSON.parse(dataJSON);
       refreshUserLogInData(data);
-    }
+    } else clearUserLogInData();
+  }
+
+  private runApp() {
+    this.checkUserData();
+    App.container.append(this.getPreloader());
+    Preloader.enablePreloader();
+    const header = new Header();
+    App.container.append(header.render());
+  }
+
+  public runToMainPage() {
+    document.body.innerHTML = '';
+    window.location.href = `#${PageIds.mainPage}`;
+    this.runApp();
+    App.renderNewPage('mainPage');
+    this.enableRouteChange();
+  }
+
+  public runToAutorizationPage() {
+    document.body.innerHTML = '';
+    window.location.href = `#${PageIds.autorizationPage}`;
+    this.runApp();
+    App.renderNewPage('autorizationPage');
+    // this.enableRouteChange();
   }
 
   public run() {
-    rsLangSS.setWordStateFromStorage();
-    window.onbeforeunload = () => {
-      rsLangSS.saveToSessionStorage();
-    };
-    this.checkUserData();
-    Preloader.enablePreloader();
-    App.container.append(this.getPreloader());
-    const header = new Header();
-    App.container.append(header.render());
+    this.runApp();
     if (window.location.hash.slice(1)) {
       App.renderNewPage(window.location.hash.slice(1));
     } else {
