@@ -1,17 +1,22 @@
 export interface IUserWord {
-  difficulty: string;
-  optional: Record<string, unknown>;
+  difficulty: 'hard' | 'easy' | 'normal';
+  optional?: IOptional;
 }
 
-//this is optional interface - depends on task
+export interface IUserWordsResponse {
+  difficulty: 'hard' | 'easy' | 'normal';
+  id: string;
+  wordId: string;
+}
+
 export interface IOptional {
-  testFieldString: string;
-  testFieldBoolean: boolean;
+  trueAnswer: number;
+  falseAnswer: number;
 }
 
 export interface INewWord {
-  difficulty: string; //here need enum
-  optional: IOptional;
+  difficulty: 'hard' | 'easy' | 'normal';
+  optional?: IOptional;
 }
 
 export interface INewWordRequest {
@@ -20,10 +25,10 @@ export interface INewWordRequest {
   word?: INewWord;
 }
 
-export class UserWordsService {
+class UserWordsService {
   private baseURL = 'https://rslang-js.herokuapp.com';
 
-  public async getUserWords(id: string, token: string): Promise<IUserWord | undefined> {
+  public async getUserWords(id: string, token: string): Promise<IUserWordsResponse[] | undefined> {
     const fullURL = `${this.baseURL}/users/${id}/words`;
     try {
       const response = await fetch(fullURL, {
@@ -43,7 +48,7 @@ export class UserWordsService {
 
   public createUserWord = async (newWord: INewWordRequest, token: string) => {
     try {
-      const response = await fetch(`${this.baseURL}/${newWord.userId}/words/${newWord.wordId}`, {
+      const response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -77,7 +82,7 @@ export class UserWordsService {
 
   public editUserWord = async (newWord: INewWordRequest, token: string) => {
     try {
-      const response = await fetch(`${this.baseURL}/${newWord.userId}/words/${newWord.wordId}`, {
+      const response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -95,7 +100,7 @@ export class UserWordsService {
 
   public deleteUserWordByID = async (newWord: INewWordRequest, token: string) => {
     try {
-      const response = await fetch(`${this.baseURL}/${newWord.userId}/words/${newWord.wordId}`, {
+      const response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -109,3 +114,5 @@ export class UserWordsService {
     }
   };
 }
+
+export const userWordsService = new UserWordsService();

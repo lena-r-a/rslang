@@ -1,0 +1,61 @@
+.page-navigation__games {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.games-menu__help-btn {
+  background-color: transparent;
+  border-color: white;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.displaynone {
+  display: none;
+}
+
+.help-message {
+  position: absolute;
+  top: -90px;
+  right: -210px;
+  width: 200px;
+  height: 150px;
+  color: black;
+  background-color: white;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  &::after {
+    position: absolute;
+    content: '';
+  }
+}
+
+.games-adaptive {
+  display: none;
+  width: 80%;
+  @media screen and (max-width: $tablet){
+    display: flex;
+  }
+  div {
+    height: 30px;
+    width: 30px;
+    margin-right: 20px;
+    @include background-styles();
+    filter: invert(98%) sepia(1%) saturate(188%) hue-rotate(121deg) brightness(112%) contrast(100%);
+  }
+  .small-challenge {
+    background-image: url('../../../assets/images/agame.svg');
+  }
+
+  .small-sprint {
+    background-image: url('../../../assets/images/sprint.svg');
+  }
+}
+
