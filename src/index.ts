@@ -27,3 +27,5 @@ app.run();
 // }
 
 // setStat();
+
+console.log('start');

@@ -150,6 +150,6 @@ export class App {
     } else {
       App.renderNewPage('mainPage');
     }
-    // this.enableRouteChange();
+    this.enableRouteChange();
   }
 }
