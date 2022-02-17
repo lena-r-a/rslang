@@ -1,4 +1,4 @@
-import { PageIds } from '../../../app';
+import { App, PageIds } from '../../../app';
 import { Component } from '../../../core/templates/components';
 import { RSLangLS } from '../../../RSLangLS';
 import { logInData } from '../../../states/logInData';
@@ -22,8 +22,8 @@ export class UserView extends Component {
 
   private signOut() {
     RSLangLS.removeUserData();
-    location.reload();
-    location.href = `#${PageIds.mainPage}`;
+    const app = new App();
+    app.runToMainPage();
   }
 
   private hideBtn(btn: HTMLElement) {

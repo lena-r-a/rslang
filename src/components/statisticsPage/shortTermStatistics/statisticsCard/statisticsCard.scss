@@ -1,0 +1,40 @@
+.statCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  padding: $padding;
+  background-color: $bc-blue;
+  @include border($bc--grey);
+  @media screen and (min-width: $statistics-adaptive) {
+    height: 445px;
+    width: 290px;
+  }
+}
+
+.statCard__header {
+  @include navigation__link();
+  margin-bottom: $margin;
+  color: $font-color--light;
+  cursor: none;
+}
+
+.statCard__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  @include border($bc-red);
+  border-radius: 50%;
+  @media screen and (min-width: $statistics-adaptive) {
+    margin-bottom: 100px;
+  }
+}
+
+.statCard__content {
+  @include text--big();
+  color: $font-color--light;
+}

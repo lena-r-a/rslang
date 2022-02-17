@@ -62,7 +62,7 @@ export class SignInForm extends AutorizationForm {
     super();
     this.container.classList.add('form--signInForm');
     this.inputEmail = Form.renderInput(inputEmailAttr);
-    this.inputEmail.focus();
+    // this.inputEmail.focus();
     this.inputPassword = Form.renderInput(inputPasswordAttr);
     this.signInBtn = Form.renderButton(['form__btn', 'form__btn-signIn'], TextObj.signInFormLegend);
     this.signInBtn.setAttribute('type', 'submit');
@@ -102,7 +102,13 @@ export class SignInForm extends AutorizationForm {
           return;
         } else {
           el.classList.remove('form__input--invalid');
-          this.inputEmail.focus();
+          switch (el) {
+            case this.inputEmail:
+              this.inputPassword.focus();
+              break;
+            case this.inputPassword:
+              this.inputEmail.focus();
+          }
         }
       });
       if (success) {
@@ -123,9 +129,8 @@ export class SignInForm extends AutorizationForm {
       const res: IUserLogin = await resp.json();
       RSLangLS.saveUserData(res);
       Preloader.hidePreloader();
-      window.location.href = `#${PageIds.mainPage}`;
       const app = new App();
-      app.run();
+      app.runToMainPage();
     } else if (Object.keys(statusMessages).includes(String(resp.status))) {
       Preloader.hidePreloader();
       this.clearForm();

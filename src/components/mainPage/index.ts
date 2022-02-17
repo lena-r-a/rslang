@@ -18,7 +18,7 @@ export class MainPage extends Page {
   }
 
   private renderAppDescription() {
-    return new AppDescription('section', ['mainPage__appDescription']).render(logInData.isAutorizated);
+    return new AppDescription('section', ['mainPage__appDescription']).render(logInData.isAutorizated!);
   }
 
   private renderTeam() {

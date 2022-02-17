@@ -96,6 +96,9 @@ export class SignUpForm extends AutorizationForm {
               break;
             case this.inputEmail:
               this.inputPassword.focus();
+              break;
+            case this.inputPassword:
+              this.inputName.focus();
           }
         }
       });

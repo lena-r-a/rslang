@@ -46,8 +46,9 @@ $margin--menu: 40px;
 
 .header__menu {
   position: absolute;
-  right: 0;
+  right: 20px;
   top: 45px;
+  width: 150px;
   @media screen and (min-width: $burger-menu-screen) {
     position: unset;
     flex-grow: 1;
