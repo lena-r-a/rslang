@@ -26,9 +26,9 @@ export class GameSprintPage extends Game {
 
   private sprintGameContainer: HTMLElement;
 
-  private question: HTMLElement;
+  private Item: HTMLElement;
 
-  private answer: HTMLElement;
+  private itemTranslate: HTMLElement;
 
   private score: HTMLElement;
 
@@ -36,8 +36,8 @@ export class GameSprintPage extends Game {
     super(id, title, page, group);
     this.sprintGameContainer = document.createElement('div');
     this.stackDesciprtion = document.createElement('p');
-    this.question = document.createElement('p');
-    this.answer = document.createElement('p');
+    this.Item = document.createElement('p');
+    this.itemTranslate = document.createElement('p');
     this.score = document.createElement('div');
     this.container.append(this.sprintGameContainer);
   }
@@ -46,7 +46,7 @@ export class GameSprintPage extends Game {
     this.renderTimer();
     this.renderStack();
     this.renderScore();
-    this.renderQuestion();
+    this.renderItem();
     this.renderControls();
   }
 
@@ -67,11 +67,11 @@ export class GameSprintPage extends Game {
     this.sprintGameContainer.append(CONTAINER);
   }
 
-  renderQuestion() {
+  renderItem() {
     const CONTAINER = document.createElement('div');
-    CONTAINER.append(this.question, this.answer);
+    CONTAINER.append(this.Item, this.itemTranslate);
     this.sprintGameContainer.append(CONTAINER);
-    this.nextQuestion();
+    this.nextItem();
   }
 
   renderTimer() {
@@ -98,17 +98,17 @@ export class GameSprintPage extends Game {
 
   setControlsListeners(container: HTMLElement, right_button: HTMLButtonElement, wrong_button: HTMLButtonElement) {
     container.addEventListener('click', (e) => {
-      const CORRECT_TRANSLATE = this.questionsList![this.currentQuestion].wordTranslate;
+      const CORRECT_TRANSLATE = this.itemsList![this.currentItem].wordTranslate;
       if (e.target === right_button) {
-        if (this.answer.textContent === CORRECT_TRANSLATE) this.correctAnswer();
+        if (this.itemTranslate.textContent === CORRECT_TRANSLATE) this.correctAnswer();
         else this.incorrectAnswer();
       } else if (e.target === wrong_button) {
-        if (this.answer.textContent !== CORRECT_TRANSLATE) this.correctAnswer();
+        if (this.itemTranslate.textContent !== CORRECT_TRANSLATE) this.correctAnswer();
         else this.incorrectAnswer();
       }
       this.updateStats();
-      this.currentQuestion++;
-      this.nextQuestion();
+      this.currentItem++;
+      this.nextItem();
     });
   }
 
@@ -121,14 +121,14 @@ export class GameSprintPage extends Game {
     if (this.invervalId) clearInterval(this.invervalId);
   }
 
-  nextQuestion() {
-    if (!this.questionsList) return;
-    const WORD_DATA = this.questionsList[this.currentQuestion];
-    const RANDOM_INT = getRandomInt(0, this.questionsList.length - 1);
-    const ANSWERS = [WORD_DATA.wordTranslate, this.questionsList[RANDOM_INT].wordTranslate];
+  nextItem() {
+    if (!this.itemsList) return;
+    const WORD_DATA = this.itemsList[this.currentItem];
+    const RANDOM_INT = getRandomInt(0, this.itemsList.length - 1);
+    const ANSWERS = [WORD_DATA.wordTranslate, this.itemsList[RANDOM_INT].wordTranslate];
     const RANDOM_TRANSLATE = ANSWERS[getRandomInt(0, 1)];
-    this.question.textContent = WORD_DATA.word;
-    this.answer.textContent = RANDOM_TRANSLATE;
+    this.Item.textContent = WORD_DATA.word;
+    this.itemTranslate.textContent = RANDOM_TRANSLATE;
   }
 
   playSound(result: boolean) {}
