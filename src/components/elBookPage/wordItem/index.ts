@@ -6,6 +6,7 @@ import { INewWordRequest, userWordsService } from '../../../services/UserWordsSe
 import { filterWordService } from '../../../services/FilterWordsService';
 import { WordState } from '../../../RSLangSS';
 import { Statistics, StatKeysType } from '../../../states/statisticsState';
+import { toggleStylesForStudiedPage } from '../functions';
 
 const URL = 'https://rslang-js.herokuapp.com/';
 let isPlay = false;
@@ -39,8 +40,12 @@ export class WordItem extends Component {
     this.studiedWord.classList.add('add-to-easy');
     this.complicatedWord.textContent = 'Добавить в сложные';
     this.complicatedWord.classList.add('add-to-hard');
-    this.studiedWord.addEventListener('click', (e) => this.addToStudiedWords(e));
-    this.complicatedWord.addEventListener('click', (e) => this.addToComplicatedWords(e));
+    this.studiedWord.addEventListener('click', async (e) => {
+      await this.addToStudiedWords(e);
+    });
+    this.complicatedWord.addEventListener('click', async (e) => {
+      await this.addToComplicatedWords(e);
+    });
     return this.buttonsWrapper;
   }
 
@@ -64,9 +69,10 @@ export class WordItem extends Component {
   }
 
   private playAudio(): void {
+    let audio = new Audio(`${URL}${this.word.audio}`);
     if (!isPlay) {
       isPlay = true;
-      let audio = new Audio(`${URL}${this.word.audio}`);
+      // audio = new Audio(`${URL}${this.word.audio}`);
       audio.play();
       audio.onended = () => {
         audio = new Audio(`${URL}${this.word.audioMeaning}`);
@@ -81,6 +87,14 @@ export class WordItem extends Component {
         audio.pause();
         isPlay = false;
       });
+      document.querySelectorAll('.audio-btn').forEach((el) => {
+        el.addEventListener('click', () => {
+          audio.pause();
+          isPlay = false;
+        });
+      });
+    } else {
+      audio.pause();
     }
   }
 
@@ -195,24 +209,7 @@ export class WordItem extends Component {
         WordState.isStudiedPage = false;
       }
     });
-    this.toggleStylesForStudiedPage();
-  }
-
-  toggleStylesForStudiedPage() {
-    const container = document.querySelector('.elbook__words-container') as HTMLElement;
-    if (WordState.isStudiedPage) {
-      document.querySelector('.page-navigation__current')?.classList.add('studied-page');
-      container.style.border = '2px solid green';
-      document.querySelectorAll('.game-button').forEach((el) => {
-        el.setAttribute('disabled', 'true');
-      });
-    } else {
-      document.querySelector('.page-navigation__current')?.classList.remove('studied-page');
-      container.style.border = 'none';
-      document.querySelectorAll('.game-button').forEach((el) => {
-        el.removeAttribute('disabled');
-      });
-    }
+    toggleStylesForStudiedPage();
   }
 
   private renderWordProgress(): HTMLElement {
@@ -220,7 +217,8 @@ export class WordItem extends Component {
     if (!logInData.isAutorizated) {
       progressContainer.classList.add('dislplaynone');
     } else {
-      filterWordService.getWordByID(logInData.userId!, this.word.id!, logInData.token!).then((rez) => {
+      const thisID = this.word.id || this.word._id;
+      filterWordService.getWordByID(logInData.userId!, thisID!, logInData.token!).then((rez) => {
         if (rez[0].userWord && rez[0].userWord.optional) {
           progressContainer.innerHTML = `
             <p class="word-progress">Статистика слова: Угадано: 
