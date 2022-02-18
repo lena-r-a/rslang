@@ -74,7 +74,6 @@ export function toggleStylesForStudiedPage() {
   const container = document.querySelector('.elbook__words-container') as HTMLElement;
   if (WordState.isStudiedPage && !WordState.VOCABULARY) {
     document.querySelector('.active')?.classList.add('studied-page');
-    console.log(document.querySelector('.active'));
     container.style.border = '2px solid green';
     document.querySelectorAll('.game-button').forEach((el) => {
       const elem = el as HTMLElement;

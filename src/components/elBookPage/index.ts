@@ -76,12 +76,13 @@ export class ElBookPage extends Page {
         this.wordsContainer.renderWordList(WordState.PAGE, WordState.GROUP);
         this.wordsContainer.container.style.backgroundColor = el.dataset.color!;
         WordState.BG = el.dataset.color!;
+        this.pageNavigation.renderPagination(WordState.PAGE + 1);
       });
     });
     this.pageNavigation.difficultWordsLink.addEventListener('click', () => {
       this.goToDifficultWords();
     });
-    this.pageNavigation.container.addEventListener('click', (e: Event) => {
+    this.pageNavigation.paginationList.addEventListener('click', (e: Event) => {
       let target = e.target as HTMLElement;
       if (target.classList.contains('numb-span') || target.children[0].classList.contains('numb-span')) {
         if (target.children[0]?.classList.contains('numb-span')) {
