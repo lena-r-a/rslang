@@ -44,7 +44,7 @@ export class ElBookPage extends Page {
       cardItem.container.classList.add(el.userWord.difficulty);
       cardItem.complicatedWord.innerHTML = 'Удалить из сложных';
       cardItem.complicatedWord.addEventListener('click', () => cardItem.container.remove());
-      cardItem.studiedWord.innerHTML = 'Добвить в изученные';
+      cardItem.studiedWord.innerHTML = 'Добавить в изученные';
       cardItem.studiedWord.addEventListener('click', () => cardItem.container.remove());
       this.wordsContainer.container.append(cardItem.container);
     });

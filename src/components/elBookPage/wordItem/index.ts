@@ -143,7 +143,7 @@ export class WordItem extends Component {
       }
       if (result[0].userWord.difficulty == 'easy') {
         this.container.classList.remove('easy');
-        target.textContent = 'Добаваить в изученные';
+        target.textContent = 'Добавить в изученные';
         await userWordsService.editUserWord(data, logInData.token!);
         await Statistics.updateStat('learned', { word: this.word.word, add: false });
       } else {
@@ -178,7 +178,7 @@ export class WordItem extends Component {
       this.container.classList.add('hard');
       target.textContent = 'Удалить из сложных';
       this.container.classList.remove('easy');
-      this.studiedWord.textContent = 'Добаваить в изученные';
+      this.studiedWord.textContent = 'Добавить в изученные';
       data.word!.difficulty = 'hard';
       await userWordsService.createUserWord(data, logInData.token!);
     } else {
@@ -193,7 +193,7 @@ export class WordItem extends Component {
         this.container.classList.add('hard');
         target.textContent = 'Удалить из сложных';
         this.container.classList.remove('easy');
-        this.studiedWord.textContent = 'Добаваить в изученные';
+        this.studiedWord.textContent = 'Добавить в изученные';
         data.word!.difficulty = 'hard';
         await userWordsService.editUserWord(data, logInData.token!);
         await Statistics.updateStat('learned', { word: this.word.word, add: false });
