@@ -53,6 +53,7 @@ export class Statistics {
 
   private async getUserStat(): Promise<StatDataType | undefined> {
     const response: Response = await this.statisticService.getStatistics(logInData.userId!, logInData.token!);
+    console.log(response.status);
     if (response.status === 200) {
       const result: StatDataType = await response.json();
       delete result.id;
@@ -67,7 +68,10 @@ export class Statistics {
         return result;
       }
     } else if (response.status === 404) {
+      //todo
       const newUserStat: StatDataType = { learnedWords: 0, optional: {} };
+      console.log('newUserStat');
+      console.log(newUserStat);
       return newUserStat;
     } else {
       throw new Error('Bad request');
@@ -91,7 +95,11 @@ export class Statistics {
       }
     } else if (response.status === 404) {
       // если данных на back нет - создаем "чистый объект"
-      return this.createNewLearnedToday();
+      console.log('newLearnedToday');
+      const newLearned = this.createNewLearnedToday();
+      console.log(newLearned);
+      // return this.createNewLearnedToday();
+      return newLearned;
     } else {
       throw new Error('Bad request');
     }
@@ -136,7 +144,7 @@ export class Statistics {
     return dataFromBack;
   }
 
-  private createNewLearnedToday(): ISettings {
+  public createNewLearnedToday(): ISettings {
     const newLearnedToday: ISettings = {
       wordsPerDay: 1,
       optional: {

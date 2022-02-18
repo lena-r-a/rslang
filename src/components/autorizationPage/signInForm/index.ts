@@ -62,7 +62,6 @@ export class SignInForm extends AutorizationForm {
     super();
     this.container.classList.add('form--signInForm');
     this.inputEmail = Form.renderInput(inputEmailAttr);
-    // this.inputEmail.focus();
     this.inputPassword = Form.renderInput(inputPasswordAttr);
     this.signInBtn = Form.renderButton(['form__btn', 'form__btn-signIn'], TextObj.signInFormLegend);
     this.signInBtn.setAttribute('type', 'submit');
@@ -163,9 +162,30 @@ export class SignInForm extends AutorizationForm {
     }
   }
 
+  private changeInputPasswordType(el: HTMLElement) {
+    const inputPassword = document.querySelector('.form__input--password') as HTMLElement;
+    inputPassword.getAttribute('type') === 'password' ? inputPassword.setAttribute('type', 'text') : inputPassword.setAttribute('type', 'password');
+    el.classList.toggle('form__password-eye--open');
+  }
+
+  private renderInputPassword(): HTMLElement {
+    const inputWrapper = document.createElement('div');
+    inputWrapper.classList.add('form__password-wrapper');
+    inputWrapper.append(this.inputPassword);
+    const passwordEye = document.createElement('span');
+    passwordEye.classList.add('form__password-eye');
+    inputWrapper.append(passwordEye);
+    passwordEye.addEventListener('click', (e: Event) => {
+      const targetEl = e.currentTarget as HTMLElement;
+      this.changeInputPasswordType(targetEl);
+    });
+    return inputWrapper;
+  }
+
   public render() {
     this.legend.append(this.inputEmail);
-    this.legend.append(this.inputPassword);
+    const inputPasswordWrapper = this.renderInputPassword();
+    this.legend.append(inputPasswordWrapper);
     this.legend.append(this.signInBtn);
     this.legend.append(this.text);
     this.legend.append(this.signUpBtn);
