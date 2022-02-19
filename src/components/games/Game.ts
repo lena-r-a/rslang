@@ -1,8 +1,8 @@
 import { StatDataGameType } from './../../services/StatisticsService';
 import { Statistics, StatKeysType, StatDateLearnedType } from './../../states/statisticsState';
-import { filterWordService } from './../../services/FilterWordsService';
+import { filterWordService, IAggr, IAgregatedWord } from './../../services/FilterWordsService';
 import { logInData } from './../../states/logInData';
-import { userWordsService, INewWordRequest } from './../../services/UserWordsService';
+import { userWordsService, INewWordRequest, IUserWord, IUserWordsResponse } from './../../services/UserWordsService';
 import { Page } from '../../core/templates/page';
 import { IWord } from '../../services/WordsService';
 import { wordService } from './../../services/WordsService';
@@ -17,7 +17,7 @@ enum Difficulty {
 export abstract class Game extends Page {
   protected title: string;
 
-  protected itemsList: IWord[] | null = null;
+  protected itemsList: IWord[] | IAgregatedWord[] | undefined = undefined;
 
   protected currentItem = 0;
 
@@ -40,20 +40,29 @@ export abstract class Game extends Page {
     this.title = title;
     this.name = name;
     let items: Promise<IWord[] | undefined> | null = null;
-    Preloader.showPreloader();
-    if (page && group && logInData.isAutorizated) {
-      items = this.filterLearnedItems(page, group);
-    } else if (page && group) {
+    let difficultItems: Promise<IAggr[] | undefined> | null = null;
+    const IS_NUM = typeof page === 'number';
+    if(IS_NUM && page < 0 && logInData.isAutorizated){
+      difficultItems = this.getFiltredItems(Difficulty.hard);
+    }
+    else if (IS_NUM && logInData.isAutorizated) {
+      items = this.filterLearnedItems(page, group!);
+    } else if (IS_NUM) {
       items = this.getGameItems(page, group);
     } else {
       this.renderMenu();
     }
     if (items)
       items.then((arr) => {
-        this.itemsList = arr!;
+        this.itemsList = arr;
         this.startGame();
       });
-    Preloader.hidePreloader();
+    if(difficultItems){
+      difficultItems.then((arr) => {
+        this.itemsList = arr![0].paginatedResults;
+        this.startGame();
+      });
+    }
   }
 
   render() {
@@ -101,12 +110,13 @@ export abstract class Game extends Page {
   private async getGameItems(group: number, page?: number, filtred?: boolean) {
     const MIN = 0;
     const MAX = 29;
-    if (!page) page = getRandomInt(MIN, MAX);
-    let items = await wordService.getWords(page, group);
+    const IS_NUM = typeof page === 'number';
+    if (!IS_NUM) page = getRandomInt(MIN, MAX);
+    let items = await wordService.getWords(page!, group);
     if (filtred) {
-      const LEARNED = await this.getDifficultyFiltredItems(Difficulty.easy);
-      const IDS = LEARNED?.map((elem, index) => elem.paginatedResults[index].id);
-      items = items?.filter((elem) => !IDS?.includes(elem.id));
+      const LEARNED = await this.getFiltredItems(Difficulty.easy);
+      const IDS = LEARNED![0].paginatedResults.map((elem) => elem._id);
+      items = items?.filter((elem) => !IDS?.includes(elem._id));
     }
     return items;
   }
@@ -122,7 +132,7 @@ export abstract class Game extends Page {
     return ITEMS;
   }
 
-  private async getDifficultyFiltredItems(diff: string) {
+  private async getFiltredItems(diff: string) {
     const ITEMS = await filterWordService.getAggregatedWords(logInData.userId!, logInData.token!, `{"userWord.difficulty":"${diff}"}`, 3600);
     return ITEMS;
   }
@@ -131,13 +141,17 @@ export abstract class Game extends Page {
     const TOKEN = logInData.token;
     const userId = logInData.userId;
     if (!logInData.isAutorizated || !TOKEN || !userId) return;
-    const RESPONSE = await userWordsService.getUserWordByID({ userId, wordId }, TOKEN);
-    //TODO AGREGATED API
-    //TODO USERWORD KEY
-    if (RESPONSE) {
-      this.updateWordStats(RESPONSE, status, word);
-      userWordsService.editUserWord(RESPONSE, TOKEN);
-    } else {
+    try{
+      const ITEMS = await userWordsService.getUserWords(userId, TOKEN);
+      const ITEM = ITEMS?.find((elem) => elem.wordId === wordId);
+      if(ITEM){
+        const WORD = await userWordsService.getUserWordByID({userId, wordId}, TOKEN);
+        this.updateWordStats(WORD, status, word);
+        userWordsService.editUserWord(WORD, TOKEN);
+      }else{
+        throw new Error('There is no such word in db');
+      }
+    }catch{
       const DATA = this.createWordData(userId, wordId);
       this.updateWordStats(DATA, status, word);
       userWordsService.createUserWord(DATA, TOKEN);
@@ -149,7 +163,7 @@ export abstract class Game extends Page {
       userId,
       wordId,
       word: {
-        difficulty: 'normal',
+        difficulty: Difficulty.normal,
         optional: {
           trueAnswer: 0,
           falseAnswer: 0,
