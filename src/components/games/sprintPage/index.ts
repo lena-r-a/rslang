@@ -2,6 +2,7 @@
 import { Game } from '../Game';
 import getRandomInt from '../../../common/getRandomInt';
 import './sprintPage.scss';
+import Chart from 'chart.js/auto';
 
 export class GameSprintPage extends Game {
   private invervalId: NodeJS.Timer | null = null;
@@ -26,17 +27,17 @@ export class GameSprintPage extends Game {
 
   private sprintGameContainer: HTMLElement;
 
-  private Item: HTMLElement;
+  private item: HTMLElement;
 
   private itemTranslate: HTMLElement;
 
   private score: HTMLElement;
 
   constructor(id: string, page?: number, group?: number, title = 'GameSprintPage') {
-    super(id, title, page, group);
+    super(id, title, 'sprint', page, group);
     this.sprintGameContainer = document.createElement('div');
     this.stackDesciprtion = document.createElement('p');
-    this.Item = document.createElement('p');
+    this.item = document.createElement('p');
     this.itemTranslate = document.createElement('p');
     this.score = document.createElement('div');
     this.container.append(this.sprintGameContainer);
@@ -50,7 +51,7 @@ export class GameSprintPage extends Game {
     this.renderControls();
   }
 
-  renderStack() {
+  private renderStack() {
     const CONTAINER = document.createElement('div');
     const STACK_CONTAINER = document.createElement('div');
     STACK_CONTAINER.classList.add('game__stack');
@@ -67,24 +68,27 @@ export class GameSprintPage extends Game {
     this.sprintGameContainer.append(CONTAINER);
   }
 
-  renderItem() {
+  private renderItem() {
     const CONTAINER = document.createElement('div');
-    CONTAINER.append(this.Item, this.itemTranslate);
+    CONTAINER.append(this.item, this.itemTranslate);
     this.sprintGameContainer.append(CONTAINER);
     this.nextItem();
   }
 
-  renderTimer() {
+  private renderTimer() {
     const TIMER_CONTAINER = document.createElement('div');
     TIMER_CONTAINER.textContent = String(this.gameTime);
     this.invervalId = setInterval(() => {
       TIMER_CONTAINER.textContent = String(--this.gameTime);
-      if (!this.gameTime) this.renderResults();
+      if (!this.gameTime) {
+        this.clearInterval();
+        this.renderResults();
+      }
     }, 1000);
     this.container.append(TIMER_CONTAINER);
   }
 
-  renderControls() {
+  private renderControls() {
     const CONTROLS_CONTAINER = document.createElement('div');
     const RIGHT_BUTTON = document.createElement('button');
     const WRONG_BUTTON = document.createElement('button');
@@ -96,55 +100,74 @@ export class GameSprintPage extends Game {
     this.sprintGameContainer.append(CONTROLS_CONTAINER);
   }
 
-  setControlsListeners(container: HTMLElement, right_button: HTMLButtonElement, wrong_button: HTMLButtonElement) {
-    container.addEventListener('click', (e) => {
+  private setControlsListeners(container: HTMLElement, right_button: HTMLButtonElement, wrong_button: HTMLButtonElement) {
+    container.addEventListener('click', async (e) => {
+      if (!(e.target instanceof HTMLButtonElement)) return;
       const CORRECT_TRANSLATE = this.itemsList![this.currentItem].wordTranslate;
+      const CURRENT_ITEM = this.itemsList![this.currentItem];
+      let status = true;
       if (e.target === right_button) {
         if (this.itemTranslate.textContent === CORRECT_TRANSLATE) this.correctAnswer();
-        else this.incorrectAnswer();
-      } else if (e.target === wrong_button) {
-        if (this.itemTranslate.textContent !== CORRECT_TRANSLATE) this.correctAnswer();
-        else this.incorrectAnswer();
+        else {
+          this.incorrectAnswer();
+          status = false;
+        }
       }
-      this.updateStats();
+      if (e.target === wrong_button) {
+        if (this.itemTranslate.textContent !== CORRECT_TRANSLATE) this.correctAnswer();
+        else {
+          this.incorrectAnswer();
+          status = false;
+        }
+      }
+      await this.updateUserWordInfo(CURRENT_ITEM.id, status, CURRENT_ITEM.word);
+      this.updateDescription();
       this.currentItem++;
+      if (this.currentItem === this.itemsList?.length) {
+        this.clearInterval();
+        this.renderResults(this.totalPoints);
+        return;
+      }
       this.nextItem();
     });
   }
 
-  renderScore() {
+  private renderScore() {
     this.sprintGameContainer.append(this.score);
-    this.updateStats();
+    this.updateDescription();
   }
 
-  renderResults() {
+  private clearInterval() {
     if (this.invervalId) clearInterval(this.invervalId);
   }
 
-  nextItem() {
+  private nextItem() {
     if (!this.itemsList) return;
     const WORD_DATA = this.itemsList[this.currentItem];
     const RANDOM_INT = getRandomInt(0, this.itemsList.length - 1);
     const ANSWERS = [WORD_DATA.wordTranslate, this.itemsList[RANDOM_INT].wordTranslate];
     const RANDOM_TRANSLATE = ANSWERS[getRandomInt(0, 1)];
-    this.Item.textContent = WORD_DATA.word;
+    this.item.textContent = WORD_DATA.word;
     this.itemTranslate.textContent = RANDOM_TRANSLATE;
   }
 
-  playSound(result: boolean) {}
+  private playSound(result: boolean) {}
 
-  correctAnswer() {
+  private correctAnswer() {
     this.results.push(true);
     this.totalPoints += this.pointsGrowth;
-    if (this.stackCurrent === this.maxStackItemsAmount && this.pointsGrowth < this.maxGrowth) {
-      this.pointsGrowth *= 2;
+    this.sequence++;
+    if (this.sequence > this.bestSequence) this.bestSequence = this.sequence;
+    if (this.stackCurrent === this.maxStackItemsAmount) {
+      if (this.pointsGrowth !== this.maxGrowth) this.pointsGrowth *= 2;
       this.clearStack();
     } else {
       this.stackItems![this.stackCurrent++].classList.add('game__stack-item_filled');
     }
   }
 
-  incorrectAnswer() {
+  private incorrectAnswer() {
+    this.sequence = 0;
     this.results.push(false);
     this.clearStack();
     if (this.pointsGrowth > this.minGrowth) {
@@ -152,14 +175,14 @@ export class GameSprintPage extends Game {
     }
   }
 
-  clearStack() {
+  private clearStack() {
     this.stackCurrent = 0;
     for (let i = 0; i < this.stackItems!.length; i++) {
       this.stackItems![i].classList.remove('game__stack-item_filled');
     }
   }
 
-  updateStats() {
+  private updateDescription() {
     const DESCRIPTION = `${this.pointsGrowth} очков за ответ`;
     const SCORE_DESCRIPTION = `Набрано очков: ${this.totalPoints}`;
     this.stackDesciprtion.textContent = DESCRIPTION;

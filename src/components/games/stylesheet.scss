@@ -103,6 +103,11 @@ select::-ms-expand {
   color: #fff;
 }
 
+.game__sound-icon {
+  width: 40px;
+  cursor: pointer;
+}
+
 @media (min-width: 768px) {
   .game__menu-button {
     font-size: 1.125rem;
