@@ -56,9 +56,9 @@ export abstract class Game extends Page {
     if (IS_NUM && page < 0 && logInData.isAutorizated) {
       difficultItems = this.getFiltredItems(Difficulty.hard);
     } else if (IS_NUM && logInData.isAutorizated) {
-      items = this.filterLearnedItems(page, group!);
+      items = this.filterLearnedItems(group!, page);
     } else if (IS_NUM) {
-      items = this.getGameItems(page, group);
+      items = this.getGameItems(group!, page);
     } else {
       this.renderMenu();
     }
@@ -134,7 +134,8 @@ export abstract class Game extends Page {
     if (filtred) {
       const LEARNED = await this.getFiltredItems(Difficulty.easy);
       const IDS = LEARNED![0].paginatedResults.map((elem) => elem._id);
-      items = items?.filter((elem) => !IDS?.includes(elem._id));
+      items = items?.filter((elem) => {
+        return !IDS?.includes(elem.id)});
     }
     return items;
   }
@@ -143,7 +144,7 @@ export abstract class Game extends Page {
     const ITEMS = [];
     let currentPage = page;
     while (currentPage >= 0 && ITEMS.length < this.maxItemsAmount) {
-      const FILTRED = await this.getGameItems(currentPage--, group, true);
+      const FILTRED = await this.getGameItems(group, currentPage--, true);
       ITEMS.push(...FILTRED!);
     }
     if (ITEMS.length > 20) return ITEMS.slice(0, 20);

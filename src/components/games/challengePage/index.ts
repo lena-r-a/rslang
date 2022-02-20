@@ -42,12 +42,13 @@ export class GameChallengePage extends Game {
 
   private async nextItem(){
     if (!this.itemsList) return;
-    this.randomWords = await this.getGameItems(this.currentGroup!);
+    const GROUP = this.currentGroup || getRandomInt(0, 5);
+    this.randomWords = await this.getGameItems(GROUP);
     const WORD_DATA = this.itemsList[this.currentItem];
     const ANSWERS = [WORD_DATA.wordTranslate];
     for(let i = 0; i < this.maxTranslatesItem - 1; i++){
       const randomInt = getRandomInt(0, this.randomWords!.length - 1);
-      const RANDOM_TRANSLATE = this.itemsList[randomInt].wordTranslate;
+      const RANDOM_TRANSLATE = this.randomWords![randomInt].wordTranslate;
       if(!ANSWERS.includes(RANDOM_TRANSLATE)) ANSWERS.push(RANDOM_TRANSLATE);
       else i--;
     }

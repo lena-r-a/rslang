@@ -59,5 +59,8 @@ export class GamesMenu extends Component {
     this.sprint.addEventListener('click', () => {
       WordState.isFromBookPage = true;
     });
+    this.audioChallenge.addEventListener('click', () => {
+      WordState.isFromBookPage = true;
+    });
   }
 }
