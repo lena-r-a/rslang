@@ -1,0 +1,116 @@
+@import url(../../styles/base/global-styles.scss);
+
+.game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.game__menu {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: .8;
+  background-color: $bc-blue;
+  color: #fff;
+  font-family: $font-family;
+
+  &>p {
+    font-size: 2rem;
+  }
+
+  &>button {
+    margin-top: 50px;
+  }
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background: #fff;
+  background-image: none;
+  flex: 1;
+  padding: 0 .5em;
+  color: #000;
+  cursor: pointer;
+  font-size: 1em;
+  font-family: 'Open Sans', sans-serif;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+.select {
+  position: relative;
+  display: flex;
+  width: 135px;
+  height: 60px;
+  line-height: 3;
+  overflow: hidden;
+  border-radius: .25em;
+}
+
+.select::after {
+  content: '\25BC';
+  position: absolute;
+  top: -5px;
+  right: 0px;
+  padding: 0 20px;
+  background: $bc-blue--dark;
+  cursor: pointer;
+  pointer-events: none;
+  transition: .25s all ease;
+}
+
+.select:hover::after {
+  color: #1e293b;
+}
+
+.game__menu-button {
+  background-color: #fff;
+  border: 0 solid #e2e8f0;
+  border-radius: 1.5rem;
+  box-sizing: border-box;
+  color: #0d172a;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 1rem 1.6rem;
+  text-align: center;
+  text-decoration: none #0d172a solid;
+  text-decoration-thickness: auto;
+  transition: all .1s cubic-bezier(.4, 0, .2, 1);
+  box-shadow: 0px 1px 2px rgba(166, 175, 195, 0.25);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.game__menu-button:hover {
+  background-color: #1e293b;
+  color: #fff;
+}
+
+.game__sound-icon {
+  width: 40px;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .game__menu-button {
+    font-size: 1.125rem;
+    padding: 1rem 2rem;
+  }
+}

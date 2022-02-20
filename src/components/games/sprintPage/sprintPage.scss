@@ -1,0 +1,15 @@
+.game__stack {
+  display: flex;
+}
+
+.game__stack-item {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  border-radius: 50%;
+  background-color: #808080;
+}
+
+.game__stack-item_filled {
+  background-color: #008000;
+}

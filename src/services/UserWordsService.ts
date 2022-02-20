@@ -9,6 +9,7 @@ export interface IUserWordsResponse {
   difficulty: 'hard' | 'easy' | 'normal';
   id: string;
   wordId: string;
+  optional?: IOptional;
 }
 
 export interface IOptional {
@@ -91,7 +92,7 @@ class UserWordsService {
 
   public getUserWordByID = async (newWord: INewWordRequest, token: string) => {
     try {
-      const response = await fetch(`${this.baseURL}/${newWord.userId}/words/${newWord.wordId}`, {
+      const response = await fetch(`${this.baseURL}/users/${newWord.userId}/words/${newWord.wordId}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

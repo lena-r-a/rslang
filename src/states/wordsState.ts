@@ -2,7 +2,7 @@
 // при изменении данных - поправляем данные по слову на сервере.
 // в дальнейшем при работе - используем не words, a usersWords (см swagger)
 
-export let wordData: WordDataType = {
+export const wordData: WordDataType = {
   difficulty: false,
   optional: {
     group: 0,
@@ -23,5 +23,5 @@ export type WordDataOptionalType = {
   page: number; // номер страницы
   new: boolean; // новое или нет
   learned: boolean; // изученное или нет
-  rigthAnswers: number; // количество 
+  rigthAnswers: number; // количество
 };
