@@ -1,6 +1,7 @@
 import './gamesMenu.scss';
 import { Component } from '../../../core/templates/components';
 import { SmallGamesMenu } from './smallGamesMenu';
+import { WordState } from '../../../RSLangSS';
 
 export class GamesMenu extends Component {
   audioChallenge: HTMLElement;
@@ -55,5 +56,8 @@ export class GamesMenu extends Component {
   private addLinks(): void {
     this.audioChallenge.setAttribute('href', '#gameChallengePage');
     this.sprint.setAttribute('href', '#gameSprintPage');
+    this.sprint.addEventListener('click', () => {
+      WordState.isFromBookPage = true;
+    });
   }
 }
