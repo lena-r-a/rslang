@@ -50,7 +50,7 @@ select::-ms-expand {
   display: none;
 }
 
-.select {
+.game__select {
   position: relative;
   display: flex;
   width: 135px;
@@ -60,7 +60,7 @@ select::-ms-expand {
   border-radius: .25em;
 }
 
-.select::after {
+.game__select::after {
   content: '\25BC';
   position: absolute;
   top: -5px;

@@ -17,6 +17,10 @@ enum Difficulty {
 export abstract class Game extends Page {
   protected title: string;
 
+  protected currentPage: number | undefined;
+  
+  protected currentGroup: number | undefined;
+
   protected itemsList: IWord[] | IAgregatedWord[] | undefined = undefined;
 
   protected currentItem = 0;
@@ -33,34 +37,45 @@ export abstract class Game extends Page {
 
   protected name: keyof StatKeysType;
 
-  protected URL = `https://rslang-js.herokuapp.com/`;
+  protected URL = 'https://rslang-js.herokuapp.com/';
+
+  protected correctSound = '../../assets/sounds/correct.mp3';
+
+  protected wrongSound = '../../assets/sounds/wrong.mp3';
+
 
   constructor(id: string, title: string, name: keyof StatKeysType, page?: number, group?: number) {
     super(id);
     this.title = title;
+    this.currentGroup = group;
+    this.currentPage = page;
     this.name = name;
     let items: Promise<IWord[] | undefined> | null = null;
     let difficultItems: Promise<IAggr[] | undefined> | null = null;
     const IS_NUM = typeof page === 'number';
-    if(IS_NUM && page < 0 && logInData.isAutorizated){
+    if (IS_NUM && page < 0 && logInData.isAutorizated) {
       difficultItems = this.getFiltredItems(Difficulty.hard);
-    }
-    else if (IS_NUM && logInData.isAutorizated) {
+    } else if (IS_NUM && logInData.isAutorizated) {
       items = this.filterLearnedItems(page, group!);
     } else if (IS_NUM) {
       items = this.getGameItems(page, group);
     } else {
       this.renderMenu();
     }
-    if (items)
+    if (items){
+      Preloader.showPreloader();
       items.then((arr) => {
         this.itemsList = arr;
         this.startGame();
+        Preloader.hidePreloader();
       });
-    if(difficultItems){
+    }
+    if (difficultItems) {
+      Preloader.showPreloader();
       difficultItems.then((arr) => {
         this.itemsList = arr![0].paginatedResults;
         this.startGame();
+        Preloader.hidePreloader();
       });
     }
   }
@@ -89,7 +104,7 @@ export abstract class Game extends Page {
       OPTION.value = String(i);
       GROUP_SELECT.append(OPTION);
     }
-    SELECT_CONTAINER.classList.add('select');
+    SELECT_CONTAINER.classList.add('game__select');
     SELECT_CONTAINER.append(GROUP_SELECT);
     START_BUTTON.textContent = BUTTON_TEXT;
     START_BUTTON.classList.add('game__menu-button');
@@ -99,7 +114,8 @@ export abstract class Game extends Page {
     this.container.append(MENU_CONTAINER);
     START_BUTTON.addEventListener('click', async () => {
       Preloader.showPreloader();
-      const ITEMS = await this.getGameItems(Number(GROUP_SELECT.value));
+      this.currentGroup = Number(GROUP_SELECT.value);
+      const ITEMS = await this.getGameItems(this.currentGroup);
       this.itemsList = ITEMS!;
       MENU_CONTAINER.remove();
       this.startGame();
@@ -107,7 +123,8 @@ export abstract class Game extends Page {
     });
   }
 
-  private async getGameItems(group: number, page?: number, filtred?: boolean) {
+  //TODO INFINITY QUESTIONS LOOP
+  protected async getGameItems(group: number, page?: number, filtred?: boolean) {
     const MIN = 0;
     const MAX = 29;
     const IS_NUM = typeof page === 'number';
@@ -142,17 +159,17 @@ export abstract class Game extends Page {
     const userId = logInData.userId;
     if (!logInData.isAutorizated || !TOKEN || !userId) return;
 
-      const ITEMS = await userWordsService.getUserWords(userId, TOKEN);
-      const ITEM = ITEMS!.find((elem) => elem.wordId === wordId);
-      if(ITEM){
-        const REQUEST_WORD:IUserWord = await userWordsService.getUserWordByID({userId, wordId}, TOKEN);
-        this.updateWordStats(REQUEST_WORD, null, status, word);
-        userWordsService.editUserWord({userId, wordId, word: {difficulty: REQUEST_WORD.difficulty, optional: REQUEST_WORD.optional}}, TOKEN);
-      }else{
-        const DATA = this.createWordData(userId, wordId);
-        this.updateWordStats(null, DATA, status, word);
-        userWordsService.createUserWord(DATA, TOKEN);
-      }
+    const ITEMS = await userWordsService.getUserWords(userId, TOKEN);
+    const ITEM = ITEMS!.find((elem) => elem.wordId === wordId);
+    if (ITEM) {
+      const REQUEST_WORD: IUserWord = await userWordsService.getUserWordByID({ userId, wordId }, TOKEN);
+      this.updateWordStats(REQUEST_WORD, null, status, word);
+      userWordsService.editUserWord({ userId, wordId, word: { difficulty: REQUEST_WORD.difficulty, optional: REQUEST_WORD.optional } }, TOKEN);
+    } else {
+      const DATA = this.createWordData(userId, wordId);
+      this.updateWordStats(null, DATA, status, word);
+      userWordsService.createUserWord(DATA, TOKEN);
+    }
   }
 
   private createWordData(userId: string, wordId: string) {
@@ -170,34 +187,34 @@ export abstract class Game extends Page {
     return DATA;
   }
 
-  private updateWordStats(response?: IUserWord | null,  request?: INewWordRequest | null,  status?: boolean, word?: string) {
+  private updateWordStats(response?: IUserWord | null, request?: INewWordRequest | null, status?: boolean, word?: string) {
     const KEY = 'learned';
     const STATISTIC_DATA: StatDateLearnedType = {
       word: word!,
       add: status!,
     };
-    const DIFF =  response ? response.difficulty : request!.word!.difficulty;
+    const DIFF = response ? response.difficulty : request!.word!.difficulty;
     let optional: IOptional | null = null;
-    if(response) optional = response.optional!;
-    if(request) optional = request.word?.optional!;
+    if (response) optional = response.optional!;
+    if (request) optional = request.word?.optional!;
     if (!optional!.falseAnswer && !optional!.trueAnswer) this.newWords++;
     if (status) {
       optional!.trueAnswer += 1;
     } else {
       optional!.falseAnswer += 1;
       if (DIFF === Difficulty.easy && response) response.difficulty = Difficulty.normal;
-      if(DIFF === Difficulty.easy && request) request.word!.difficulty = Difficulty.normal;
+      if (DIFF === Difficulty.easy && request) request.word!.difficulty = Difficulty.normal;
       Statistics.updateStat(KEY, STATISTIC_DATA);
     }
 
     if (optional!.trueAnswer >= 3 && DIFF === Difficulty.normal) {
       if (response) response.difficulty = Difficulty.easy;
-      if(request) request.word!.difficulty = Difficulty.easy;
+      if (request) request.word!.difficulty = Difficulty.easy;
       Statistics.updateStat(KEY, STATISTIC_DATA);
     }
     if (optional!.trueAnswer >= 5 && DIFF === Difficulty.hard) {
       if (response) response.difficulty = Difficulty.easy;
-      if(request) request.word!.difficulty = Difficulty.easy;
+      if (request) request.word!.difficulty = Difficulty.easy;
       Statistics.updateStat(KEY, STATISTIC_DATA);
     }
   }
@@ -254,4 +271,11 @@ export abstract class Game extends Page {
     });
     return LINE;
   }
+
+  protected playSound(result: boolean) {
+    const SOUND = document.createElement('audio');
+    SOUND.src = result ? this.correctSound : this.wrongSound;
+    SOUND.play();
+  }
+  //TODO ERROR NOT ENOUGHT WORDS FOR THE GAME
 }

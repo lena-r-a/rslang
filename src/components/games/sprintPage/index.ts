@@ -2,7 +2,6 @@
 import { Game } from '../Game';
 import getRandomInt from '../../../common/getRandomInt';
 import './sprintPage.scss';
-import Chart from 'chart.js/auto';
 
 export class GameSprintPage extends Game {
   private invervalId: NodeJS.Timer | null = null;
@@ -32,7 +31,6 @@ export class GameSprintPage extends Game {
   private itemTranslate: HTMLElement;
 
   private score: HTMLElement;
-
 
   constructor(id: string, page?: number, group?: number, title = 'GameSprintPage') {
     super(id, title, 'sprint', page, group);
@@ -103,9 +101,9 @@ export class GameSprintPage extends Game {
 
   private setControlsListeners(container: HTMLElement, right_button: HTMLButtonElement, wrong_button: HTMLButtonElement) {
     const KEYBOARD_HANDLER = (e: KeyboardEvent) => {
-      if (this.currentItem === this.itemsList!.length) return
-      if(e.key === 'ArrowLeft') wrong_button.click();
-      if(e.key === 'ArrowRight') right_button.click();
+      if (this.currentItem === this.itemsList!.length) return;
+      if (e.key === 'ArrowLeft') wrong_button.click();
+      if (e.key === 'ArrowRight') right_button.click();
     };
     container.addEventListener('click', async (e) => {
       if (!(e.target instanceof HTMLButtonElement)) return;
@@ -158,8 +156,6 @@ export class GameSprintPage extends Game {
     this.item.textContent = WORD_DATA.word;
     this.itemTranslate.textContent = RANDOM_TRANSLATE;
   }
-
-  private playSound(result: boolean) {}
 
   private correctAnswer() {
     this.results.push(true);
