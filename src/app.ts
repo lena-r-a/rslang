@@ -13,8 +13,9 @@ import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
 import { RSLangLS } from './RSLangLS';
+import { rsLangSS } from './RSLangSS';
 import { clearUserLogInData, refreshUserLogInData } from './states/logInData';
-import { rsLangSS, WordState } from './RSLangSS';
+import { WordState } from './RSLangSS';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -92,7 +93,7 @@ export class App {
         return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage);
         //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage
         //return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage, -1);
-      } else if (WordState.PAGE !== 0) {
+      } else {
         return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP) : new GameChallengePage(idPage);
         //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage;
         // : (page = new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP));
@@ -165,6 +166,10 @@ export class App {
   }
 
   public run() {
+    rsLangSS.setWordStateFromStorage();
+    window.onbeforeunload = () => {
+      rsLangSS.saveToSessionStorage();
+    };
     this.runApp();
     if (window.location.hash.slice(1)) {
       App.renderNewPage(window.location.hash.slice(1));

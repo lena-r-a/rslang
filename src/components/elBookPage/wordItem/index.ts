@@ -5,6 +5,8 @@ import { logInData } from '../../../states/logInData';
 import { INewWordRequest, userWordsService } from '../../../services/UserWordsService';
 import { filterWordService } from '../../../services/FilterWordsService';
 import { WordState } from '../../../RSLangSS';
+import { Statistics, StatKeysType } from '../../../states/statisticsState';
+import { toggleStylesForStudiedPage } from '../functions';
 
 const URL = 'https://rslang-js.herokuapp.com/';
 let isPlay = false;
@@ -38,8 +40,12 @@ export class WordItem extends Component {
     this.studiedWord.classList.add('add-to-easy');
     this.complicatedWord.textContent = 'Добавить в сложные';
     this.complicatedWord.classList.add('add-to-hard');
-    this.studiedWord.addEventListener('click', (e) => this.addToStudiedWords(e));
-    this.complicatedWord.addEventListener('click', (e) => this.addToComplicatedWords(e));
+    this.studiedWord.addEventListener('click', async (e) => {
+      await this.addToStudiedWords(e);
+    });
+    this.complicatedWord.addEventListener('click', async (e) => {
+      await this.addToComplicatedWords(e);
+    });
     return this.buttonsWrapper;
   }
 
@@ -63,9 +69,10 @@ export class WordItem extends Component {
   }
 
   private playAudio(): void {
+    let audio = new Audio(`${URL}${this.word.audio}`);
     if (!isPlay) {
       isPlay = true;
-      let audio = new Audio(`${URL}${this.word.audio}`);
+      // audio = new Audio(`${URL}${this.word.audio}`);
       audio.play();
       audio.onended = () => {
         audio = new Audio(`${URL}${this.word.audioMeaning}`);
@@ -80,6 +87,14 @@ export class WordItem extends Component {
         audio.pause();
         isPlay = false;
       });
+      document.querySelectorAll('.audio-btn').forEach((el) => {
+        el.addEventListener('click', () => {
+          audio.pause();
+          isPlay = false;
+        });
+      });
+    } else {
+      audio.pause();
     }
   }
 
@@ -108,6 +123,10 @@ export class WordItem extends Component {
       wordId: thisID!,
       word: {
         difficulty: 'normal',
+        optional: {
+          trueAnswer: 0,
+          falseAnswer: 0,
+        },
       },
     };
     if (!result[0].userWord) {
@@ -117,14 +136,16 @@ export class WordItem extends Component {
       this.complicatedWord.textContent = 'Добавить в сложные';
       data.word!.difficulty = 'easy';
       await userWordsService.createUserWord(data, logInData.token!);
+      await Statistics.updateStat('learned', { word: this.word.word, add: true });
     } else {
       if (result[0].userWord && result[0].userWord.optional) {
         data.word!.optional = result[0].userWord.optional;
       }
       if (result[0].userWord.difficulty == 'easy') {
         this.container.classList.remove('easy');
-        target.textContent = 'Добаваить в изученные';
+        target.textContent = 'Добавить в изученные';
         await userWordsService.editUserWord(data, logInData.token!);
+        await Statistics.updateStat('learned', { word: this.word.word, add: false });
       } else {
         this.container.classList.add('easy');
         target.textContent = 'Удалить из изученных';
@@ -132,6 +153,7 @@ export class WordItem extends Component {
         this.complicatedWord.textContent = 'Добавить в сложные';
         data.word!.difficulty = 'easy';
         await userWordsService.editUserWord(data, logInData.token!);
+        await Statistics.updateStat('learned', { word: this.word.word, add: true });
       }
     }
     this.checkStudiedPage();
@@ -146,13 +168,17 @@ export class WordItem extends Component {
       wordId: thisID!,
       word: {
         difficulty: 'normal',
+        optional: {
+          trueAnswer: 0,
+          falseAnswer: 0,
+        },
       },
     };
     if (!result[0].userWord) {
       this.container.classList.add('hard');
       target.textContent = 'Удалить из сложных';
       this.container.classList.remove('easy');
-      this.studiedWord.textContent = 'Добаваить в изученные';
+      this.studiedWord.textContent = 'Добавить в изученные';
       data.word!.difficulty = 'hard';
       await userWordsService.createUserWord(data, logInData.token!);
     } else {
@@ -167,9 +193,10 @@ export class WordItem extends Component {
         this.container.classList.add('hard');
         target.textContent = 'Удалить из сложных';
         this.container.classList.remove('easy');
-        this.studiedWord.textContent = 'Добаваить в изученные';
+        this.studiedWord.textContent = 'Добавить в изученные';
         data.word!.difficulty = 'hard';
         await userWordsService.editUserWord(data, logInData.token!);
+        await Statistics.updateStat('learned', { word: this.word.word, add: false });
       }
     }
     this.checkStudiedPage();
@@ -182,34 +209,29 @@ export class WordItem extends Component {
         WordState.isStudiedPage = false;
       }
     });
-    this.toggleStylesForStudiedPage();
-  }
-
-  toggleStylesForStudiedPage() {
-    const container = document.querySelector('.elbook__words-container') as HTMLElement;
-    if (WordState.isStudiedPage) {
-      document.querySelector('.page-navigation__current')?.classList.add('studied-page');
-      container.style.border = '2px solid green';
-      document.querySelectorAll('.game-button').forEach((el) => {
-        el.setAttribute('disabled', 'true');
-      });
-    } else {
-      document.querySelector('.page-navigation__current')?.classList.remove('studied-page');
-      container.style.border = 'none';
-      document.querySelectorAll('.game-button').forEach((el) => {
-        el.removeAttribute('disabled');
-      });
-    }
+    toggleStylesForStudiedPage();
   }
 
   private renderWordProgress(): HTMLElement {
     const progressContainer = document.createElement('div');
     if (!logInData.isAutorizated) {
       progressContainer.classList.add('dislplaynone');
+    } else {
+      const thisID = this.word.id || this.word._id;
+      filterWordService.getWordByID(logInData.userId!, thisID!, logInData.token!).then((rez) => {
+        if (rez[0].userWord && rez[0].userWord.optional) {
+          progressContainer.innerHTML = `
+            <p class="word-progress">Статистика слова: Угадано: 
+            <span>${rez[0].userWord.optional?.trueAnswer}</span> / Ошибка: 
+            <span>${rez[0].userWord.optional?.trueAnswer}</span></p>
+          `;
+        } else {
+          progressContainer.innerHTML = `
+            <p class="word-progress">Статистика слова: Угадано: <span>0</span> / Ошибка: <span>0</span></p>
+          `;
+        }
+      });
     }
-    progressContainer.innerHTML = `
-      <p>Статистика слова: Угадано: <span>1</span> / Ошибка: <span>1</span></p>
-    `;
     return progressContainer;
   }
 
