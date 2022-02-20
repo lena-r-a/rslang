@@ -18,9 +18,9 @@ async function setStat() {
     add: true,
   };
 
-//   await Statistics.updateStat('challenge', data);
-//   await Statistics.updateStat('sprint', data);
-  // await Statistics.updateStat('learned', learned);
+  await Statistics.updateStat('challenge', data);
+  await Statistics.updateStat('sprint', data);
+  await Statistics.updateStat('learned', learned);
 }
 
 // setStat();

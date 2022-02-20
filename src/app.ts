@@ -57,6 +57,7 @@ export class App {
         page = new StatisticsPage(idPage);
         break;
       case PageIds.gameChallengePage:
+        //todo проверить iscurrentpageelbook
         page = new GameChallengePage(idPage);
         break;
       case PageIds.gameSprintPage:
@@ -132,7 +133,7 @@ export class App {
     window.location.href = `#${PageIds.mainPage}`;
     this.runApp();
     App.renderNewPage('mainPage');
-    this.enableRouteChange();
+    // this.enableRouteChange();
   }
 
   public runToAutorizationPage() {
