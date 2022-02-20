@@ -103,7 +103,7 @@ export class GameSprintPage extends Game {
 
   private setControlsListeners(container: HTMLElement, right_button: HTMLButtonElement, wrong_button: HTMLButtonElement) {
     const KEYBOARD_HANDLER = (e: KeyboardEvent) => {
-      if (this.currentItem === this.itemsList?.length) return
+      if (this.currentItem === this.itemsList!.length) return
       if(e.key === 'ArrowLeft') wrong_button.click();
       if(e.key === 'ArrowRight') right_button.click();
     };
@@ -126,7 +126,7 @@ export class GameSprintPage extends Game {
           status = false;
         }
       }
-      await this.updateUserWordInfo(CURRENT_ITEM.id, status, CURRENT_ITEM.word);
+      this.updateUserWordInfo(CURRENT_ITEM.id, status, CURRENT_ITEM.word);
       this.updateDescription();
       this.currentItem++;
       if (this.currentItem === this.itemsList?.length) {

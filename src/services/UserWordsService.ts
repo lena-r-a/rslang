@@ -7,6 +7,7 @@ export interface IUserWordsResponse {
   difficulty: 'hard' | 'easy' | 'normal';
   id: string;
   wordId: string;
+  optional?: IOptional;
 }
 
 export interface IOptional {

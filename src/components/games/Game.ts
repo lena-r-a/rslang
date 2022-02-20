@@ -2,7 +2,7 @@ import { StatDataGameType } from './../../services/StatisticsService';
 import { Statistics, StatKeysType, StatDateLearnedType } from './../../states/statisticsState';
 import { filterWordService, IAggr, IAgregatedWord } from './../../services/FilterWordsService';
 import { logInData } from './../../states/logInData';
-import { userWordsService, INewWordRequest, IUserWord, IUserWordsResponse } from './../../services/UserWordsService';
+import { userWordsService, INewWordRequest, IUserWord, IUserWordsResponse, IOptional } from './../../services/UserWordsService';
 import { Page } from '../../core/templates/page';
 import { IWord } from '../../services/WordsService';
 import { wordService } from './../../services/WordsService';
@@ -141,21 +141,18 @@ export abstract class Game extends Page {
     const TOKEN = logInData.token;
     const userId = logInData.userId;
     if (!logInData.isAutorizated || !TOKEN || !userId) return;
-    try{
+
       const ITEMS = await userWordsService.getUserWords(userId, TOKEN);
-      const ITEM = ITEMS?.find((elem) => elem.wordId === wordId);
+      const ITEM = ITEMS!.find((elem) => elem.wordId === wordId);
       if(ITEM){
-        const WORD = await userWordsService.getUserWordByID({userId, wordId}, TOKEN);
-        this.updateWordStats(WORD, status, word);
-        userWordsService.editUserWord(WORD, TOKEN);
+        const REQUEST_WORD:IUserWord = await userWordsService.getUserWordByID({userId, wordId}, TOKEN);
+        this.updateWordStats(REQUEST_WORD, null, status, word);
+        userWordsService.editUserWord({userId, wordId, word: {difficulty: REQUEST_WORD.difficulty, optional: REQUEST_WORD.optional}}, TOKEN);
       }else{
-        throw new Error('There is no such word in db');
+        const DATA = this.createWordData(userId, wordId);
+        this.updateWordStats(null, DATA, status, word);
+        userWordsService.createUserWord(DATA, TOKEN);
       }
-    }catch{
-      const DATA = this.createWordData(userId, wordId);
-      this.updateWordStats(DATA, status, word);
-      userWordsService.createUserWord(DATA, TOKEN);
-    }
   }
 
   private createWordData(userId: string, wordId: string) {
@@ -173,27 +170,35 @@ export abstract class Game extends Page {
     return DATA;
   }
 
-  private updateWordStats(data: INewWordRequest, status: boolean, word: string) {
+  private updateWordStats(response?: IUserWord | null,  request?: INewWordRequest | null,  status?: boolean, word?: string) {
     const KEY = 'learned';
     const STATISTIC_DATA: StatDateLearnedType = {
-      word: word,
-      add: status,
+      word: word!,
+      add: status!,
     };
-    if (!data.word!.optional!.falseAnswer && !data.word!.optional!.trueAnswer) this.newWords++;
+    const DIFF =  response ? response.difficulty : request!.word!.difficulty;
+    let optional: IOptional | null = null;
+    if(response) optional = response.optional!;
+    if(request) optional = request.word?.optional!;
+    if (!optional!.falseAnswer && !optional!.trueAnswer) this.newWords++;
     if (status) {
-      data.word!.optional!.trueAnswer += 1;
+      optional!.trueAnswer += 1;
     } else {
-      data.word!.optional!.falseAnswer += 1;
-      if (data.word!.difficulty !== Difficulty.hard) data.word!.difficulty = Difficulty.normal;
+      optional!.falseAnswer += 1;
+      if (DIFF === Difficulty.easy && response) response.difficulty = Difficulty.normal;
+      if(DIFF === Difficulty.easy && request) request.word!.difficulty = Difficulty.normal;
       Statistics.updateStat(KEY, STATISTIC_DATA);
     }
-    if (data.word!.optional!.trueAnswer >= 3 && data.word!.difficulty === Difficulty.normal) {
-      data.word!.difficulty = Difficulty.easy;
+
+    if (optional!.trueAnswer >= 3 && DIFF === Difficulty.normal) {
+      if (response) response.difficulty = Difficulty.easy;
+      if(request) request.word!.difficulty = Difficulty.easy;
       Statistics.updateStat(KEY, STATISTIC_DATA);
     }
-    if (data.word!.optional!.trueAnswer >= 5 && data.word!.difficulty === Difficulty.hard) {
+    if (optional!.trueAnswer >= 5 && DIFF === Difficulty.hard) {
+      if (response) response.difficulty = Difficulty.easy;
+      if(request) request.word!.difficulty = Difficulty.easy;
       Statistics.updateStat(KEY, STATISTIC_DATA);
-      data.word!.difficulty = Difficulty.easy;
     }
   }
 
