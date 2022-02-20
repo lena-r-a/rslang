@@ -3,37 +3,23 @@ import { Component } from '../../../core/templates/components';
 import { WordState } from '../../../RSLangSS';
 import { GamesMenu } from '../gamesMenu';
 import { logInData } from '../../../states/logInData';
+import { createPagination } from '../functions';
 
 export class PageNavigation extends Component {
-  prevPage: HTMLElement;
-
-  nextPage: HTMLElement;
-
-  firstPage: HTMLElement;
-
-  lastPage: HTMLElement;
-
-  numberContainer: HTMLElement;
-
   navPageWrapper: HTMLElement;
 
   difficultWordsLink: HTMLElement;
+
+  paginationList: HTMLElement;
 
   gamesMenu: GamesMenu;
 
   constructor() {
     super('section', ['page-navigation']);
     this.navPageWrapper = document.createElement('div');
-    this.prevPage = document.createElement('button');
-    this.nextPage = document.createElement('button');
-    this.firstPage = document.createElement('button');
-    this.lastPage = document.createElement('button');
+    this.navPageWrapper.classList.add('pagination');
+    this.paginationList = document.createElement('ul');
     this.gamesMenu = new GamesMenu();
-    this.numberContainer = document.createElement('div');
-    this.numberContainer.innerHTML = `
-      <span class = "page-navigation__current">${WordState.PAGE + 1}</span> / 
-      <span class = "page-navigation__total">${WordState.TOTALPAGES}</span>
-    `;
     this.difficultWordsLink = document.createElement('button');
     this.difficultWordsLink.innerHTML = 'Сложные слова';
     this.appendElements();
@@ -41,25 +27,22 @@ export class PageNavigation extends Component {
   }
 
   private addClasses() {
-    this.prevPage.classList.add('page-navigation__prev', 'arrow-btn');
     this.navPageWrapper.classList.add('page-navigation__wrapper');
-    this.nextPage.classList.add('page-navigation__next', 'arrow-btn');
-    this.lastPage.classList.add('page-navigation__end', 'arrow-btn');
-    this.firstPage.classList.add('page-navigation__start', 'arrow-btn');
     this.difficultWordsLink.classList.add('page-navigation__difficult', 'link-btn');
     if (!logInData.isAutorizated) {
       this.difficultWordsLink.classList.add('visually-hidden');
     }
   }
 
+  renderPagination(page: number): void {
+    this.paginationList.innerHTML = createPagination(30, page, this.paginationList);
+  }
+
   private appendElements() {
-    this.navPageWrapper.append(this.firstPage);
-    this.navPageWrapper.append(this.prevPage);
-    this.navPageWrapper.append(this.numberContainer);
-    this.navPageWrapper.append(this.nextPage);
-    this.navPageWrapper.append(this.lastPage);
+    this.navPageWrapper.append(this.paginationList);
     this.container.append(this.gamesMenu.container);
     this.container.append(this.navPageWrapper);
     this.container.append(this.difficultWordsLink);
+    this.paginationList.innerHTML = createPagination(30, WordState.PAGE + 1, this.paginationList);
   }
 }

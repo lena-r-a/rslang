@@ -9,6 +9,7 @@ import { wordService } from './../../services/WordsService';
 import getRandomInt from '../../common/getRandomInt';
 import { Preloader } from '../../common/preloader';
 import './stylesheet.scss';
+
 enum Difficulty {
   easy = 'easy',
   hard = 'hard',
@@ -38,11 +39,10 @@ export abstract class Game extends Page {
   protected name: keyof StatKeysType;
 
   protected URL = 'https://rslang-js.herokuapp.com/';
-
+  
   protected correctSound = '../../assets/sounds/correct.mp3';
 
   protected wrongSound = '../../assets/sounds/wrong.mp3';
-
 
   constructor(id: string, title: string, name: keyof StatKeysType, page?: number, group?: number) {
     super(id);
@@ -70,8 +70,9 @@ export abstract class Game extends Page {
         Preloader.hidePreloader();
       });
     }
+
     if (difficultItems) {
-      Preloader.showPreloader();
+      Preloader.showPreloader()
       difficultItems.then((arr) => {
         this.itemsList = arr![0].paginatedResults;
         this.startGame();

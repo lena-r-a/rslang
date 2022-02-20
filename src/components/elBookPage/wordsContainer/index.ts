@@ -7,6 +7,7 @@ import { WordState } from '../../../RSLangSS';
 import { IUserWordsResponse, userWordsService } from '../../../services/UserWordsService';
 import { logInData } from '../../../states/logInData';
 import { Preloader } from '../../../common/preloader';
+import { toggleStylesForStudiedPage } from '../functions';
 
 export class WordContainer extends Component {
   wordsList: IWord[] | undefined;
@@ -46,19 +47,7 @@ export class WordContainer extends Component {
         this.container.append(cardItem.container);
       });
       Preloader.hidePreloader();
-      if (WordState.isStudiedPage) {
-        document.querySelector('.page-navigation__current')?.classList.add('studied-page');
-        this.container.style.border = '2px solid green';
-        document.querySelectorAll('.game-button').forEach((el) => {
-          el.setAttribute('disabled', 'true');
-        });
-      } else {
-        document.querySelector('.page-navigation__current')?.classList.remove('studied-page');
-        this.container.style.border = 'none';
-        document.querySelectorAll('.game-button').forEach((el) => {
-          el.removeAttribute('disabled');
-        });
-      }
+      toggleStylesForStudiedPage();
     }
   }
 }

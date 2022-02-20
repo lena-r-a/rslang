@@ -69,7 +69,7 @@
       cursor: pointer;
       background-color: $bc--grey;
     }
-    @media screen and (max-width: $tablet){
+    @media screen and (max-width: 980px){
       line-height: 20px;
     }
   }
@@ -110,7 +110,6 @@
   &::after {
     position: absolute;
     content: 'Сложное';
-    // width: 40px;
     height: 40px;
     line-height: 40px;
     padding: 0 5px 0 5px;
@@ -120,3 +119,4 @@
     background-color: $bc-red;
   }
 }
+

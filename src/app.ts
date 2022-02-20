@@ -13,7 +13,9 @@ import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
 import { RSLangLS } from './RSLangLS';
+import { rsLangSS } from './RSLangSS';
 import { clearUserLogInData, refreshUserLogInData } from './states/logInData';
+import { WordState } from './RSLangSS';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -57,10 +59,15 @@ export class App {
         page = new StatisticsPage(idPage);
         break;
       case PageIds.gameChallengePage:
-        page = new GameChallengePage(idPage);
+        //todo проверить iscurrentpageelbook
+        // page = new GameChallengePage(idPage);
+        page = App.checkWordState(idPage);
+        WordState.isFromBookPage = false;
         break;
       case PageIds.gameSprintPage:
-        page = new GameSprintPage(idPage);
+        // page = new GameSprintPage(idPage);
+        page = App.checkWordState(idPage);
+        WordState.isFromBookPage = false;
         break;
       case PageIds.autorizationPage:
         page = new SignInPage(idPage);
@@ -78,6 +85,21 @@ export class App {
     }
     App.toogleFooterDisplay(idPage);
     App.setFocusOnInput(idPage);
+  }
+
+  static checkWordState(idPage: string): GameChallengePage | GameSprintPage {
+    if (WordState.isFromBookPage) {
+      if (WordState.VOCABULARY) {
+        return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage);
+        //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage
+        //return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage, -1);
+      } else {
+        return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP) : new GameChallengePage(idPage);
+        //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage;
+        // : (page = new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP));
+      }
+    }
+    return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage) : new GameChallengePage(idPage);
   }
 
   static toogleFooterDisplay(idPage: string): void {
@@ -132,7 +154,7 @@ export class App {
     window.location.href = `#${PageIds.mainPage}`;
     this.runApp();
     App.renderNewPage('mainPage');
-    this.enableRouteChange();
+    // this.enableRouteChange();
   }
 
   public runToAutorizationPage() {
@@ -144,6 +166,10 @@ export class App {
   }
 
   public run() {
+    rsLangSS.setWordStateFromStorage();
+    window.onbeforeunload = () => {
+      rsLangSS.saveToSessionStorage();
+    };
     this.runApp();
     if (window.location.hash.slice(1)) {
       App.renderNewPage(window.location.hash.slice(1));

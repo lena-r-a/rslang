@@ -60,6 +60,7 @@ export class GroupNavigation extends Component {
   private changeGroup(e: Event) {
     const target = e.currentTarget as HTMLElement;
     WordState.GROUP = Number(target.dataset.id);
+    WordState.PAGE = 0;
     document.querySelectorAll('.elBool__nav-item').forEach((el) => {
       el.classList.add('unactive');
     });
