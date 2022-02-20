@@ -15,22 +15,16 @@ const inputNameSchema = yup.object().shape({
 const inputEmailAttr: Attr = {
   type: 'text',
   placeholder: TextObj.signUpFormEmailField,
-  // pattern: '^([a-z0-9_-]{3,15})@([a-z]{1,}).([a-z]{2,})$',
-  // required: '',
 };
 
 const inputNameAttr: Attr = {
   type: 'text',
   placeholder: TextObj.signUpFormNameField,
-  // pattern: '^[A-Za-zА-Яа-яЁё ]{3,12}$',
-  // required: '',
 };
 
 const inputPasswordAttr: Attr = {
   type: 'password',
   placeholder: TextObj.signUpFormPasswordField,
-  // pattern: '[a-z0-9_-]{8,12}',
-  // required: '',
 };
 
 const statusMessages = {
@@ -157,10 +151,31 @@ export class SignUpForm extends AutorizationForm {
     }
   }
 
+  private changeInputPasswordType(el: HTMLElement) {
+    const inputPassword = document.querySelector('.form__input--password') as HTMLElement;
+    inputPassword.getAttribute('type') === 'password' ? inputPassword.setAttribute('type', 'text') : inputPassword.setAttribute('type', 'password');
+    el.classList.toggle('form__password-eye--open');
+  }
+
+  private renderInputPassword(): HTMLElement {
+    const inputWrapper = document.createElement('div');
+    inputWrapper.classList.add('form__password-wrapper');
+    inputWrapper.append(this.inputPassword);
+    const passwordEye = document.createElement('span');
+    passwordEye.classList.add('form__password-eye');
+    inputWrapper.append(passwordEye);
+    passwordEye.addEventListener('click', (e: Event) => {
+      const targetEl = e.currentTarget as HTMLElement;
+      this.changeInputPasswordType(targetEl);
+    });
+    return inputWrapper;
+  }
+
   public render() {
     this.legend.append(this.inputName);
     this.legend.append(this.inputEmail);
-    this.legend.append(this.inputPassword);
+    const inputPasswordWrapper = this.renderInputPassword();
+    this.legend.append(inputPasswordWrapper);
     this.legend.append(this.signUpBtn);
     return this.container;
   }

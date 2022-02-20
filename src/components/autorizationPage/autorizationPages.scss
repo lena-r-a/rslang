@@ -7,6 +7,8 @@
 
 .aut__message {
   @include error__message();
+  height: 80px;
+  margin-bottom: $margin;
 }
 
 .aut__wrapper {

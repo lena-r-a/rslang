@@ -54,3 +54,30 @@ $form-margin: 70px;
 .form__text {
   @include info-text();
 }
+
+.form__password-wrapper {
+  position: relative;
+  & .form__input {
+    margin-top: 0;
+  }
+}
+
+.form__password-eye {
+  position: absolute;
+  top: 50%;
+  left: 265px;
+  width: 32px;
+  height: 32px;
+  transform: translateY(-50%);
+  background-image: url('../../assets/svg/icon-eye-open.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: .5;
+  &:hover,
+  &:active {
+    opacity: .7;
+  }
+  &--open {
+    background-image: url('../../assets/svg/icon-eye-close.svg');
+  }
+}
