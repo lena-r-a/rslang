@@ -74,14 +74,14 @@ export function toggleStylesForStudiedPage() {
   const container = document.querySelector('.elbook__words-container') as HTMLElement;
   if (WordState.isStudiedPage && !WordState.VOCABULARY) {
     document.querySelector('.active')?.classList.add('studied-page');
-    container.style.border = '2px solid green';
+    if (container) container.style.border = '2px solid green';
     document.querySelectorAll('.game-button').forEach((el) => {
       const elem = el as HTMLElement;
       elem.style.pointerEvents = 'none';
     });
   } else {
     document.querySelector('.page-navigation__current')?.classList.remove('studied-page');
-    container.style.border = 'none';
+    if (container) container.style.border = 'none';
     document.querySelectorAll('.game-button').forEach((el) => {
       const elem = el as HTMLElement;
       elem.style.pointerEvents = 'auto';

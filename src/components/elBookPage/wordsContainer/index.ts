@@ -37,8 +37,8 @@ export class WordContainer extends Component {
           const word = userWords.find((wordEl) => wordEl.wordId == el.id);
           if (word) {
             cardItem.container.classList.add(word.difficulty);
-            cardItem.complicatedWord.innerHTML = word.difficulty == 'hard' ? 'Удалить из сложных' : 'Добвить в сложные';
-            cardItem.studiedWord.innerHTML = word.difficulty == 'easy' ? 'Удалить из изученных' : 'Добвить в изученные';
+            cardItem.complicatedWord.innerHTML = word.difficulty == 'hard' ? 'Удалить из сложных' : 'Добавить в сложные';
+            cardItem.studiedWord.innerHTML = word.difficulty == 'easy' ? 'Удалить из изученных' : 'Добавить в изученные';
           }
         }
         if (!cardItem.container.classList.contains('hard') && !cardItem.container.classList.contains('easy')) {
