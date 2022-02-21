@@ -87,9 +87,11 @@ export class App {
   static checkWordState(idPage: string): GameChallengePage | GameSprintPage {
     if (WordState.isFromBookPage) {
       if (WordState.VOCABULARY) {
-        return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage);
+        return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage, -1);
       } else {
-        return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP) : new GameChallengePage(idPage);
+        return idPage === PageIds.gameSprintPage
+          ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP)
+          : new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP);
       }
     }
     return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage) : new GameChallengePage(idPage);

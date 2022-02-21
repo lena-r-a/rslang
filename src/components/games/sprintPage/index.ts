@@ -1,8 +1,8 @@
-'use strict';
+import { logInData } from './../../../states/logInData';
+('use strict');
 import { Game } from '../Game';
 import getRandomInt from '../../../common/getRandomInt';
 import './sprintPage.scss';
-import Chart from 'chart.js/auto';
 
 export class GameSprintPage extends Game {
   private invervalId: NodeJS.Timer | null = null;
@@ -31,7 +31,13 @@ export class GameSprintPage extends Game {
 
   private itemTranslate: HTMLElement;
 
+  private gameHeading: HTMLElement;
+
   private score: HTMLElement;
+
+  private usedPages: number[] = [];
+
+  private keyBoardHandler: (e: KeyboardEvent) => void = () => null;
 
   constructor(id: string, page?: number, group?: number, title = 'GameSprintPage') {
     super(id, title, 'sprint', page, group);
@@ -40,7 +46,16 @@ export class GameSprintPage extends Game {
     this.item = document.createElement('p');
     this.itemTranslate = document.createElement('p');
     this.score = document.createElement('div');
-    this.container.append(this.sprintGameContainer);
+    this.gameHeading = document.createElement('div');
+    this.gameHeading.classList.add('game__heading');
+    this.score.classList.add('game__score');
+    this.item.classList.add('game__item');
+    this.itemTranslate.classList.add('game__item-translate');
+    this.sprintGameContainer.classList.add('game__sprint-container');
+    this.container.append(this.gameHeading, this.sprintGameContainer);
+    this.sprintGameContainer.addEventListener('DOMNodeRemovedFromDocument', () => {
+      this.clear();
+    });
   }
 
   startGame(): void {
@@ -68,9 +83,10 @@ export class GameSprintPage extends Game {
     this.sprintGameContainer.append(CONTAINER);
   }
 
-  private renderItem() {
+  private async renderItem() {
     const CONTAINER = document.createElement('div');
     CONTAINER.append(this.item, this.itemTranslate);
+    CONTAINER.classList.add('game__items-container');
     this.sprintGameContainer.append(CONTAINER);
     this.nextItem();
   }
@@ -78,30 +94,37 @@ export class GameSprintPage extends Game {
   private renderTimer() {
     const TIMER_CONTAINER = document.createElement('div');
     TIMER_CONTAINER.textContent = String(this.gameTime);
+    TIMER_CONTAINER.classList.add('game__timer');
     this.invervalId = setInterval(() => {
       TIMER_CONTAINER.textContent = String(--this.gameTime);
       if (!this.gameTime) {
-        this.clearInterval();
+        this.ResultItems?.push(...this.itemsList!);
+        this.clear();
         this.renderResults();
       }
     }, 1000);
-    this.container.append(TIMER_CONTAINER);
+    this.gameHeading.append(TIMER_CONTAINER);
   }
 
   private renderControls() {
     const CONTROLS_CONTAINER = document.createElement('div');
-    const RIGHT_BUTTON = document.createElement('button');
-    const WRONG_BUTTON = document.createElement('button');
-    RIGHT_BUTTON.textContent = 'Верно';
-    WRONG_BUTTON.textContent = 'Неверно';
+    const RIGHT_BUTTON = this.getButton('Верно');
+    const WRONG_BUTTON = this.getButton('Неверно');
     CONTROLS_CONTAINER.classList.add('game__controls');
     CONTROLS_CONTAINER.append(WRONG_BUTTON, RIGHT_BUTTON);
     this.setControlsListeners(CONTROLS_CONTAINER, RIGHT_BUTTON, WRONG_BUTTON);
     this.sprintGameContainer.append(CONTROLS_CONTAINER);
   }
 
+  private getButton(str: string) {
+    const BUTTON = document.createElement('button');
+    BUTTON.textContent = str;
+    BUTTON.classList.add('game__controls-button');
+    return BUTTON;
+  }
+
   private setControlsListeners(container: HTMLElement, right_button: HTMLButtonElement, wrong_button: HTMLButtonElement) {
-    const KEYBOARD_HANDLER = (e: KeyboardEvent) => {
+    this.keyBoardHandler = (e: KeyboardEvent) => {
       if (this.currentItem === this.itemsList!.length) return;
       if (e.key === 'ArrowLeft') wrong_button.click();
       if (e.key === 'ArrowRight') right_button.click();
@@ -110,6 +133,7 @@ export class GameSprintPage extends Game {
       if (!(e.target instanceof HTMLButtonElement)) return;
       const CORRECT_TRANSLATE = this.itemsList![this.currentItem].wordTranslate;
       const CURRENT_ITEM = this.itemsList![this.currentItem];
+      const ID = CURRENT_ITEM.id || CURRENT_ITEM._id;
       let status = true;
       if (e.target === right_button) {
         if (this.itemTranslate.textContent === CORRECT_TRANSLATE) this.correctAnswer();
@@ -125,27 +149,42 @@ export class GameSprintPage extends Game {
           status = false;
         }
       }
-      this.updateUserWordInfo(CURRENT_ITEM.id, status, CURRENT_ITEM.word);
+      this.updateUserWordInfo(ID!, status, CURRENT_ITEM.word);
       this.updateDescription();
       this.currentItem++;
-      if (this.currentItem === this.itemsList?.length) {
-        this.clearInterval();
-        document.removeEventListener('keydown', KEYBOARD_HANDLER);
-        this.renderResults(this.totalPoints);
+      if (this.currentItem === this.itemsList?.length && typeof this.currentGroup === 'number') {
+        this.currentItem = 0;
+        let flag = true;
+        this.ResultItems?.push(...this.itemsList);
+        while (flag) {
+          const RANDOM_PAGE = getRandomInt(this.MIN_PAGE, this.MAX_PAGE);
+          if (RANDOM_PAGE !== this.currentPage && !this.usedPages.includes(RANDOM_PAGE)) {
+            this.usedPages.push(RANDOM_PAGE);
+            this.itemsList = logInData.isAutorizated
+              ? await this.filterLearnedItems(this.currentGroup, RANDOM_PAGE)
+              : await this.getGameItems(this.currentGroup, RANDOM_PAGE);
+            flag = false;
+          }
+        }
+      } else if (this.currentItem === this.itemsList?.length) {
+        this.ResultItems?.push(...this.itemsList);
+        this.clear();
+        this.renderResults();
         return;
       }
       this.nextItem();
     });
-    document.addEventListener('keydown', KEYBOARD_HANDLER);
+    document.addEventListener('keydown', this.keyBoardHandler);
   }
 
   private renderScore() {
-    this.sprintGameContainer.append(this.score);
+    this.gameHeading.append(this.score);
     this.updateDescription();
   }
 
-  private clearInterval() {
+  private clear() {
     if (this.invervalId) clearInterval(this.invervalId);
+    document.removeEventListener('keydown', this.keyBoardHandler);
   }
 
   private nextItem() {
@@ -158,9 +197,8 @@ export class GameSprintPage extends Game {
     this.itemTranslate.textContent = RANDOM_TRANSLATE;
   }
 
-  private playSound(result: boolean) {}
-
   private correctAnswer() {
+    this.playSound(true);
     this.results.push(true);
     this.totalPoints += this.pointsGrowth;
     this.sequence++;
@@ -174,6 +212,7 @@ export class GameSprintPage extends Game {
   }
 
   private incorrectAnswer() {
+    this.playSound(false);
     this.sequence = 0;
     this.results.push(false);
     this.clearStack();
