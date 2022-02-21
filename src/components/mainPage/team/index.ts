@@ -14,7 +14,7 @@ export const teamMembersData: TeamMemberData[] = [
   },
   {
     img: '../../../assets/images/team2.jpg',
-    name: 'Богдан Палица',
+    name: 'Богдан Палянца',
     position: 'Разработчик',
     role: 'Реализация игр "Спринт" и "Аудиовызов"',
     gitHub: 'https://github.com/whispermind',

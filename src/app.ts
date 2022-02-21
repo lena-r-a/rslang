@@ -90,11 +90,13 @@ export class App {
   static checkWordState(idPage: string): GameChallengePage | GameSprintPage {
     if (WordState.isFromBookPage) {
       if (WordState.VOCABULARY) {
-        return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage);
+        return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage, -1);
         //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage
         //return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage, -1);
       } else {
-        return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP) : new GameChallengePage(idPage);
+        return idPage === PageIds.gameSprintPage
+          ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP)
+          : new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP);
         //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage;
         // : (page = new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP));
       }
