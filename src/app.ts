@@ -13,8 +13,9 @@ import { Footer } from './common/footer';
 import { ErrorPage } from './components/errorPage';
 import { Preloader } from './common/preloader';
 import { RSLangLS } from './RSLangLS';
+import { rsLangSS } from './RSLangSS';
 import { clearUserLogInData, refreshUserLogInData } from './states/logInData';
-import { rsLangSS, WordState } from './RSLangSS';
+import { WordState } from './RSLangSS';
 
 export const enum PageIds {
   mainPage = 'mainPage',
@@ -87,7 +88,7 @@ export class App {
     if (WordState.isFromBookPage) {
       if (WordState.VOCABULARY) {
         return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage);
-      } else if (WordState.PAGE !== 0) {
+      } else {
         return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP) : new GameChallengePage(idPage);
       }
     }
@@ -158,6 +159,10 @@ export class App {
   }
 
   public run() {
+    rsLangSS.setWordStateFromStorage();
+    window.onbeforeunload = () => {
+      rsLangSS.saveToSessionStorage();
+    };
     this.runApp();
     if (window.location.hash.slice(1)) {
       App.renderNewPage(window.location.hash.slice(1));

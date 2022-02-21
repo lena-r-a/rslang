@@ -33,7 +33,6 @@ export class GameSprintPage extends Game {
 
   private score: HTMLElement;
 
-
   constructor(id: string, page?: number, group?: number, title = 'GameSprintPage') {
     super(id, title, 'sprint', page, group);
     this.sprintGameContainer = document.createElement('div');
@@ -103,9 +102,9 @@ export class GameSprintPage extends Game {
 
   private setControlsListeners(container: HTMLElement, right_button: HTMLButtonElement, wrong_button: HTMLButtonElement) {
     const KEYBOARD_HANDLER = (e: KeyboardEvent) => {
-      if (this.currentItem === this.itemsList!.length) return
-      if(e.key === 'ArrowLeft') wrong_button.click();
-      if(e.key === 'ArrowRight') right_button.click();
+      if (this.currentItem === this.itemsList!.length) return;
+      if (e.key === 'ArrowLeft') wrong_button.click();
+      if (e.key === 'ArrowRight') right_button.click();
     };
     container.addEventListener('click', async (e) => {
       if (!(e.target instanceof HTMLButtonElement)) return;
