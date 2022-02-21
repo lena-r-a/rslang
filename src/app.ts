@@ -147,7 +147,6 @@ export class App {
     window.location.href = `#${PageIds.mainPage}`;
     this.runApp();
     App.renderNewPage('mainPage');
-    // this.enableRouteChange();
   }
 
   public runToAutorizationPage() {
@@ -155,7 +154,6 @@ export class App {
     window.location.href = `#${PageIds.autorizationPage}`;
     this.runApp();
     App.renderNewPage('autorizationPage');
-    // this.enableRouteChange();
   }
 
   public run() {
