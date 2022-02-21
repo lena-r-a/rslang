@@ -1,14 +1,16 @@
+import { WordState } from './../../RSLangSS/index';
 import { StatDataGameType } from './../../services/StatisticsService';
 import { Statistics, StatKeysType, StatDateLearnedType } from './../../states/statisticsState';
 import { filterWordService, IAggr, IAgregatedWord } from './../../services/FilterWordsService';
 import { logInData } from './../../states/logInData';
-import { userWordsService, INewWordRequest, IUserWord, IUserWordsResponse, IOptional } from './../../services/UserWordsService';
+import { userWordsService, INewWordRequest, INewWord, IUserWordsResponse } from './../../services/UserWordsService';
 import { Page } from '../../core/templates/page';
 import { IWord } from '../../services/WordsService';
 import { wordService } from './../../services/WordsService';
 import getRandomInt from '../../common/getRandomInt';
 import { Preloader } from '../../common/preloader';
 import './stylesheet.scss';
+import { PageIds } from '../../app';
 
 enum Difficulty {
   easy = 'easy',
@@ -19,10 +21,12 @@ export abstract class Game extends Page {
   protected title: string;
 
   protected currentPage: number | undefined;
-  
+
   protected currentGroup: number | undefined;
 
   protected itemsList: IWord[] | IAgregatedWord[] | undefined = undefined;
+
+  protected ResultItems: IWord[] | Omit<IAgregatedWord, 'userWord'>[] | undefined = [];
 
   protected currentItem = 0;
 
@@ -39,10 +43,14 @@ export abstract class Game extends Page {
   protected name: keyof StatKeysType;
 
   protected URL = 'https://rslang-js.herokuapp.com/';
-  
-  protected correctSound = '../../assets/sounds/correct.mp3';
 
-  protected wrongSound = '../../assets/sounds/wrong.mp3';
+  protected correctSound = './../../assets/sounds/correct.mp3';
+
+  protected wrongSound = './../../assets/sounds/wrong.mp3';
+
+  protected MAX_PAGE = 29;
+
+  protected MIN_PAGE = 0;
 
   constructor(id: string, title: string, name: keyof StatKeysType, page?: number, group?: number) {
     super(id);
@@ -62,7 +70,7 @@ export abstract class Game extends Page {
     } else {
       this.renderMenu();
     }
-    if (items){
+    if (items) {
       Preloader.showPreloader();
       items.then((arr) => {
         this.itemsList = arr;
@@ -72,7 +80,7 @@ export abstract class Game extends Page {
     }
 
     if (difficultItems) {
-      Preloader.showPreloader()
+      Preloader.showPreloader();
       difficultItems.then((arr) => {
         this.itemsList = arr![0].paginatedResults;
         this.startGame();
@@ -124,23 +132,24 @@ export abstract class Game extends Page {
     });
   }
 
-  //TODO INFINITY QUESTIONS LOOP
   protected async getGameItems(group: number, page?: number, filtred?: boolean) {
-    const MIN = 0;
-    const MAX = 29;
     const IS_NUM = typeof page === 'number';
-    if (!IS_NUM) page = getRandomInt(MIN, MAX);
+    if (!IS_NUM) {
+      page = getRandomInt(this.MIN_PAGE, this.MAX_PAGE);
+      this.currentPage = page;
+    }
     let items = await wordService.getWords(page!, group);
     if (filtred) {
       const LEARNED = await this.getFiltredItems(Difficulty.easy);
       const IDS = LEARNED![0].paginatedResults.map((elem) => elem._id);
       items = items?.filter((elem) => {
-        return !IDS?.includes(elem.id)});
+        return !IDS?.includes(elem.id);
+      });
     }
     return items;
   }
 
-  private async filterLearnedItems(group: number, page: number) {
+  protected async filterLearnedItems(group: number, page: number) {
     const ITEMS = [];
     let currentPage = page;
     while (currentPage >= 0 && ITEMS.length < this.maxItemsAmount) {
@@ -164,12 +173,11 @@ export abstract class Game extends Page {
     const ITEMS = await userWordsService.getUserWords(userId, TOKEN);
     const ITEM = ITEMS!.find((elem) => elem.wordId === wordId);
     if (ITEM) {
-      const REQUEST_WORD: IUserWord = await userWordsService.getUserWordByID({ userId, wordId }, TOKEN);
-      this.updateWordStats(REQUEST_WORD, null, status, word);
-      userWordsService.editUserWord({ userId, wordId, word: { difficulty: REQUEST_WORD.difficulty, optional: REQUEST_WORD.optional } }, TOKEN);
+      this.updateWordStats(null, ITEM, status, word);
+      userWordsService.editUserWord({ userId, wordId, word: { difficulty: ITEM.difficulty, optional: ITEM.optional } }, TOKEN);
     } else {
       const DATA = this.createWordData(userId, wordId);
-      this.updateWordStats(null, DATA, status, word);
+      this.updateWordStats(DATA, null, status, word);
       userWordsService.createUserWord(DATA, TOKEN);
     }
   }
@@ -189,34 +197,28 @@ export abstract class Game extends Page {
     return DATA;
   }
 
-  private updateWordStats(response?: IUserWord | null, request?: INewWordRequest | null, status?: boolean, word?: string) {
+  private updateWordStats(requestWord?: INewWordRequest | null, responseWord?: IUserWordsResponse | null, status?: boolean, word?: string) {
     const KEY = 'learned';
     const STATISTIC_DATA: StatDateLearnedType = {
       word: word!,
       add: status!,
     };
-    const DIFF = response ? response.difficulty : request!.word!.difficulty;
-    let optional: IOptional | null = null;
-    if (response) optional = response.optional!;
-    if (request) optional = request.word?.optional!;
-    if (!optional!.falseAnswer && !optional!.trueAnswer) this.newWords++;
+    const DATA: INewWordRequest | INewWord | undefined = responseWord ? responseWord : requestWord?.word;
+    if (!DATA?.optional?.falseAnswer && !DATA?.optional?.trueAnswer) this.newWords++;
     if (status) {
-      optional!.trueAnswer += 1;
+      DATA!.optional!.trueAnswer += 1;
     } else {
-      optional!.falseAnswer += 1;
-      if (DIFF === Difficulty.easy && response) response.difficulty = Difficulty.normal;
-      if (DIFF === Difficulty.easy && request) request.word!.difficulty = Difficulty.normal;
+      DATA!.optional!.falseAnswer += 1;
+      if (DATA?.difficulty === Difficulty.easy) DATA.difficulty = Difficulty.normal;
       Statistics.updateStat(KEY, STATISTIC_DATA);
     }
 
-    if (optional!.trueAnswer >= 3 && DIFF === Difficulty.normal) {
-      if (response) response.difficulty = Difficulty.easy;
-      if (request) request.word!.difficulty = Difficulty.easy;
+    if (DATA!.optional!.trueAnswer >= 3 && DATA?.difficulty === Difficulty.normal) {
+      DATA.difficulty = Difficulty.easy;
       Statistics.updateStat(KEY, STATISTIC_DATA);
     }
-    if (optional!.trueAnswer >= 5 && DIFF === Difficulty.hard) {
-      if (response) response.difficulty = Difficulty.easy;
-      if (request) request.word!.difficulty = Difficulty.easy;
+    if (DATA!.optional!.trueAnswer >= 5 && DATA?.difficulty === Difficulty.hard) {
+      DATA.difficulty = Difficulty.easy;
       Statistics.updateStat(KEY, STATISTIC_DATA);
     }
   }
@@ -234,10 +236,11 @@ export abstract class Game extends Page {
   protected renderResults(score?: number) {
     if (logInData.isAutorizated) this.sendStats();
     const RESULTS_CONTAINER = document.createElement('div');
+    const RESULTS_CONTENT = document.createElement('div');
     const RESULTS_TABLE = document.createElement('table');
-    const RETURN_BUTTON = document.createElement('button');
+    const RESTART_BUTTON = document.createElement('button');
     const SCORE = document.createElement('p');
-    RETURN_BUTTON.textContent = 'SOME BUTTON EVENT';
+    RESTART_BUTTON.textContent = 'Restart';
     if (score) {
       SCORE.textContent = `Вы заработали ${score} очков`;
     }
@@ -245,28 +248,54 @@ export abstract class Game extends Page {
       const LINE = this.getResultLine(result, index);
       RESULTS_TABLE.append(LINE);
     });
-    RESULTS_CONTAINER.append(SCORE, RESULTS_TABLE, RETURN_BUTTON);
+    RESULTS_CONTENT.append(SCORE, RESULTS_TABLE);
+    RESULTS_CONTENT.classList.add('game__result-table', 'game__result-table-content');
+    RESULTS_CONTAINER.append(this.getResultsHeading(), RESULTS_CONTENT, RESTART_BUTTON);
+    RESULTS_CONTAINER.classList.add('game__results');
     this.container.innerHTML = '';
     this.container.append(RESULTS_CONTAINER);
+    RESTART_BUTTON.addEventListener('click', () => {
+      window.location.reload();
+    });
+  }
+
+  protected getResultsHeading() {
+    const CONTAINER = document.createElement('div');
+    const TABLE = document.createElement('table');
+    const THEAD = document.createElement('thead');
+    const TR = document.createElement('tr');
+    const HEADINGS = ['Audio', 'Word', 'Translate', 'Transcription', 'Result'];
+    HEADINGS.forEach((str) => {
+      const TH = document.createElement('th');
+      TH.classList.add('game__result-table-th');
+      TH.textContent = str;
+      TR.append(TH);
+    });
+    THEAD.append(TR);
+    TABLE.append(THEAD);
+    CONTAINER.append(TABLE);
+    CONTAINER.classList.add('game__result-table', 'game__result-table-header');
+    return CONTAINER;
   }
 
   private getResultLine(result: boolean, index: number) {
     const LINE = document.createElement('tr');
     const sound = document.createElement('audio');
-    sound.src = this.URL + this.itemsList![index].audio;
+    sound.src = this.URL + this.ResultItems![index].audio;
     const soundIcon = document.createElement('img');
     soundIcon.src = '../../assets/svg/sound.svg';
     soundIcon.addEventListener('click', () => sound.play());
     soundIcon.classList.add('game__sound-icon');
     const RESULT_ITEMS = [
       soundIcon,
-      this.itemsList![index].word,
-      this.itemsList![index].wordTranslate,
-      this.itemsList![index].transcription,
+      this.ResultItems![index].word,
+      this.ResultItems![index].wordTranslate,
+      this.ResultItems![index].transcription,
       result ? '✔️' : '❌',
     ];
     RESULT_ITEMS.forEach((content) => {
       const TD = document.createElement('td');
+      TD.classList.add('game__result-table-td');
       if (typeof content === 'string') TD.textContent = content;
       else TD.append(content);
       LINE.append(TD);
@@ -276,8 +305,8 @@ export abstract class Game extends Page {
 
   protected playSound(result: boolean) {
     const SOUND = document.createElement('audio');
-    SOUND.src = result ? this.correctSound : this.wrongSound;
+    const SRC = result ? this.correctSound : this.wrongSound;
+    SOUND.src = SRC;
     SOUND.play();
   }
-  //TODO ERROR NOT ENOUGHT WORDS FOR THE GAME
 }

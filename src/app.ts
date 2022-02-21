@@ -94,7 +94,9 @@ export class App {
         //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage
         //return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage, -1);
       } else {
-        return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP) : new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP);
+        return idPage === PageIds.gameSprintPage
+          ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP)
+          : new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP);
         //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage;
         // : (page = new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP));
       }
