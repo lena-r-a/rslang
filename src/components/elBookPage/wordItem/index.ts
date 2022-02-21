@@ -72,7 +72,6 @@ export class WordItem extends Component {
     let audio = new Audio(`${URL}${this.word.audio}`);
     if (!isPlay) {
       isPlay = true;
-      // audio = new Audio(`${URL}${this.word.audio}`);
       audio.play();
       audio.onended = () => {
         audio = new Audio(`${URL}${this.word.audioMeaning}`);
@@ -223,7 +222,7 @@ export class WordItem extends Component {
           progressContainer.innerHTML = `
             <p class="word-progress">Статистика слова: Угадано: 
             <span>${rez[0].userWord.optional?.trueAnswer}</span> / Ошибка: 
-            <span>${rez[0].userWord.optional?.trueAnswer}</span></p>
+            <span>${rez[0].userWord.optional?.falseAnswer}</span></p>
           `;
         } else {
           progressContainer.innerHTML = `

@@ -38,16 +38,24 @@ export class ElBookPage extends Page {
     this.pageNavigation.navPageWrapper.classList.add('visually-hidden');
     const result = await filterWordService.getAggregatedWords(logInData.userId!, logInData.token!, '{"userWord.difficulty":"hard"}', 3600);
     const wordList = result![0].paginatedResults;
-    wordList!.forEach((el) => {
-      const cardItem = new WordItem(el);
-      cardItem.render();
-      cardItem.container.classList.add(el.userWord.difficulty);
-      cardItem.complicatedWord.innerHTML = 'Удалить из сложных';
-      cardItem.complicatedWord.addEventListener('click', () => cardItem.container.remove());
-      cardItem.studiedWord.innerHTML = 'Добавить в изученные';
-      cardItem.studiedWord.addEventListener('click', () => cardItem.container.remove());
-      this.wordsContainer.container.append(cardItem.container);
-    });
+    if (wordList.length === 0) {
+      this.wordsContainer.container.innerHTML = `
+      <div class="center">
+      Здесь будут отображаться сложные слова
+      </div>
+      `;
+    } else {
+      wordList!.forEach((el) => {
+        const cardItem = new WordItem(el);
+        cardItem.render();
+        cardItem.container.classList.add(el.userWord.difficulty);
+        cardItem.complicatedWord.innerHTML = 'Удалить из сложных';
+        cardItem.complicatedWord.addEventListener('click', () => cardItem.container.remove());
+        cardItem.studiedWord.innerHTML = 'Добавить в изученные';
+        cardItem.studiedWord.addEventListener('click', () => cardItem.container.remove());
+        this.wordsContainer.container.append(cardItem.container);
+      });
+    }
     Preloader.hidePreloader();
   }
 

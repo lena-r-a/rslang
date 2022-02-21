@@ -81,7 +81,7 @@ export function toggleStylesForStudiedPage() {
     });
   } else {
     document.querySelector('.page-navigation__current')?.classList.remove('studied-page');
-    container.style.border = 'none';
+    if (container) container.style.border = 'none';
     document.querySelectorAll('.game-button').forEach((el) => {
       const elem = el as HTMLElement;
       elem.style.pointerEvents = 'auto';
