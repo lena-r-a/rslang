@@ -1,0 +1,22 @@
+.shortStat,
+.longStat {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 70px;
+  @media screen and (min-width: $statistics-adaptive--desktop) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 1980px;
+    margin: 0 auto;
+  }
+}
+
+.shortStat__message,
+.longStat__message {
+    @include error__message();
+    color: $font-color--grey;
+    margin-bottom: $margin;
+    font-size: $font-size--small;
+}

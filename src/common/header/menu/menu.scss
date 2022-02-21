@@ -1,0 +1,87 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  @media screen and (min-width: $burger-menu-screen) {
+    display: block;
+  }
+}
+
+.menu__burgerBtn {
+  align-self: flex-end;
+  @include btn2();
+  margin-bottom: 60px;
+  width: 40px;
+  height: 40px;
+  background-image: url('../../../assets/svg/icon-menu.svg');
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  line-height: 40px;
+  border: none;
+  cursor: pointer;
+  opacity: .75;
+  &:hover,
+  &:active {
+    opacity: 1;
+  }
+  &:focus-visible {
+    @include outline();
+  }
+  @media screen and (min-width: $burger-menu-screen){
+    display: none;
+  }
+  &--open {
+    background-image: url('../../../assets/svg/icon-cross.svg');
+  }
+}
+
+.menu__wrapper {
+  position: absolute;
+  top: 85px;
+  left: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  row-gap: 20px;
+  column-gap: $margin;
+  width: 100%;
+  padding: $padding;
+  opacity: .9;
+  background-color: $bc-light;
+  @include hover-active-transition;
+  &--open {
+    left: 20px;
+  }
+  @media screen and (min-width: $burger-menu-screen){
+    position: unset;
+    display: flex;
+    flex-direction: row;
+    opacity: 1;
+    background-color: transparent;
+  }
+}
+
+.menu__item {
+  margin-right: $margin;
+  @include navigation__link();
+  color: $font-color--blue;
+  @include hover-active-transition();
+  &:hover,
+  &:active {
+    color: lighten($font-color--blue, 25%);
+  }
+  &:focus-visible {
+    @include outline();
+    border-top: $bc-light;
+  }
+  @media screen and (min-width: $burger-menu-screen) {
+    color: rgba(255, 255, 255, 0.75);
+    &:hover,
+    &:active {
+      color: $font-color--light;
+    }
+  }
+}

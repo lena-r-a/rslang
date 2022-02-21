@@ -1,0 +1,14 @@
+.team {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  max-width: 1170px;
+  /*61.6%*/
+  margin: 100px auto;
+}
+
+@media screen and (max-width: $tablet) {
+  .team {
+    justify-content: space-between;
+  }
+}

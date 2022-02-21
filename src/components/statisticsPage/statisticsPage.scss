@@ -1,0 +1,73 @@
+.stat {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 40px $padding;
+  // padding-top: 120px;
+  width: 100%;
+  @media screen and (min-width: $burger-menu-screen) {
+    padding: 40px $padding;
+  }
+}
+
+.stat__btn {
+  @include btn();
+  width: auto;
+  padding: 16px;
+  &--shortTerm {
+    margin-right: $margin;
+    animation-name: btn;
+    animation-duration: 0.7s;
+  }
+  &:hover,
+  &:focus {
+    background-color: $bc-red--active;
+  }
+  &:focus-visible {
+    @include outline();
+  }
+}
+
+@keyframes btn {
+  0% {
+    transform: rotate(0deg) scale(0.7);
+  }
+  20% {
+    transform: rotate(0deg) scale(0.8);
+  }
+  40% {
+    transform: rotate(0deg) scale(0.9);
+  }
+  50% {
+    transform: rotate(8deg) scale(1);
+  }
+  60% {
+    transform: rotate(-8deg) scale(1.2);
+  }
+  75%,
+  90% {
+    transform: rotate(8deg) scale(1);
+  }
+  80%,
+  95% {
+    transform: rotate(-8deg) scale(1);
+  }
+  70%,
+  85%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.stat__btn-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 auto;
+  margin-bottom: 40px;
+}
+
+.stat__error-message {
+  @include error__message();
+  margin-bottom: $margin;
+}

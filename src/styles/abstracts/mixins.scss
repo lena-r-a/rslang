@@ -1,0 +1,138 @@
+// кнопки
+@mixin btn() {
+  display: block;
+  width: 200px;
+  padding: 16px 0 16px 0;
+  font-size: $font-size--tiny;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  color: $font-color--light;
+  background-color: lighten($bc-red, 5%);
+  border: none;
+  border-radius: $block-border-radius;
+  transition: background-color ease-in-out 0.5s;
+}
+
+@mixin btn2() {
+  display: block;
+  padding: 10px;
+  font-size: $font-size--tiny;
+  line-height: 100%;
+  font-family: $font-family--semiBold;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  color: $font-color--light;
+  background-color: $bc--grey;
+  @include border($font-color--light); 
+  cursor: pointer;
+  @include hover-active-transition();
+  &:hover,
+  &:active {
+    color: $font-color--red;
+  }
+  &:focus-visible {
+    @include outline();
+  }
+}
+
+// меню
+@mixin navigation__link() {
+  font-size: $font-size--tiny;
+  font-family: $font-family--bold;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+// основные заголовки типа h2
+@mixin main-caption() {
+  margin: 0;
+  font-size: $font-size--big;
+  line-height: 110%;
+  text-transform: uppercase;
+  text-align: center;
+  color: $font-color--light;
+}
+
+// заголовки типа h3
+@mixin caption() {
+  font-size: $font-size--middle;
+  font-family: $font-family--regular;
+  color: $font-color--grey-dark;
+}
+
+@mixin text--big() {
+  font-size: $font-size--small;
+  font-family: $font-family--regular;
+  text-transform: uppercase;
+  color: $font-color--red;
+}
+
+@mixin text() {
+  font-size: $font-size--middle;
+  line-height: 150%;
+  font-family: $font-family--regular;
+  color: $font-color--light;
+} 
+
+@mixin info-text() {
+  font-size: $font-size--info;
+  line-height: 150%;
+  font-family: $font-family--regular;
+  color: $font-color--grey;
+}
+
+@mixin text--italic() {
+  font-style: italic;
+  font-size: $font-size--middle;
+  line-height: 120%;
+  font-family: Cardo, "Open Sans", Arial;
+  color: $font-color--light;
+}
+
+@mixin hover-active-transition() {
+  transition: .5s;
+}
+
+@mixin outline() {
+  outline: 2px solid $font-color--grey-dark;
+}
+
+@mixin list-style-none() {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin list-item-style-none() {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+@mixin background-styles() {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@mixin border($border-color) {
+  border: 4px solid $border-color;
+  border-radius: 5px;
+}
+
+@mixin error__message {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: $margin;
+  @include text();
+  text-align: center;
+  color: $font-color--red;
+}

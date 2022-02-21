@@ -1,0 +1,42 @@
+.userView {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: $margin;
+}
+
+.userView__wrap {
+  display: flex;
+  align-items: center;
+}
+
+.userView__img {
+  width: 50px;
+  height: auto;
+  margin-right: $margin;
+}
+
+.userView__greeting {
+  display: block;
+  width: 100%;
+  margin: 0;
+  margin-top: $margin--small;
+  @include navigation__link();
+  text-transform: none;
+  cursor: auto;
+}
+
+.userView__btn {
+  @include btn2();
+  @include navigation__link();
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  width: 80px;
+  &:hover,
+  &:active {
+    color: $font-color--light;
+  }
+}
