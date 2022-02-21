@@ -27,21 +27,22 @@ export class StatisticsPage extends Page {
     this.btnsWrapper.classList.add('stat__btn-wrapper');
 
     this.shortTermStatBtn.addEventListener('click', async () => {
-      this.clearStatisticsPage('longStat');
+      this.clearStatisticsPage();
       await this.shortTermStatRender();
     });
 
     this.longTermStatBtn.addEventListener('click', async () => {
-      this.clearStatisticsPage('shortStat');
+      this.clearStatisticsPage();
       await this.longTermStatRender();
     });
   }
 
-  private clearStatisticsPage(el: string) {
+  private clearStatisticsPage() {
     const shortTermStat = document.querySelector('.shortStat');
     const longTermStat = document.querySelector('.longStat');
     const errorMessage = document.querySelector('.stat__error-message');
-    el === 'shortStat' ? shortTermStat?.remove() : longTermStat?.remove();
+    shortTermStat?.remove();
+    longTermStat?.remove();
     errorMessage?.remove();
   }
 

@@ -59,13 +59,10 @@ export class App {
         page = new StatisticsPage(idPage);
         break;
       case PageIds.gameChallengePage:
-        //todo проверить iscurrentpageelbook
-        // page = new GameChallengePage(idPage);
         page = App.checkWordState(idPage);
         WordState.isFromBookPage = false;
         break;
       case PageIds.gameSprintPage:
-        // page = new GameSprintPage(idPage);
         page = App.checkWordState(idPage);
         WordState.isFromBookPage = false;
         break;
@@ -91,14 +88,10 @@ export class App {
     if (WordState.isFromBookPage) {
       if (WordState.VOCABULARY) {
         return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage, -1);
-        //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage
-        //return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage, -1) : new GameChallengePage(idPage, -1);
       } else {
         return idPage === PageIds.gameSprintPage
           ? new GameSprintPage(idPage, WordState.PAGE, WordState.GROUP)
           : new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP);
-        //todo поменять в предыдущем тернарнике получение новой игры аудиовызов после реализации класса GameChallengePage;
-        // : (page = new GameChallengePage(idPage, WordState.PAGE, WordState.GROUP));
       }
     }
     return idPage === PageIds.gameSprintPage ? new GameSprintPage(idPage) : new GameChallengePage(idPage);
@@ -156,7 +149,6 @@ export class App {
     window.location.href = `#${PageIds.mainPage}`;
     this.runApp();
     App.renderNewPage('mainPage');
-    // this.enableRouteChange();
   }
 
   public runToAutorizationPage() {
@@ -164,7 +156,6 @@ export class App {
     window.location.href = `#${PageIds.autorizationPage}`;
     this.runApp();
     App.renderNewPage('autorizationPage');
-    // this.enableRouteChange();
   }
 
   public run() {
