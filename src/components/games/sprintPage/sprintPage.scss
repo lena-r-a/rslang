@@ -40,6 +40,10 @@
   background-color: #addbb7;
 }
 
+.game__score {
+  font-size: 1.325rem;
+}
+
 
 .game__timer {
   width: 120px;
@@ -67,4 +71,10 @@
 
 .game__controls {
   margin-top: 100px;
+}
+
+@media (max-width: 640px) {
+  .game__sprint-container {
+    margin-top: 50px;
+  }
 }
