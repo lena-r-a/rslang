@@ -36,7 +36,7 @@ export class WordItem extends Component {
 
   private renderWordButtons(): HTMLElement {
     this.buttonsWrapper.classList.add('word-item__buttons');
-    this.studiedWord.textContent = 'Добаваить в изученные';
+    this.studiedWord.textContent = 'Добавить в изученные';
     this.studiedWord.classList.add('add-to-easy');
     this.complicatedWord.textContent = 'Добавить в сложные';
     this.complicatedWord.classList.add('add-to-hard');
@@ -72,7 +72,6 @@ export class WordItem extends Component {
     let audio = new Audio(`${URL}${this.word.audio}`);
     if (!isPlay) {
       isPlay = true;
-      // audio = new Audio(`${URL}${this.word.audio}`);
       audio.play();
       audio.onended = () => {
         audio = new Audio(`${URL}${this.word.audioMeaning}`);
@@ -223,7 +222,7 @@ export class WordItem extends Component {
           progressContainer.innerHTML = `
             <p class="word-progress">Статистика слова: Угадано: 
             <span>${rez[0].userWord.optional?.trueAnswer}</span> / Ошибка: 
-            <span>${rez[0].userWord.optional?.trueAnswer}</span></p>
+            <span>${rez[0].userWord.optional?.falseAnswer}</span></p>
           `;
         } else {
           progressContainer.innerHTML = `
