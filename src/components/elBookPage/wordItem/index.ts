@@ -36,7 +36,7 @@ export class WordItem extends Component {
 
   private renderWordButtons(): HTMLElement {
     this.buttonsWrapper.classList.add('word-item__buttons');
-    this.studiedWord.textContent = 'Добаваить в изученные';
+    this.studiedWord.textContent = 'Добавить в изученные';
     this.studiedWord.classList.add('add-to-easy');
     this.complicatedWord.textContent = 'Добавить в сложные';
     this.complicatedWord.classList.add('add-to-hard');
